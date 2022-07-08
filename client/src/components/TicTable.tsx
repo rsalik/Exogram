@@ -72,7 +72,7 @@ function TicTableCompactRow(props: { ticData: any }) {
           Exofop
         </Link>
       </td>
-      <td className="mono">{props.ticData.sectors}</td>
+      <td>{props.ticData.sectors.replaceAll(',', ', ')}</td>
       <td className="mono">{props.ticData.epoch}</td>
       <td className="mono">{props.ticData.period}</td>
       <td className="mono">{props.ticData.duration}</td>
