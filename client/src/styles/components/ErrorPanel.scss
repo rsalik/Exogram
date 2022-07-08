@@ -1,0 +1,8 @@
+.error-panel {
+  @include rounded-panel($color: $sec1);
+
+
+  .message {
+    font-size: 1.3em;
+  }
+}

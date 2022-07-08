@@ -1,0 +1,28 @@
+@mixin bkg-on-hover($color: $primary) {
+  color: $color;
+  padding: 0.3em;
+  border-radius: 0.25rem;
+
+  box-sizing: content-box;
+
+  transition: background-color $transition, color $transition;
+
+  &:hover {
+    background: $color;
+    color: $bkg;
+
+    cursor: pointer;
+  }
+}
+
+@mixin rounded-panel($color: $pri1) {
+  background: $color;
+  border-radius: $border-radius-large;
+  padding: 1rem;
+  margin: 1rem;
+
+  .title {
+    font-size: 3em;
+    font-weight: $fw-bold;
+  }
+}

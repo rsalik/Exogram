@@ -1,0 +1,29 @@
+.disposition-wrapper {
+  display: flex;
+  justify-content: center;
+
+  .disposition {
+    margin: 0.2em 0;
+
+    div {
+      display: inline;
+      margin: 0 0.2em;
+    }
+
+    .value {
+      background: $quaternary;
+      color: $bkg;
+      padding: 0.3em;
+
+      font-weight: $fw-bold;
+
+      border-radius: $border-radius;
+    }
+
+    padding: 0.7em 0.6em;
+    font-size: 1.3em;
+
+    background: $pri3;
+    border-radius: $border-radius;
+  }
+}

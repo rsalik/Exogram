@@ -1,0 +1,16 @@
+.link {
+  @include bkg-on-hover();
+
+  text-decoration: underline;
+}
+
+.borderless-link {
+  text-decoration: underline;
+  color: $primary;
+
+  transition: color $transition;
+
+  &:hover {
+    color: $white;
+  }
+}

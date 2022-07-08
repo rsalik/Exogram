@@ -1,0 +1,40 @@
+// Colors
+$bkg: #131c24;
+$white: #f0f0f0;
+
+$primary: #61dafb;
+
+$pri1: mix($bkg, $primary, 95%);
+$pri2: mix($bkg, $primary, 80%);
+$pri3: mix($bkg, $primary, 70%);
+$pri4: mix($bkg, $primary, 60%);
+
+$secondary: #f64961;
+
+$sec1: mix($bkg, $secondary, 80%);
+$sec2: mix($bkg, $secondary, 70%);
+
+$tertiary: #fb61bd;
+
+$ter1: mix($bkg, $tertiary, 90%);
+$ter2: mix($bkg, $tertiary, 80%);
+$ter3: mix($bkg, $tertiary, 70%);
+$ter4: mix($bkg, $tertiary, 60%);
+$ter5: mix($bkg, $tertiary, 50%);
+
+$quaternary: #ffe345;
+
+// Font Weights
+
+//$fw-thin: 100;
+$fw-light: 200;
+$fw-regular: 300;
+//$fw-medium: 400;
+$fw-semibold: 600;
+$fw-bold: 775;
+$fw-black: 850;
+
+// Misc
+$border-radius: 0.25em;
+$border-radius-large: 1em;
+$transition: 0.15s ease-in-out;

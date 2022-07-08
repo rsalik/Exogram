@@ -1,0 +1,109 @@
+.tic-table {
+  @include rounded-panel();
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  margin: 0 1rem;
+
+  .row {
+    width: 100%;
+    padding: 1em;
+    margin: 0.3rem 0;
+
+    box-sizing: border-box;
+
+    border-radius: $border-radius-large;
+
+    &:nth-of-type(odd) {
+      background: $pri2;
+
+      .data {
+        background: $pri3;
+
+        &:nth-of-type(even) {
+          background: $pri4;
+        }
+      }
+
+      .num-dispositions {
+        background: $pri3;
+      }
+    }
+
+    &:nth-of-type(even) {
+      background: $ter2;
+
+      .link {
+        @include bkg-on-hover($tertiary);
+      }
+
+      .data {
+        background: $ter3;
+
+        &:nth-of-type(even) {
+          background: $ter4;
+        }
+      }
+
+      .disposition,
+      .num-dispositions {
+        background: $ter3;
+      }
+    }
+
+    .ticId {
+      font-weight: $fw-semibold;
+      font-size: 1.5em;
+      padding: 0 0.5rem;
+
+      margin-bottom: 0.1em;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .link {
+        margin-left: 0.5rem;
+      }
+    }
+
+    .data-wrapper {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+
+      .data {
+        font-weight: $fw-semibold;
+
+        border-radius: $border-radius-large;
+        padding: 1rem;
+
+        width: 15em;
+        height: 3.5em;
+
+        margin: 0.2rem;
+
+        display: inline-block;
+
+        .value {
+          font-weight: $fw-regular;
+        }
+      }
+    }
+
+    .num-dispositions {
+      font-size: 1.3em;
+      margin: 0.2em 0.3em;
+
+      padding: .5em 0.5em;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      border-radius: $border-radius;
+    }
+  }
+}
