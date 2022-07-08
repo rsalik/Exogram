@@ -1,11 +1,11 @@
 export default function Header() {
   return (
     <div className="header">
-      <a href="/">
-        <div className="title">
+      <div className="title">
+        <a href="/">
           Exo<span>gram</span>
-        </div>
-      </a>
+        </a>
+      </div>
     </div>
   );
 }

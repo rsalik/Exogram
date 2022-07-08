@@ -8,21 +8,23 @@ $pri1: mix($bkg, $primary, 95%);
 $pri2: mix($bkg, $primary, 80%);
 $pri3: mix($bkg, $primary, 70%);
 $pri4: mix($bkg, $primary, 60%);
+$pri5: mix($bkg, $primary, 50%);
+$pri6: mix($bkg, $primary, 40%);
 
-$secondary: #f64961;
+$error: #f64961;
 
-$sec1: mix($bkg, $secondary, 80%);
-$sec2: mix($bkg, $secondary, 70%);
+$err1: mix($bkg, $error, 80%);
+$err2: mix($bkg, $error, 70%);
 
-$tertiary: #fb61bd;
+$secondary: #fb61bd;
 
-$ter1: mix($bkg, $tertiary, 90%);
-$ter2: mix($bkg, $tertiary, 80%);
-$ter3: mix($bkg, $tertiary, 70%);
-$ter4: mix($bkg, $tertiary, 60%);
-$ter5: mix($bkg, $tertiary, 50%);
+$sec1: mix($bkg, $secondary, 90%);
+$sec2: mix($bkg, $secondary, 80%);
+$sec3: mix($bkg, $secondary, 70%);
+$sec4: mix($bkg, $secondary, 60%);
+$sec5: mix($bkg, $secondary, 50%);
 
-$quaternary: #ffe345;
+$tertiary: #ffe345;
 
 // Font Weights
 

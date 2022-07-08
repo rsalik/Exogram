@@ -1,0 +1,15 @@
+.error-panel {
+  @include rounded-panel($color: $err1);
+
+  .message {
+    font-size: 1.3em;
+  }
+}
+
+.info-panel {
+  @include rounded-panel($color: $pri2);
+
+  .message {
+    font-size: 1.3em;
+  }
+}

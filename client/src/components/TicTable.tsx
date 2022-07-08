@@ -3,6 +3,7 @@ import { getAllTics } from '../apiHandler';
 import Link from './Link';
 import TicDisposition from './TicDisposition';
 import { TableRows, ViewAgenda } from '@mui/icons-material';
+import { exofopLink } from '../utils';
 
 export default function TicTable(props: { onError?: Function }) {
   const [ticData, setTicData] = useState([]);
@@ -38,7 +39,7 @@ function TicTableCompact(props: { ticData: any }) {
     <table className="table-compact">
       <thead>
         <tr>
-          <th>TIC</th>
+          <th>TIC Id</th>
           <th>Exofop</th>
           <th>Sectors</th>
           <th>Epoch [BJD]</th>
@@ -46,7 +47,7 @@ function TicTableCompact(props: { ticData: any }) {
           <th>Duration [Hrs]</th>
           <th>Depth [ppm]</th>
           <th>Depth [%]</th>
-          <th>Rtransiter</th>
+          <th>RTransiter</th>
           <th>RStar</th>
           <th>Tmag</th>
           <th>Δ Tmag</th>
@@ -68,7 +69,7 @@ function TicTableCompactRow(props: { ticData: any }) {
     <tr>
       <td className="tic-id mono"><Link href={`/tic/${props.ticData.ticId}`}>{props.ticData.ticId}</Link></td>
       <td>
-        <Link href={`https://exofop.ipac.caltech.edu/tess/target.php?id=${props.ticData.ticId}`}>
+        <Link href={exofopLink(props.ticData.ticId)}>
           Exofop
         </Link>
       </td>
@@ -93,7 +94,7 @@ function TicTableRow(props: { ticData: any }) {
     <div className="row">
       <div className="header">
         <a className="tic-id" href={`/tic/${props.ticData.ticId}`}>TIC {props.ticData.ticId}</a>
-        <Link href={`https://exofop.ipac.caltech.edu/tess/target.php?id=${props.ticData.ticId}`}>Exofop</Link>
+        <Link href={exofopLink(props.ticData.ticId)}>Exofop</Link>
       </div>
       <div className="data-wrapper">
         {!!props.ticData.sectors && (

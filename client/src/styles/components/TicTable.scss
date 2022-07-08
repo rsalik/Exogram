@@ -38,7 +38,7 @@
         }
 
         &.active {
-          background: $quaternary;
+          background: $tertiary;
           color: $bkg;
         }
       }
@@ -72,23 +72,23 @@
     }
 
     &:nth-of-type(even) {
-      background: $ter2;
+      background: $sec2;
 
       .link {
-        @include bkg-on-hover($tertiary);
+        @include bkg-on-hover($secondary);
       }
 
       .data {
-        background: $ter3;
+        background: $sec3;
 
         &:nth-of-type(even) {
-          background: $ter4;
+          background: $sec4;
         }
       }
 
       .disposition,
       .num-dispositions {
-        background: $ter3;
+        background: $sec3;
       }
     }
 
@@ -153,6 +153,7 @@
 
   .table-compact {
     border-collapse: collapse;
+    margin-top: .5em;
 
     tr {
       &:nth-of-type(even) {
@@ -161,6 +162,21 @@
 
       th {
         padding: 0.5em 1em;
+        background: $secondary;
+        color: $bkg;
+
+        position: sticky;
+        top: 0;
+
+        &:first-of-type {
+          border-top-left-radius: $border-radius;
+          border-bottom-left-radius: $border-radius;
+        }
+
+        &:last-of-type {
+          border-top-right-radius: $border-radius;
+          border-bottom-right-radius: $border-radius;
+        }
       }
 
       td {

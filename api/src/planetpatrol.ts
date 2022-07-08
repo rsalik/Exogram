@@ -100,9 +100,15 @@ export function generateCSVRequest(req: any, res: any) {
 }
 
 export async function getTicDataRequest(req: any, res: any) {
-  try {
-    const tic = await db.get('tic:' + req.params.ticId);
+  const tic = ticList.filter((t) => t.ticId === req.params.ticId)[0];
 
+  if (!tic) {
+    res.status(404);
+    res.json({ message: 'The request TIC could not be found.' });
+    return;
+  }
+
+  try {
     let dispositionsRealName: {}[] = [];
 
     await asyncForEach(Object.keys(tic.dispositions), async (key: string) => {
@@ -118,17 +124,15 @@ export async function getTicDataRequest(req: any, res: any) {
         disposition: tic.dispositions[key].disposition,
         comments: tic.dispositions[key].comments,
         name: name,
-        _id: key,
+        userId: key,
       });
     });
 
-    tic.dispositions = dispositionsRealName;
-
-    res.json(tic);
+    res.json({ ...tic, dispositions: dispositionsRealName });
     res.status(200);
   } catch {
-    res.status(404);
-    res.json({ message: 'The request TIC could not be found.' });
+    res.status(500);
+    res.json({ message: 'Something went wrong.' });
   }
 }
 
@@ -254,7 +258,7 @@ export async function fetchTicList() {
       newTicList = newTicList.concat(pList.rows);
     } catch (e) {
       console.error(e);
-      console.log("An Error occurred. Retrying in 10 seconds.");
+      console.log('An Error occurred. Retrying in 10 seconds.');
       setTimeout(() => fetchTicList(), 10000);
 
       return;
@@ -264,7 +268,7 @@ export async function fetchTicList() {
   ticList = newTicList
     .map((t) => t.doc)
     .map((t) => {
-      return { ...t, ticId: t._id.replaceAll("tic:", ""), _rev: undefined, _id: undefined };
+      return { ...t, ticId: t._id.replaceAll('tic:', ''), _rev: undefined, _id: undefined };
     });
 }
 

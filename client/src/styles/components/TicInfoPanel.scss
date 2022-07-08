@@ -1,0 +1,95 @@
+.tic-info {
+  @include rounded-panel($color: $pri1);
+
+  .title {
+    text-align: center;
+    font-weight: $fw-regular;
+
+    span {
+      font-weight: $fw-bold;
+    }
+  }
+
+  .data-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    .exofop-link,
+    .data {
+      width: 20rem;
+      margin: 0.5rem;
+
+    }
+
+    .exofop-link {
+      background: $pri6;
+      color: $bkg;
+
+      border-radius: $border-radius;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      
+      font-size: 3em;
+      font-weight: $fw-bold;  
+
+      transition: color $transition, background-color $transition;
+
+      &:hover {
+        background: $primary;
+      }
+    }
+
+    .data {
+      font-size: 2em;
+
+      display: flex;
+      flex-direction: column;
+
+      .name,
+      .value {
+        padding: 0.2em;
+      }
+
+      .name {
+        border-top-left-radius: $border-radius;
+        border-top-right-radius: $border-radius;
+
+        background: $pri6;
+        color: $bkg;
+
+        font-weight: $fw-bold;
+
+        text-align: center;
+
+        .unit {
+          font-weight: $fw-semibold;
+          color: $pri1;
+        }
+      }
+
+      .value {
+        text-align: center;
+        background: $pri2;
+        border-bottom-left-radius: $border-radius;
+        border-bottom-right-radius: $border-radius;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        flex-grow: 1;
+      }
+    }
+  }
+
+  .dispositions {
+    @include rounded-panel($color: $sec2);
+
+    .title {
+      font-size: 2.6em;
+    }
+  }
+}
