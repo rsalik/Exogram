@@ -5,6 +5,45 @@
   flex-direction: column;
   align-items: center;
 
+  .title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    position: relative;
+
+    .style-toggle {
+      position: absolute;
+      right: 0;
+
+      display: flex;
+
+      .icon {
+        width: 1em;
+        height: 1em;
+
+        margin: 0 0.2rem;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        border-radius: $border-radius;
+
+        cursor: pointer;
+
+        &:hover {
+          background: $pri3;
+        }
+
+        &.active {
+          background: $quaternary;
+          color: $bkg;
+        }
+      }
+    }
+  }
   margin: 0 1rem;
 
   .row {
@@ -53,7 +92,7 @@
       }
     }
 
-    .ticId {
+    .header {
       font-weight: $fw-semibold;
       font-size: 1.5em;
       padding: 0 0.5rem;
@@ -63,6 +102,11 @@
       display: flex;
       justify-content: center;
       align-items: center;
+
+      a.tic-id {
+        text-decoration: underline;
+        @include bkg-on-hover($white);
+      }
 
       .link {
         margin-left: 0.5rem;
@@ -97,13 +141,57 @@
       font-size: 1.3em;
       margin: 0.2em 0.3em;
 
-      padding: .5em 0.5em;
+      padding: 0.5em 0.5em;
 
       display: flex;
       justify-content: center;
       align-items: center;
 
       border-radius: $border-radius;
+    }
+  }
+
+  .table-compact {
+    border-collapse: collapse;
+
+    tr {
+      &:nth-of-type(even) {
+        background: $pri3;
+      }
+
+      th {
+        padding: 0.5em 1em;
+      }
+
+      td {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+
+        text-align: center;
+
+        padding: 0.5em 1em;
+        max-width: 7em;
+
+        &.tic-id {
+          a {
+            @include bkg-on-hover($white);
+          }
+
+          text-align: left;
+
+          max-width: 8em;
+        }
+
+        &:first-of-type {
+          border-top-left-radius: $border-radius;
+          border-bottom-left-radius: $border-radius;
+        }
+
+        &:last-of-type {
+          border-top-right-radius: $border-radius;
+          border-bottom-right-radius: $border-radius;
+        }
+      }
     }
   }
 }

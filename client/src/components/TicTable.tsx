@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react';
 import { getAllTics } from '../apiHandler';
 import Link from './Link';
 import TicDisposition from './TicDisposition';
+import { TableRows, ViewAgenda } from '@mui/icons-material';
 
 export default function TicTable(props: { onError?: Function }) {
   const [ticData, setTicData] = useState([]);
+  const [compact, setCompact] = useState(true);
 
   useEffect(() => {
     getAllTics().then((d) => {
@@ -15,19 +17,82 @@ export default function TicTable(props: { onError?: Function }) {
 
   return (
     <div className="tic-table">
-      <div className="title">TIC Table</div>
-      {ticData.map((tic: any) => (
-        <TicTableRow ticData={tic} key={tic.ticId} />
-      ))}
+      <div className="title">
+        TIC Table
+        <div className="style-toggle">
+          <div className={`icon ${compact ? 'active' : ''}`} onClick={() => setCompact(true)}>
+            <TableRows fontSize="large" />
+          </div>
+          <div className={`icon ${compact ? '' : 'active'}`} onClick={() => setCompact(false)}>
+            <ViewAgenda fontSize="large" />
+          </div>
+        </div>
+      </div>
+      {compact ? <TicTableCompact ticData={ticData} /> : ticData.map((tic: any) => <TicTableRow ticData={tic} key={tic.ticId} />)}
     </div>
+  );
+}
+
+function TicTableCompact(props: { ticData: any }) {
+  return (
+    <table className="table-compact">
+      <thead>
+        <tr>
+          <th>TIC</th>
+          <th>Exofop</th>
+          <th>Sectors</th>
+          <th>Epoch [BJD]</th>
+          <th>Period [Days]</th>
+          <th>Duration [Hrs]</th>
+          <th>Depth [ppm]</th>
+          <th>Depth [%]</th>
+          <th>Rtransiter</th>
+          <th>RStar</th>
+          <th>Tmag</th>
+          <th>Δ Tmag</th>
+          <th>Paper Disp</th>
+          <th># Disps</th>
+        </tr>
+      </thead>
+      <tbody>
+        {props.ticData.map((t: any) => (
+          <TicTableCompactRow ticData={t} key={t.ticId} />
+        ))}
+      </tbody>
+    </table>
+  );
+}
+
+function TicTableCompactRow(props: { ticData: any }) {
+  return (
+    <tr>
+      <td className="tic-id mono"><Link href={`/tic/${props.ticData.ticId}`}>{props.ticData.ticId}</Link></td>
+      <td>
+        <Link href={`https://exofop.ipac.caltech.edu/tess/target.php?id=${props.ticData.ticId}`}>
+          Exofop
+        </Link>
+      </td>
+      <td className="mono">{props.ticData.sectors}</td>
+      <td className="mono">{props.ticData.epoch}</td>
+      <td className="mono">{props.ticData.period}</td>
+      <td className="mono">{props.ticData.duration}</td>
+      <td className="mono">{props.ticData.depth}</td>
+      <td className="mono">{props.ticData.depthPercent}</td>
+      <td className="mono">{props.ticData.rTranister /* Spelled wrong lol*/}</td>
+      <td className="mono">{props.ticData.rStar}</td>
+      <td className="mono">{props.ticData.tmag}</td>
+      <td className="mono">{props.ticData.deltaTmag}</td>
+      <td>{props.ticData.dispositions['user:paper']?.disposition}</td>
+      <td className="mono">{Object.keys(props.ticData.dispositions).length}</td>
+    </tr>
   );
 }
 
 function TicTableRow(props: { ticData: any }) {
   return (
-    <a className="row" href={`/tic/${props.ticData.ticId}`}>
-      <div className="ticId">
-        <div>TIC {props.ticData.ticId}</div>
+    <div className="row">
+      <div className="header">
+        <a className="tic-id" href={`/tic/${props.ticData.ticId}`}>TIC {props.ticData.ticId}</a>
         <Link href={`https://exofop.ipac.caltech.edu/tess/target.php?id=${props.ticData.ticId}`}>Exofop</Link>
       </div>
       <div className="data-wrapper">
@@ -97,6 +162,6 @@ function TicTableRow(props: { ticData: any }) {
         )}
         <div className="num-dispositions">{Object.keys(props.ticData.dispositions).length} Dispositions</div>
       </div>
-    </a>
+    </div>
   );
 }
