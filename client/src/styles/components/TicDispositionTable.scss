@@ -1,0 +1,50 @@
+.tic-disposition-table {
+  display: flex;
+  justify-content: center;
+
+  table {
+    font-size: 1.5em;
+    border-collapse: collapse;
+
+    tr {
+      &:nth-of-type(even) {
+        background: $sec3;
+      }
+    }
+
+    th {
+      background: $sec5;
+    }
+
+    th {
+      &:first-of-type {
+        border-top-left-radius: $border-radius;
+        border-bottom-left-radius: $border-radius;
+      }
+
+      &:last-of-type {
+        border-top-right-radius: $border-radius;
+        border-bottom-right-radius: $border-radius;
+      }
+    }
+
+    th, td {
+      padding: 0.3em 0.6em;
+
+      &:first-of-type {
+        border-top-left-radius: $border-radius;
+        border-bottom-left-radius: $border-radius;
+      }
+
+      &:last-of-type {
+        border-top-right-radius: $border-radius;
+        border-bottom-right-radius: $border-radius;
+      }
+    }
+
+    tr.paper {
+      background: $tertiary;
+      color: $bkg;
+    }
+  }
+}

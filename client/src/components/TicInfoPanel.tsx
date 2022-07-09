@@ -1,15 +1,25 @@
 import { exofopLink } from '../utils';
-import Link from './Link';
 import TicDisposition from './TicDisposition';
+import TicDispositionTable from './TicDispositionTable';
 
 export default function TicInfoPanel(props: { ticData: any }) {
   return (
     <div className="tic-info">
-      <div className="title">
-        TIC <span>{props.ticData.ticId}</span>
+      <div className="title-sec-wrapper">
+        <div className="title-sec">
+          <div className="title">
+            TIC <span>{props.ticData.ticId}</span>
+          </div>
+          <a href={exofopLink(props.ticData.ticId)} className="exofop-link">
+            Exofop Link
+          </a>
+          {!!props.ticData.dispositions.filter((d: any) => d.userId === 'user:paper').length && (
+            <div className="published-badge">This TIC was published in a Planet Patrol Paper</div>
+          )}
+        </div>
       </div>
+
       <div className="data-wrapper">
-        <a href={exofopLink(props.ticData.ticId)} className="exofop-link">Exofop</a>
         <div className="data">
           <div className="name">Sectors</div>
           <div className="value">{props.ticData.sectors.replaceAll(',', ', ')}</div>
@@ -63,9 +73,7 @@ export default function TicInfoPanel(props: { ticData: any }) {
       </div>
       <div className="dispositions">
         <div className="title">Dispositions</div>
-        {props.ticData.dispositions.map((disposition: any) => (
-          <TicDisposition data={disposition} key={disposition.userId} />
-        ))}
+        <TicDispositionTable data={props.ticData.dispositions} />
       </div>
     </div>
   );
