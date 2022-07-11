@@ -10,6 +10,7 @@ export default function TicTable(props: { onError?: Function }) {
   const [compact, setCompact] = useState(true);
   const [sortBy, setSortBy] = useState('ticId');
   const [search, setSearch] = useState('');
+  const [publishedOnly, setPublishedOnly] = useState(false);
 
   useEffect(() => {
     getAllTics().then((d) => {
@@ -33,22 +34,42 @@ export default function TicTable(props: { onError?: Function }) {
             </div>
           </div>
         </div>
-        <div className="sort-by">
-          <label htmlFor="sortby">Sort by:</label>
-          <select name="sortby" onChange={(e) => setSortBy(e.target.value)}>
-            {TicListSortByOptions.map((o) => (
-              <option key={o.value} value={o.value}>
-                {o.name}
-              </option>
-            ))}
-          </select>
+        <div className="settings">
+          <div className={`filter ${publishedOnly ? '' : 'active'}`} onClick={() => setPublishedOnly(false)}>
+            All
+          </div>
+          <div className="sep">/</div>
+          <div className={`filter ${publishedOnly ? 'active' : ''}`} onClick={() => setPublishedOnly(true)}>
+            Published Only
+          </div>
+          {/* eslint-disable-next-line react/jsx-no-comment-textnodes*/}
+          <div className="sep">//</div>
+          &nbsp;
+          <div className="sort-by">
+            <label htmlFor="sortby"> Sort by</label>
+            <select name="sortby" onChange={(e) => setSortBy(e.target.value)}>
+              {TicListSortByOptions.map((o) => (
+                <option key={o.value} value={o.value}>
+                  {o.name}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
+
         {compact ? (
-          <TicTableCompact ticData={sortTicList(searchTicList(ticData, search), sortBy)} sortBy={sortBy} />
+          <TicTableCompact
+            ticData={sortTicList(
+              searchTicList(publishedOnly ? ticData.filter((t: any) => !!t.dispositions['user:paper']) : ticData, search),
+              sortBy
+            )}
+            sortBy={sortBy}
+          />
         ) : (
-          sortTicList(searchTicList(ticData, search), sortBy).map((tic: any) => (
-            <TicTableRow ticData={tic} sortBy={sortBy} key={tic.ticId} />
-          ))
+          sortTicList(
+            searchTicList(publishedOnly ? ticData.filter((t: any) => !!t.dispositions['user:paper']) : ticData, search),
+            sortBy
+          ).map((tic: any) => <TicTableRow ticData={tic} sortBy={sortBy} key={tic.ticId} />)
         )}
       </div>
     </>
@@ -92,7 +113,9 @@ function TicTableCompactRow(props: { ticData: any }) {
         <Link href={`/tic/${props.ticData.ticId}`}>{props.ticData.ticId}</Link>
       </td>
       <td>
-        <Link href={exofopLink(props.ticData.ticId)}>Exofop</Link>
+        <Link href={exofopLink(props.ticData.ticId)} newTab>
+          Exofop
+        </Link>
       </td>
       <td>{props.ticData.sectors.replaceAll(',', ', ')}</td>
       <td className="mono">{props.ticData.epoch}</td>
@@ -105,7 +128,7 @@ function TicTableCompactRow(props: { ticData: any }) {
       <td className="mono">{props.ticData.tmag}</td>
       <td className="mono">{props.ticData.deltaTmag}</td>
       <td>{props.ticData.dispositions['user:paper']?.disposition}</td>
-      <td className="mono">{Object.keys(props.ticData.dispositions).length}</td>
+      <td>{Object.keys(props.ticData.dispositions).length}</td>
     </tr>
   );
 }
@@ -117,7 +140,9 @@ function TicTableRow(props: { ticData: any; sortBy: string }) {
         <a className="tic-id" href={`/tic/${props.ticData.ticId}`}>
           TIC {props.ticData.ticId}
         </a>
-        <Link href={exofopLink(props.ticData.ticId)}>Exofop</Link>
+        <Link newTab href={exofopLink(props.ticData.ticId)}>
+          Exofop
+        </Link>
       </div>
       <div className="data-wrapper">
         {TicBasicProperties.filter((p) => p.id !== 'ticId').map((p) => {

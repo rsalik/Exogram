@@ -1,6 +1,8 @@
 .header {
-  padding: 1rem .5rem;
+  padding: 1rem 0.5rem;
   margin: 0 1rem;
+
+  display: flex;
 
   .title {
     font-size: 3em;
@@ -12,9 +14,27 @@
       background: $primary;
       color: $bkg;
 
-      padding: 0 .2em;
-      margin: 0 .1em;
+      padding: 0 0.2em;
+      margin: 0 0.1em;
       border-radius: $border-radius;
+    }
+  }
+
+  .links {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    font-size: 2em;
+
+    a {
+      @include bkg-on-hover($white);
+      border-radius: $border-radius * 1.65;
+    }
+
+    .sep {
+      color: $pri5;
+      margin: 0 0.8rem;
     }
   }
 }

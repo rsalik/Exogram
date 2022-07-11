@@ -9,7 +9,7 @@ export default function TicInfoPanel(props: { ticData: any }) {
           <div className="title">
             TIC <span>{props.ticData.ticId}</span>
           </div>
-          <a href={exofopLink(props.ticData.ticId)} className="exofop-link">
+          <a href={exofopLink(props.ticData.ticId)} className="exofop-link" target="_blank" rel="noreferrer">
             Exofop Link
           </a>
           {!!props.ticData.dispositions.filter((d: any) => d.userId === 'user:paper').length && (
