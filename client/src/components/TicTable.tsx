@@ -2,12 +2,14 @@ import { useEffect, useState } from 'react';
 import { getAllTics } from '../apiHandler';
 import Link from './Link';
 import TicDisposition from './TicDisposition';
-import { TableRows, ViewAgenda } from '@mui/icons-material';
-import { exofopLink } from '../utils';
+import { TableRows, ViewAgenda, Search } from '@mui/icons-material';
+import { exofopLink, searchTicList, sortTicList, TicBasicProperties, TicListSortByOptions } from '../utils';
 
 export default function TicTable(props: { onError?: Function }) {
   const [ticData, setTicData] = useState([]);
   const [compact, setCompact] = useState(true);
+  const [sortBy, setSortBy] = useState('ticId');
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
     getAllTics().then((d) => {
@@ -17,42 +19,61 @@ export default function TicTable(props: { onError?: Function }) {
   }, [props]);
 
   return (
-    <div className="tic-table">
-      <div className="title">
-        TIC Table
-        <div className="style-toggle">
-          <div className={`icon ${compact ? 'active' : ''}`} onClick={() => setCompact(true)}>
-            <TableRows fontSize="large" />
-          </div>
-          <div className={`icon ${compact ? '' : 'active'}`} onClick={() => setCompact(false)}>
-            <ViewAgenda fontSize="large" />
+    <>
+      <FloatingSearchBar value={search} onChange={setSearch} />
+      <div className="tic-table">
+        <div className="title">
+          TIC Table
+          <div className="style-toggle">
+            <div className={`icon ${compact ? 'active' : ''}`} onClick={() => setCompact(true)}>
+              <TableRows fontSize="large" />
+            </div>
+            <div className={`icon ${compact ? '' : 'active'}`} onClick={() => setCompact(false)}>
+              <ViewAgenda fontSize="large" />
+            </div>
           </div>
         </div>
+        <div className="sort-by">
+          <label htmlFor="sortby">Sort by:</label>
+          <select name="sortby" onChange={(e) => setSortBy(e.target.value)}>
+            {TicListSortByOptions.map((o) => (
+              <option key={o.value} value={o.value}>
+                {o.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        {compact ? (
+          <TicTableCompact ticData={sortTicList(searchTicList(ticData, search), sortBy)} sortBy={sortBy} />
+        ) : (
+          sortTicList(searchTicList(ticData, search), sortBy).map((tic: any) => (
+            <TicTableRow ticData={tic} sortBy={sortBy} key={tic.ticId} />
+          ))
+        )}
       </div>
-      {compact ? <TicTableCompact ticData={ticData} /> : ticData.map((tic: any) => <TicTableRow ticData={tic} key={tic.ticId} />)}
-    </div>
+    </>
   );
 }
 
-function TicTableCompact(props: { ticData: any }) {
+function TicTableCompact(props: { ticData: any; sortBy: string }) {
   return (
-    <table className="table-compact">
+    <table className="table-compact" cellSpacing={0}>
       <thead>
         <tr>
-          <th>TIC Id</th>
+          <th className={`${props.sortBy === 'ticId' ? 'sort' : ''}`}>TIC ID</th>
           <th>Exofop</th>
           <th>Sectors</th>
-          <th>Epoch [BJD]</th>
-          <th>Period [Days]</th>
+          <th className={`${props.sortBy === 'epoch' ? 'sort' : ''}`}>Epoch [BJD]</th>
+          <th className={`${props.sortBy === 'period' ? 'sort' : ''}`}>Period [Days]</th>
           <th>Duration [Hrs]</th>
           <th>Depth [ppm]</th>
           <th>Depth [%]</th>
-          <th>RTransiter</th>
-          <th>RStar</th>
+          <th className={`${props.sortBy === 'rTranister' ? 'sort' : ''}`}>RTransiter</th>
+          <th className={`${props.sortBy === 'rStar' ? 'sort' : ''}`}>RStar</th>
           <th>Tmag</th>
           <th>Δ Tmag</th>
-          <th>Paper Disp</th>
-          <th># Disps</th>
+          <th className={`${props.sortBy === 'paperDisp' ? 'sort' : ''}`}>Paper Disp</th>
+          <th className={`${props.sortBy === 'dispAsc' || props.sortBy === 'dispDesc' ? 'sort' : ''}`}># Disps</th>
         </tr>
       </thead>
       <tbody>
@@ -67,11 +88,11 @@ function TicTableCompact(props: { ticData: any }) {
 function TicTableCompactRow(props: { ticData: any }) {
   return (
     <tr>
-      <td className="tic-id mono"><Link href={`/tic/${props.ticData.ticId}`}>{props.ticData.ticId}</Link></td>
+      <td className="tic-id mono">
+        <Link href={`/tic/${props.ticData.ticId}`}>{props.ticData.ticId}</Link>
+      </td>
       <td>
-        <Link href={exofopLink(props.ticData.ticId)}>
-          Exofop
-        </Link>
+        <Link href={exofopLink(props.ticData.ticId)}>Exofop</Link>
       </td>
       <td>{props.ticData.sectors.replaceAll(',', ', ')}</td>
       <td className="mono">{props.ticData.epoch}</td>
@@ -89,80 +110,41 @@ function TicTableCompactRow(props: { ticData: any }) {
   );
 }
 
-function TicTableRow(props: { ticData: any }) {
+function TicTableRow(props: { ticData: any; sortBy: string }) {
   return (
     <div className="row">
       <div className="header">
-        <a className="tic-id" href={`/tic/${props.ticData.ticId}`}>TIC {props.ticData.ticId}</a>
+        <a className="tic-id" href={`/tic/${props.ticData.ticId}`}>
+          TIC {props.ticData.ticId}
+        </a>
         <Link href={exofopLink(props.ticData.ticId)}>Exofop</Link>
       </div>
       <div className="data-wrapper">
-        {!!props.ticData.sectors && (
-          <div className="data mono">
-            <div className="name">Sectors</div>
-            <div className="value">{props.ticData.sectors.replaceAll(',', ', ')}</div>
-          </div>
-        )}
-        {!!props.ticData.epoch && (
-          <div className="data mono">
-            <div className="name">Epoch [BJD]</div>
-            <div className="value">{props.ticData.epoch}</div>
-          </div>
-        )}
-        {!!props.ticData.period && (
-          <div className="data mono">
-            <div className="name">Period [Days]</div>
-            <div className="value">{props.ticData.period}</div>
-          </div>
-        )}
-        {!!props.ticData.duration && (
-          <div className="data mono">
-            <div className="name">Duration [Hours]</div>
-            <div className="value">{props.ticData.duration}</div>
-          </div>
-        )}
-        {!!props.ticData.depth && (
-          <div className="data mono">
-            <div className="name">Depth [ppm]</div>
-            <div className="value">{props.ticData.depth}</div>
-          </div>
-        )}
-        {!!props.ticData.depthPercent && (
-          <div className="data mono">
-            <div className="name">Depth [%]</div>
-            <div className="value">{props.ticData.depthPercent}</div>
-          </div>
-        )}
-        {!!props.ticData.rTranister && (
-          <div className="data mono">
-            <div className="name">RTransiter</div>
-            <div className="value">{props.ticData.rTranister}</div> {/* rTransiter is spelled wrong in the data */}
-          </div>
-        )}
-        {!!props.ticData.rStar && (
-          <div className="data mono">
-            <div className="name">RStar</div>
-            <div className="value">{props.ticData.rStar}</div>
-          </div>
-        )}
-        {!!props.ticData.tmag && (
-          <div className="data mono">
-            <div className="name">Tmag</div>
-            <div className="value">{props.ticData.tmag}</div>
-          </div>
-        )}
-        {!!props.ticData.deltaTmag && (
-          <div className="data mono">
-            <div className="name">Delta Tmag</div>
-            <div className="value">{props.ticData.deltaTmag}</div>
-          </div>
-        )}
+        {TicBasicProperties.filter((p) => p.id !== 'ticId').map((p) => {
+          return (
+            !!props.ticData[p.id] && (
+              <div className={`data mono ${props.sortBy === p.id ? 'sort' : ''}`}>
+                <div className="name">{p.name}</div>
+                <div className="value">{p.id === 'sectors' ? props.ticData[p.id].replaceAll(',', ', ') : props.ticData[p.id]}</div>
+              </div>
+            )
+          );
+        })}
         <div className="flex-br" style={{ width: '100%' }}></div>
         {props.ticData.dispositions['user:paper'] && (
           <TicDisposition data={{ ...props.ticData.dispositions['user:paper'], name: 'Paper Disposition' }} />
         )}
         <div className="num-dispositions">{Object.keys(props.ticData.dispositions).length} Dispositions</div>
       </div>
+    </div>
+  );
+}
+
+function FloatingSearchBar(props: { value: string; onChange: (v: string) => void }) {
+  return (
+    <div className="floating-search">
+      <div className="label">{<Search />} Search</div>
+      <input type="text" placeholder="1003831, pVshape" value={props.value} onChange={(e) => props.onChange(e.target.value)} />
     </div>
   );
 }

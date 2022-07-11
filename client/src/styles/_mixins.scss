@@ -26,3 +26,8 @@
     font-weight: $fw-bold;
   }
 }
+
+@mixin blurred-bkg($color: $pri1) {
+  background: rgba($color, .7);
+  backdrop-filter: blur(7px);
+}

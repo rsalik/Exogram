@@ -1,5 +1,4 @@
 import { exofopLink } from '../utils';
-import TicDisposition from './TicDisposition';
 import TicDispositionTable from './TicDispositionTable';
 
 export default function TicInfoPanel(props: { ticData: any }) {

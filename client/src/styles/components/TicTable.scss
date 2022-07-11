@@ -55,6 +55,11 @@
 
     border-radius: $border-radius-large;
 
+    .data.sort {
+      background: $tertiary !important;
+      color: $bkg;
+    }
+
     &:nth-of-type(odd) {
       background: $pri2;
 
@@ -153,7 +158,7 @@
 
   .table-compact {
     border-collapse: collapse;
-    margin-top: .5em;
+    margin-top: 0.5em;
 
     tr {
       &:nth-of-type(even) {
@@ -167,6 +172,10 @@
 
         position: sticky;
         top: 0;
+
+        &.sort {
+          background: $tertiary;
+        }
 
         &:first-of-type {
           border-top-left-radius: $border-radius;
@@ -210,4 +219,50 @@
       }
     }
   }
+}
+
+.floating-search {
+  @include blurred-bkg($pri2);
+  border-radius: $border-radius;
+
+  font-size: 1.3em;
+
+  position: fixed;
+
+  &,
+  .label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .label {
+    margin-right: .5em;
+  }
+
+  .label svg {
+    margin-right: .2em;
+  }
+
+  input {
+    background: $primary;
+    border: none;
+    outline: none;
+
+    padding: .3em .5em;
+
+    border-radius: $border-radius;
+    font-size: 1em;
+
+    &::placeholder {
+      color: $pri3;
+    }
+
+    color: $bkg;
+  }
+
+  padding: 1em;
+
+  bottom: 1em;
+  right: 0.5em;
 }
