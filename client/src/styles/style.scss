@@ -4,7 +4,7 @@
 // Components
 @import 'components/Link';
 @import 'components/Panels';
-@import 'components/Header';
+@import 'components/HeaderAndFooter';
 @import 'components/TicTable';
 @import 'components/TicInfoPanel';
 @import 'components/TicDisposition';
@@ -61,4 +61,8 @@ body {
   margin: 0;
   background: $bkg;
   color: $white;
+
+  position: relative;
+
+  padding-bottom: 6rem;
 }

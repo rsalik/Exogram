@@ -1,6 +1,22 @@
-export default function Header() {
+export function Header() {
   return (
     <div className="header">
+      <HeaderAndFooterContent />
+    </div>
+  );
+}
+
+export function Footer() {
+  return (
+    <div className="footer">
+      <HeaderAndFooterContent />
+    </div>
+  );
+}
+
+function HeaderAndFooterContent() {
+  return (
+    <>
       <div className="title">
         <a href="/">
           Exo<span>gram</span>
@@ -11,6 +27,6 @@ export default function Header() {
         <div className="sep">/</div>
         <a href="/dictionary">Dictionary</a>
       </div>
-    </div>
+    </>
   );
 }
