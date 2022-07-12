@@ -1,0 +1,32 @@
+.dictionary {
+  @include rounded-panel();
+
+
+  .terms {
+    display: flex;
+    flex-wrap: wrap;
+
+    justify-content: center;
+
+    .term {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      width: 25em;
+      height: 10em;
+
+      margin: .7em;
+      padding: 1em;
+
+      background: $pri2;
+      border-radius: $border-radius-large;
+
+      .name {
+        font-size: 2em;
+        font-weight: $fw-bold;
+      }
+    }
+  }
+}

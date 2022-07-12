@@ -21,6 +21,8 @@
   padding: 1rem;
   margin: 1rem;
 
+  text-align: center;
+
   .title {
     font-size: 3em;
     font-weight: $fw-bold;
@@ -28,6 +30,6 @@
 }
 
 @mixin blurred-bkg($color: $pri1) {
-  background: rgba($color, .7);
-  backdrop-filter: blur(7px);
+  background: rgba($color, 0.6);
+  backdrop-filter: blur(9px);
 }
