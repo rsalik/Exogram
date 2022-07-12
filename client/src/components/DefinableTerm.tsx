@@ -14,7 +14,7 @@ export function generateDefinableTermsFromText(text: string) {
             return <></>;
           }
 
-          let dictTerm = dictionaryDefinitions.find((d) => d.name === tr || d.name.replaceAll('(p)', 'p') === tr);
+          let dictTerm = dictionaryDefinitions.find((d) => d.name === tr || d.name.replaceAll('(p)', 'p') === tr || d.name.replaceAll('(p)', '') === tr);
 
           if (dictTerm) {
             return <DefinableTerm text={t} term={dictTerm.name} definition={dictTerm.def} />;
