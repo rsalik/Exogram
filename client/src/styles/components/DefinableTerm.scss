@@ -5,11 +5,11 @@
   display: inline-block;
 
   cursor: help;
-  
-  .tooltip {
-    font-size: 1rem;
 
+  .tooltip {
     @include blurred-bkg($bkg);
+
+    font-size: 1rem;
 
     position: absolute;
 
@@ -17,6 +17,8 @@
     padding: 1em;
 
     max-width: 20em;
+
+    z-index: 120;
 
     .term {
       font-size: 1.5em;
