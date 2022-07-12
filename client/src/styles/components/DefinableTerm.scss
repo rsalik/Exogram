@@ -1,0 +1,26 @@
+.definable {
+  text-decoration: underline;
+  text-decoration-style: dotted;
+
+  display: inline-block;
+
+  cursor: help;
+  
+  .tooltip {
+    font-size: 1rem;
+
+    @include blurred-bkg($bkg);
+
+    position: absolute;
+
+    border-radius: $border-radius;
+    padding: 1em;
+
+    max-width: 20em;
+
+    .term {
+      font-size: 1.5em;
+      font-weight: $fw-bold;
+    }
+  }
+}

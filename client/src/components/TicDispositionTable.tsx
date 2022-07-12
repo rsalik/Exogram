@@ -1,3 +1,5 @@
+import { generateDefinableTermsFromText } from './DefinableTerm';
+
 export default function TicDispositionTable(props: { data: any }) {
   return (
     <div className="tic-disposition-table">
@@ -31,7 +33,7 @@ function TicDispositionTableRow(props: { data: any }) {
     <tr className={`${props.data.userId === 'user:paper' ? 'paper' : ''}`}>
       <td>{props.data.name}</td>
       <td>{props.data.disposition}</td>
-      <td>{props.data.comments}</td>
+      <td>{generateDefinableTermsFromText(props.data.comments)}</td>
     </tr>
   );
 }
