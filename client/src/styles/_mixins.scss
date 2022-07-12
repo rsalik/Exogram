@@ -30,6 +30,12 @@
 }
 
 @mixin blurred-bkg($color: $pri1) {
-  background: rgba($color, 0.7);
-  backdrop-filter: blur(9px);
+  @supports not (backdrop-filter: none) {
+    background: rgba($color, .95);
+  }
+
+  @supports (backdrop-filter: none) {
+    background: rgba($color, 0.75);
+    backdrop-filter: blur(10px) saturate(125%); 
+  }
 }

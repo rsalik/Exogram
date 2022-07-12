@@ -222,14 +222,15 @@
         }
 
         padding: 0.5em 1em;
-        max-width: 7em;
+
+        *:not(.tic-id) {
+          max-width: 7em;
+        }
 
         &.tic-id {
           a {
             @include bkg-on-hover($white);
           }
-
-          max-width: 8em;
         }
 
         &:first-of-type {
