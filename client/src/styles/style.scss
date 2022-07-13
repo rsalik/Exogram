@@ -65,6 +65,8 @@ body {
   background: $bkg;
   color: $white;
 
+  font-size: max(16px, 1.6vmin);
+
   position: relative;
 
   padding-bottom: 6rem;
