@@ -11,13 +11,17 @@ function App() {
   return (
     <Router>
       <Header />
-      <Routes>
-        <Route index element={<Home />} />
-        <Route path="/table" element={<TicTablePage />} />
-        <Route path="/dictionary" element={<DictionaryPage />} />
-        <Route path="/tic/:ticId" element={<TicPage />} />
-      </Routes>
-      <Footer />
+      <div className="content-wrapper">
+        <div>
+          <Routes>
+            <Route index element={<Home />} />
+            <Route path="/table" element={<TicTablePage />} />
+            <Route path="/dictionary" element={<DictionaryPage />} />
+            <Route path="/tic/:ticId" element={<TicPage />} />
+          </Routes>
+        </div>
+        <Footer />
+      </div>
     </Router>
   );
 }
