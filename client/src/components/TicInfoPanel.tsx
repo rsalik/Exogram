@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getTicFiles } from '../firebase/functionsHandler';
+import { getTicFiles } from '../handlers/functionsHandler';
 import { exofopLink, TicBasicProperties } from '../utils';
 import InfoPanel from './InfoPanel';
 import Link from './Link';

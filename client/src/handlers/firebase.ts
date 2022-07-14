@@ -1,6 +1,5 @@
 import { initializeApp } from 'firebase/app';
 import { getDatabase } from 'firebase/database';
-import { getFunctions } from 'firebase/functions';
 
 const app = initializeApp({
   apiKey: 'AIzaSyCANdvfJid7BOHTeKS-pFrRF8hDNmhkX_A',
@@ -14,4 +13,3 @@ const app = initializeApp({
 });
 
 export const db = getDatabase(app);
-export const functions = getFunctions(app);

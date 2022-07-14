@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getDictionary } from '../firebase/databaseHandler';
+import { getDictionary } from '../handlers/databaseHandler';
 import { generateDefinableTermsFromText } from './DefinableTerm';
 
 export default function TicDisposition(props: { data: any }) {

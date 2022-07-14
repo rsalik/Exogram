@@ -3,7 +3,7 @@ import Link from './Link';
 import TicDisposition from './TicDisposition';
 import { TableRows, ViewAgenda, Search } from '@mui/icons-material';
 import { exofopLink, searchTicList, sortTicList, TicBasicProperties, TicListSortByOptions } from '../utils';
-import { useTicList } from '../firebase/databaseHandler';
+import { useTicList } from '../handlers/databaseHandler';
 
 export default function TicTable(props: { onError?: Function }) {
   const ticList = useTicList();

@@ -3,7 +3,7 @@ import { useParams } from 'react-router';
 import ErrorPanel from '../components/ErrorPanel';
 import InfoPanel from '../components/InfoPanel';
 import TicInfoPanel from '../components/TicInfoPanel';
-import { useTicData } from '../firebase/databaseHandler';
+import { useTicData } from '../handlers/databaseHandler';
 
 export function TicPage() {
   const { ticId } = useParams();

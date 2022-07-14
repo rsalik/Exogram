@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getDictionary } from '../firebase/databaseHandler';
+import { getDictionary } from '../handlers/databaseHandler';
 
 export default function Dictionary() {
   const [dictionary, setDictionary] = useState<any[]>([]);
