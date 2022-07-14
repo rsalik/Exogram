@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getTicFiles } from '../handlers/functionsHandler';
 import { exofopLink, TicBasicProperties } from '../utils';
+import ErrorPanel from './ErrorPanel';
 import InfoPanel from './InfoPanel';
 import Link from './Link';
 import TicDispositionTable from './TicDispositionTable';
@@ -8,12 +9,15 @@ import TicDispositionTable from './TicDispositionTable';
 export default function TicInfoPanel(props: { ticData: any }) {
   const [ticFiles, setTicFiles] = useState<any[]>([]);
   const [ticFilesLoading, setTicFilesLoading] = useState(true);
+  const [ticFilesFailedLoading, setTicFilesFailedLoading] = useState(false);
 
   useEffect(() => {
     getTicFiles(props.ticData.ticId).then((files) => {
-      if (Array.isArray(files)) {
+      if (files) {
         setTicFiles(files);
         setTicFilesLoading(false);
+      } else {
+        setTicFilesFailedLoading(true);
       }
     });
   }, [props.ticData]);
@@ -45,7 +49,9 @@ export default function TicInfoPanel(props: { ticData: any }) {
         })}
       </div>
 
-      {ticFilesLoading ? (
+      {ticFilesFailedLoading ? (
+        <ErrorPanel title="Failed to load TIC files" message="Refresh the page to try again." />
+      ) : ticFilesLoading ? (
         <InfoPanel title="Loading TIC Files" />
       ) : ticFiles.length ? (
         <div className="files">
