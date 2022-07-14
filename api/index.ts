@@ -98,6 +98,6 @@ function getTicFilesFromFolder(ticId: string, drive: drive_v3.Drive, folderId = 
   });
 }
 
-export default app;
+module.exports = app;
 
 if (process.env.NODE_ENV !== 'production') app.listen(process.env.PORT || 3001, () => console.log('Listening...'));
