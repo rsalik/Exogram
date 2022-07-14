@@ -191,6 +191,7 @@
       th {
         padding: 0.5em 1em;
         background: $secondary;
+
         color: $bkg;
 
         position: sticky;
@@ -217,9 +218,8 @@
 
         text-align: center;
 
-        &.mono {
-          text-align: left;
-        }
+       // border: 1px solid $pri2;
+
 
         padding: 0.5em 1em;
 
@@ -228,6 +228,8 @@
         }
 
         &.tic-id {
+          text-align: center;
+
           a {
             @include bkg-on-hover($white);
           }

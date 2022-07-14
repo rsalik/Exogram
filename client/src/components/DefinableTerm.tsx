@@ -1,26 +1,27 @@
 import { useState } from 'react';
-import dictionaryDefinitions from '../dictionaryDefinitions.json';
 
-export function generateDefinableTermsFromText(text: string) {
+export function generateDefinableTermsFromText(text: string, dictionary: any[]) {
   return (
     <>
       {text
         .replaceAll(/,(?=[^\s])/g, ', ') // Add spaces to commas w/o spaces so that terms are seperated
         .split(' ')
-        .map<React.ReactNode>((t) => {
+        .map<React.ReactNode>((t, i) => {
           let tr = t.trim().replaceAll(',', '');
 
           if (tr.length === 0) {
-            return <></>;
+            return null;
           }
 
-          let dictTerm = dictionaryDefinitions.find((d) => d.name === tr || d.name.replaceAll('(p)', 'p') === tr || d.name.replaceAll('(p)', '') === tr);
+          let dictTerm = dictionary.find(
+            (d) => d.name === tr || d.name.replaceAll('(p)', 'p') === tr || d.name.replaceAll('(p)', '') === tr
+          );
 
           if (dictTerm) {
-            return <DefinableTerm text={t} term={dictTerm.name} definition={dictTerm.def} />;
+            return <DefinableTerm text={t} key={t} term={dictTerm.name} definition={dictTerm.def || ''} />;
           }
 
-          return <>{t}</>;
+          return t;
         })
         .reduce((p, c) => [p, ' ', c])}
     </>

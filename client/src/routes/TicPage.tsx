@@ -1,30 +1,45 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { getTic } from '../apiHandler';
 import ErrorPanel from '../components/ErrorPanel';
 import InfoPanel from '../components/InfoPanel';
 import TicInfoPanel from '../components/TicInfoPanel';
+import { useTicData } from '../firebase/databaseHandler';
 
 export function TicPage() {
   const { ticId } = useParams();
-  const [ticData, setTicData] = useState<any>({} as any);
 
   const [ticNotFoundError, setTicNotFoundError] = useState(false);
   const [loadingTicData, setLoadingTicData] = useState(true);
 
+  const ticData = useTicData(ticId || '');
+
   useEffect(() => {
-    if (ticId) {
-      getTic(ticId).then((data) => {
-        if (data) setTicData(data);
-        else setTicNotFoundError(true);
-
-        setLoadingTicData(false);
-      });
+    if (ticData) {
+      setLoadingTicData(false);
+      setTicNotFoundError(false);
     }
-  }, [ticId]);
 
-  if (loadingTicData) return <InfoPanel title="Loading TIC Data" message="" />;
-  if (ticNotFoundError) return <ErrorPanel title="Error 404" message={<>No data on <span className="mono">TIC <strong>{ticId}</strong></span> was found on the server.</>} />;
+    if (!ticData) {
+      setTicNotFoundError(true);
+    }
+  }, [ticData]);
+
+  if (loadingTicData) return <InfoPanel title="Loading TIC Data" />;
+  if (ticNotFoundError)
+    return (
+      <ErrorPanel
+        title="Error 404"
+        message={
+          <>
+            No data on{' '}
+            <span className="mono">
+              TIC <strong>{ticId}</strong>
+            </span>{' '}
+            was found on the server.
+          </>
+        }
+      />
+    );
 
   return (
     <div className="tic-page">

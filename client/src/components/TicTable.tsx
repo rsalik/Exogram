@@ -1,23 +1,17 @@
-import { useEffect, useState } from 'react';
-import { getAllTics } from '../apiHandler';
+import { useState } from 'react';
 import Link from './Link';
 import TicDisposition from './TicDisposition';
 import { TableRows, ViewAgenda, Search } from '@mui/icons-material';
 import { exofopLink, searchTicList, sortTicList, TicBasicProperties, TicListSortByOptions } from '../utils';
+import { useTicList } from '../firebase/databaseHandler';
 
 export default function TicTable(props: { onError?: Function }) {
-  const [ticData, setTicData] = useState([]);
+  const ticList = useTicList();
+
   const [compact, setCompact] = useState(true);
   const [sortBy, setSortBy] = useState('ticId');
   const [search, setSearch] = useState('');
   const [publishedOnly, setPublishedOnly] = useState(false);
-
-  useEffect(() => {
-    getAllTics().then((d) => {
-      if (!d || !d.length) props.onError?.();
-      else setTicData(d);
-    });
-  }, [props]);
 
   return (
     <>
@@ -60,14 +54,14 @@ export default function TicTable(props: { onError?: Function }) {
         {compact ? (
           <TicTableCompact
             ticData={sortTicList(
-              searchTicList(publishedOnly ? ticData.filter((t: any) => !!t.dispositions['user:paper']) : ticData, search),
+              searchTicList(publishedOnly ? ticList.filter((t: any) => !!t.dispositions['paper']) : ticList, search),
               sortBy
             )}
             sortBy={sortBy}
           />
         ) : (
           sortTicList(
-            searchTicList(publishedOnly ? ticData.filter((t: any) => !!t.dispositions['user:paper']) : ticData, search),
+            searchTicList(publishedOnly ? ticList.filter((t: any) => !!t.dispositions['paper']) : ticList, search),
             sortBy
           ).map((tic: any) => <TicTableRow ticData={tic} sortBy={sortBy} key={tic.ticId} />)
         )}
@@ -118,16 +112,16 @@ function TicTableCompactRow(props: { ticData: any }) {
         </Link>
       </td>
       <td>{props.ticData.sectors.replaceAll(',', ', ')}</td>
-      <td className="mono">{props.ticData.epoch}</td>
-      <td className="mono">{props.ticData.period}</td>
-      <td className="mono">{props.ticData.duration}</td>
+      <td className="mono">{fixedString(props.ticData.epoch, 3)}</td>
+      <td className="mono">{fixedString(props.ticData.period, 6)}</td>
+      <td className="mono">{fixedString(props.ticData.duration, 2)}</td>
       <td className="mono">{props.ticData.depth}</td>
-      <td className="mono">{props.ticData.depthPercent}</td>
-      <td className="mono">{props.ticData.rTranister /* Spelled wrong lol*/}</td>
-      <td className="mono">{props.ticData.rStar}</td>
+      <td className="mono">{fixedString(props.ticData.depthPercent, 3)}</td>
+      <td className="mono">{fixedString(props.ticData.rTranister, 2) /* Spelled wrong lol*/}</td>
+      <td className="mono">{fixedString(props.ticData.rTranister, 2)}</td>
       <td className="mono">{props.ticData.tmag}</td>
-      <td className="mono">{props.ticData.deltaTmag}</td>
-      <td>{props.ticData.dispositions['user:paper']?.disposition}</td>
+      <td className="mono">{fixedString(props.ticData.deltaTmag, 2)}</td>
+      <td>{props.ticData.dispositions['paper']?.disposition}</td>
       <td>{Object.keys(props.ticData.dispositions).length}</td>
     </tr>
   );
@@ -156,8 +150,8 @@ function TicTableRow(props: { ticData: any; sortBy: string }) {
           );
         })}
         <div className="flex-br" style={{ width: '100%' }}></div>
-        {props.ticData.dispositions['user:paper'] && (
-          <TicDisposition data={{ ...props.ticData.dispositions['user:paper'], name: 'Paper Disposition' }} />
+        {props.ticData.dispositions['paper'] && (
+          <TicDisposition data={{ ...props.ticData.dispositions['paper'], name: 'Paper Disposition' }} />
         )}
         <div className="num-dispositions">{Object.keys(props.ticData.dispositions).length} Dispositions</div>
       </div>
@@ -172,4 +166,14 @@ function FloatingSearchBar(props: { value: string; onChange: (v: string) => void
       <input type="text" placeholder="1003831, pVshape" value={props.value} onChange={(e) => props.onChange(e.target.value)} />
     </div>
   );
+}
+
+function fixedString(num: string, digits: number) {
+  let flt = parseFloat(num);
+
+  if (isNaN(flt)) {
+    return num;
+  }
+
+  return flt.toFixed(digits);
 }
