@@ -16,11 +16,11 @@ export const TicListSortByOptions = [
     value: 'period',
   },
   {
-    name: 'RTransiter',
-    value: 'rTranister', // Spelled wrong ofc
+    name: 'Planet Radius',
+    value: 'rPlanet',
   },
   {
-    name: 'RStar',
+    name: 'Star Radius',
     value: 'rStar',
   },
   {
@@ -74,22 +74,22 @@ export const TicBasicProperties = [
     shortName: 'Depth [%]',
   },
   {
-    name: 'RTransiter',
-    id: 'rTranister', // Spelled wrong ofc
-    shortName: 'RTransiter',
+    name: 'Planet Radius',
+    id: 'rPlanet',
+    shortName: 'R Planet',
   },
   {
-    name: 'RStar',
+    name: 'Star Radius',
     id: 'rStar',
-    shortName: 'RStar',
+    shortName: 'R Star',
   },
   {
-    name: 'Tmag',
+    name: 'TESSmag',
     id: 'tmag',
     shortName: 'Tmag',
   },
   {
-    name: 'Delta Tmag',
+    name: 'Delta TESSmag',
     id: 'deltaTmag',
     shortName: 'Δ Tmag',
   },

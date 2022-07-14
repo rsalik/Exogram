@@ -83,8 +83,8 @@ function TicTableCompact(props: { ticData: any; sortBy: string }) {
           <th>Duration [Hrs]</th>
           <th>Depth [ppm]</th>
           <th>Depth [%]</th>
-          <th className={`${props.sortBy === 'rTranister' ? 'sort' : ''}`}>RTransiter</th>
-          <th className={`${props.sortBy === 'rStar' ? 'sort' : ''}`}>RStar</th>
+          <th className={`${props.sortBy === 'rPlanet' ? 'sort' : ''}`}>R<sub>P</sub></th>
+          <th className={`${props.sortBy === 'rStar' ? 'sort' : ''}`}>R<sub>S</sub></th>
           <th>Tmag</th>
           <th>Δ Tmag</th>
           <th className={`${props.sortBy === 'paperDisp' ? 'sort' : ''}`}>Paper Disp</th>
@@ -117,8 +117,8 @@ function TicTableCompactRow(props: { ticData: any }) {
       <td className="mono">{fixedString(props.ticData.duration, 2)}</td>
       <td className="mono">{props.ticData.depth}</td>
       <td className="mono">{fixedString(props.ticData.depthPercent, 3)}</td>
-      <td className="mono">{fixedString(props.ticData.rTranister, 2) /* Spelled wrong lol*/}</td>
-      <td className="mono">{fixedString(props.ticData.rTranister, 2)}</td>
+      <td className="mono">{fixedString(props.ticData.rPlanet, 2)}</td>
+      <td className="mono">{fixedString(props.ticData.rStar, 2)}</td>
       <td className="mono">{props.ticData.tmag}</td>
       <td className="mono">{fixedString(props.ticData.deltaTmag, 2)}</td>
       <td>{props.ticData.dispositions['paper']?.disposition}</td>
