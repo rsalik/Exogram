@@ -31,3 +31,6 @@ yarn-error.log*
 **/typings/
 
 .firebase
+
+# Data management scripts
+scripts

@@ -47,7 +47,7 @@ function TicDispositionTableRow(props: { data: any; users: any; dictionary: any[
           ? props.data.userId[0].toUpperCase() + props.data.userId.substring(1) // Crazy, I know lol
           : props.users?.filter((u: any) => u.id === props.data.userId)[0]?.name}
       </td>
-      <td>{props.data.disposition}</td>
+      <td>{generateDefinableTermsFromText(props.data.disposition, props.dictionary)}</td>
       <td>{generateDefinableTermsFromText(props.data.comments, props.dictionary)}</td>
     </tr>
   );

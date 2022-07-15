@@ -136,7 +136,7 @@ function TicTableRow(props: { ticData: any; sortBy: string }) {
           return (
             !!props.ticData[p.id] && (
               <div className={`data mono ${props.sortBy === p.id ? 'sort' : ''}`}>
-                <div className="name">{p.name}</div>
+                <div className="name" dangerouslySetInnerHTML={{ __html: p.name }}></div>
                 <div className="value">{p.id === 'sectors' ? props.ticData[p.id].replaceAll(',', ', ') : props.ticData[p.id]}</div>
               </div>
             )

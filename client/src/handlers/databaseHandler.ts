@@ -79,8 +79,6 @@ function convertUsersObjToList(users: any) {
 export async function getDictionary() {
   let dict = (await get(ref(db, '/dictionary'))).val();
 
-  console.log(dict);
-
   let dictArr = [];
   for (const key in dict) {
     dictArr.push({

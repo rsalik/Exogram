@@ -5,6 +5,7 @@ import ErrorPanel from './ErrorPanel';
 import InfoPanel from './InfoPanel';
 import Link from './Link';
 import TicDispositionTable from './TicDispositionTable';
+import { TicChartsPanel } from './TicChartsPanel';
 
 export default function TicInfoPanel(props: { ticData: any }) {
   const [ticFiles, setTicFiles] = useState<any[]>([]);
@@ -78,6 +79,8 @@ export default function TicInfoPanel(props: { ticData: any }) {
         <div className="title">Dispositions</div>
         <TicDispositionTable data={props.ticData.dispositions} />
       </div>
+
+      <TicChartsPanel ticId={props.ticData.ticId} />
     </div>
   );
 }

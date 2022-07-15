@@ -13,6 +13,7 @@ export function TicPage() {
 
   const ticData = useTicData(ticId || '');
 
+
   useEffect(() => {
     if (ticData) {
       setLoadingTicData(false);
