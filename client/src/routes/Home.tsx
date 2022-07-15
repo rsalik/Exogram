@@ -5,7 +5,6 @@ export default function Home() {
   return (
     <div className="home">
       <div className="title">Welcome to Exogram!</div>
-      <div className="description">The one-stop shop for all things Planet Patrol</div>
       <div className="section">
         <img src={TableImage} alt="TIC Table" />
         <div className="text">

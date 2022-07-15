@@ -60,10 +60,9 @@ export default function TicTable(props: { onError?: Function }) {
             sortBy={sortBy}
           />
         ) : (
-          sortTicList(
-            searchTicList(publishedOnly ? ticList.filter((t: any) => !!t.dispositions['paper']) : ticList, search),
-            sortBy
-          ).map((tic: any) => <TicTableRow ticData={tic} sortBy={sortBy} key={tic.ticId} />)
+          sortTicList(searchTicList(publishedOnly ? ticList.filter((t: any) => !!t.dispositions['paper']) : ticList, search), sortBy).map(
+            (tic: any) => <TicTableRow ticData={tic} sortBy={sortBy} key={tic.ticId} />
+          )
         )}
       </div>
     </>
@@ -71,22 +70,16 @@ export default function TicTable(props: { onError?: Function }) {
 }
 
 function TicTableCompact(props: { ticData: any; sortBy: string }) {
+  const headerNames = [...TicBasicProperties];
+  headerNames.splice(1, 0, { id: 'exofop', name: 'Exofop', shortName: 'Exofop' });
+
   return (
     <table className="table-compact" cellSpacing={0}>
       <thead>
         <tr>
-          <th className={`${props.sortBy === 'ticId' ? 'sort' : ''}`}>TIC ID</th>
-          <th>Exofop</th>
-          <th>Sectors</th>
-          <th className={`${props.sortBy === 'epoch' ? 'sort' : ''}`}>Epoch [BJD]</th>
-          <th className={`${props.sortBy === 'period' ? 'sort' : ''}`}>Period [Days]</th>
-          <th>Duration [Hrs]</th>
-          <th>Depth [ppm]</th>
-          <th>Depth [%]</th>
-          <th className={`${props.sortBy === 'rPlanet' ? 'sort' : ''}`}>R<sub>P</sub></th>
-          <th className={`${props.sortBy === 'rStar' ? 'sort' : ''}`}>R<sub>S</sub></th>
-          <th>Tmag</th>
-          <th>Δ Tmag</th>
+          {headerNames.map((p) => (
+            <th key={p.id} className={`${p.id} ${props.sortBy === p.id ? 'sort' : ''}`} dangerouslySetInnerHTML={{ __html: p.shortName }} />
+          ))}
           <th className={`${props.sortBy === 'paperDisp' ? 'sort' : ''}`}>Paper Disp</th>
           <th className={`${props.sortBy === 'dispAsc' || props.sortBy === 'dispDesc' ? 'sort' : ''}`}># Disps</th>
         </tr>

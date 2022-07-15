@@ -51,37 +51,37 @@ export const TicBasicProperties = [
   {
     name: 'Epoch [BJD]',
     id: 'epoch',
-    shortName: 'Epoch [BJD]',
+    shortName: 'Epoch',
   },
   {
     name: 'Period [Days]',
     id: 'period',
-    shortName: 'Period [Days]',
+    shortName: 'Period',
   },
   {
     name: 'Duration [Hours]',
     id: 'duration',
-    shortName: 'Duration [Hrs]',
+    shortName: 'Duration',
   },
   {
     name: 'Depth [ppm]',
     id: 'depth',
-    shortName: 'Depth [ppm]',
+    shortName: 'Depth',
   },
   {
     name: 'Depth [%]',
     id: 'depthPercent',
-    shortName: 'Depth [%]',
+    shortName: 'Depth%',
   },
   {
-    name: 'Planet Radius',
+    name: 'Planet Radius [R<sub>J</sub>]',
     id: 'rPlanet',
-    shortName: 'R Planet',
+    shortName: 'R<sub>P</sub>',
   },
   {
-    name: 'Star Radius',
+    name: 'Star Radius [R<sub>☉</sub>]',
     id: 'rStar',
-    shortName: 'R Star',
+    shortName: 'R<sub>S</sub>',
   },
   {
     name: 'TESSmag',

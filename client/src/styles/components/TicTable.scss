@@ -218,14 +218,9 @@
 
         text-align: center;
 
-       // border: 1px solid $pri2;
-
+        // border: 1px solid $pri2;
 
         padding: 0.5em 1em;
-
-        *:not(.tic-id) {
-          max-width: 7em;
-        }
 
         &.tic-id {
           text-align: center;
