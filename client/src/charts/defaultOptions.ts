@@ -4,6 +4,7 @@ export function getChartOptions(title: string, xAxisLabel: string, yAxisLabel: s
     interaction: {
       mode: 'index',
       intersection: false,
+      enabled: false,
     },
     scales: {
       y: {
@@ -72,8 +73,10 @@ export function getChartOptions(title: string, xAxisLabel: string, yAxisLabel: s
         },
       },
       tooltip: {
-        mode: 'interpolate',
+        mode: 'index',
         intersect: false,
+        enabled: false,
+        external: (ctx: any) => {},
       },
     },
   };

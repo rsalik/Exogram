@@ -1,4 +1,25 @@
 .chart {
   padding: 0 3em;
   margin: 1em 0; 
+  position: relative;
+
+  canvas {
+    position: relative;
+    z-index: 1;
+  }
+
+  .tooltip {
+    @include blurred-bkg();
+
+    position: absolute;
+    top: 5em;
+    right: 5em;
+
+    padding: 1em;
+    border-radius: $border-radius;
+
+    font-size: 1em;
+
+    z-index: 100;
+  }
 }
