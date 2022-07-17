@@ -1,3 +1,89 @@
 .tic-charts-panel {
   @include rounded-panel($pri2);
+
+  > .title {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .show-help {
+      position: absolute;
+      right: 0;
+
+      width: 1em;
+      height: 1em;
+
+      margin: 0 0.2rem;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      border-radius: $border-radius;
+
+      cursor: pointer;
+
+      &:hover {
+        background: $pri4;
+      }
+
+      &.active {
+        background: $tertiary;
+        color: $bkg;
+      }
+    }
+  }
+
+  .help-wrapper {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+
+    z-index: 100;
+
+    .help {
+      @include blurred-bkg();
+
+      position: relative;
+
+      border-radius: $border-radius-large;
+
+      padding: 3em;
+
+      font-size: 1.7em;
+
+      .title {
+        font-size: 1.7em;
+      }
+
+      .key {
+        background: $primary;
+        color: $bkg;
+
+        padding: .1em .3em;
+        border-radius: $border-radius;
+
+        filter: drop-shadow(0 .15em 0 $pri4);
+      }
+
+      .close {
+        font-size: .7em;
+
+        position: absolute;
+        bottom: .6rem;
+        left: 0;
+        right: 0;
+      }
+    }
+
+    
+  }
 }

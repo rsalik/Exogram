@@ -1,6 +1,7 @@
 export function getChartOptions(title: string, xAxisLabel: string, yAxisLabel: string) {
   return {
     responsive: true,
+    maintainAspectRatio: false,
     scales: {
       y: {
         title: {

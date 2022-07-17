@@ -6,7 +6,6 @@ export class CentroidOffsetChartDataGenerator extends ChartDataGenerator {
   }
 
   generateDataset(data: any, ticId: string, index: number, cleaned?: boolean) {
-    console.log(data);
     if (!data || data.error) return null;
 
     return [
@@ -45,8 +44,8 @@ export class CentroidOffsetChartDataGenerator extends ChartDataGenerator {
 
   getDefaultRange() {
     return {
-      min: 0.99,
-      max: 1.01,
+      min: 0.999,
+      max: 1.001,
     };
   }
 }

@@ -8,7 +8,6 @@ export class NormalizedFluxChartDataGenerator extends ChartDataGenerator {
   }
 
   generateDataset(data: any, ticId: string, index: number, cleaned?: boolean) {
-    console.log(data);
     if (!data || data.error) return null;
 
     return [{
@@ -25,8 +24,8 @@ export class NormalizedFluxChartDataGenerator extends ChartDataGenerator {
             };
       }),
       showLine: true,
-      borderColor: this.getColorOfTic(ticId),
-      backgroundColor: this.getColorOfTic(ticId),
+      borderColor: this.colorArr[index % this.colorArr.length],
+      backgroundColor: this.colorArr[index % this.colorArr.length],
       tension: 0.4,
       borderWidth: 2,
       pointRadius: 2,
@@ -35,8 +34,8 @@ export class NormalizedFluxChartDataGenerator extends ChartDataGenerator {
 
   getDefaultRange() {
     return {
-      min: 0.99,
-      max: 1.01,
+      min: 0.97,
+      max: 1.03,
     };
   }
 }

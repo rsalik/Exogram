@@ -50,8 +50,4 @@ export class ChartDataGenerator {
       max: 10,
     };
   }
-
-  getColorOfTic(ticId: string) {
-    return this.colorArr[this.tics.indexOf(ticId) % this.colorArr.length];
-  }
 }

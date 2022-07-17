@@ -22,7 +22,6 @@ export default function Chart(props: { generator: ChartDataGenerator }) {
   const chartRef = useRef<any>();
 
   function onTooltipUpdate(ctx: any) {
-    console.log(ctx);
     setTooltipData({ points: ctx.tooltip.dataPoints });
   }
 
@@ -46,12 +45,12 @@ export default function Chart(props: { generator: ChartDataGenerator }) {
         <div className="tooltip">
           {tooltipData.points[0]?.raw.x && (
             <div className="text">
-              Time: <span className="mono">{tooltipData.points[0].raw.x.toFixed(3)}</span>
+              Time: <span className="mono">{tooltipData.points[0].raw.x.toFixed(4)}</span>
             </div>
           )}
-          {tooltipData.points.map((p: any) => (
-            <div className="text color" style={{ backgroundColor: p.dataset.backgroundColor }}>
-              {p.dataset.label}: <span className="mono">{p.raw.y.toFixed(4)}</span>
+          {tooltipData.points.map((p: any, i: number) => (
+            <div className="text color" key={i} style={{ backgroundColor: p.dataset.backgroundColor }}>
+              {p.dataset.label}: <span className="mono">{p.raw.y.toFixed(6)}</span>
             </div>
           ))}
         </div>
