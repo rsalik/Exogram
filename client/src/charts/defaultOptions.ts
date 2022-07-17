@@ -1,11 +1,6 @@
 export function getChartOptions(title: string, xAxisLabel: string, yAxisLabel: string) {
   return {
     responsive: true,
-    interaction: {
-      mode: 'index',
-      intersection: false,
-      enabled: false,
-    },
     scales: {
       y: {
         title: {
@@ -19,6 +14,8 @@ export function getChartOptions(title: string, xAxisLabel: string, yAxisLabel: s
           color: '#fff2',
           borderColor: '#fffa',
         },
+        min: 0.99,
+        max: 1.01,
       },
       x: {
         title: {
@@ -39,13 +36,17 @@ export function getChartOptions(title: string, xAxisLabel: string, yAxisLabel: s
         pan: {
           enabled: true,
           mode: 'xy',
-          modifierKey: 'alt',
         },
         zoom: {
-          drag: {
+          wheel: {
             enabled: true,
+            modifierKey: 'alt',
           },
-          mode: 'xy',
+          pinch: {
+            enabled: true,
+            modifierKey: 'alt',
+          },
+          mode: 'x',
         },
       },
       legend: {

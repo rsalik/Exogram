@@ -1,6 +1,6 @@
 .chart {
   padding: 0 3em;
-  margin: 1em 0; 
+  margin: 1em 0;
   position: relative;
 
   canvas {
@@ -13,7 +13,7 @@
 
     position: absolute;
     top: 5em;
-    right: 5em;
+    left: 7em;
 
     padding: 1em;
     border-radius: $border-radius;
@@ -21,5 +21,53 @@
     font-size: 1em;
 
     z-index: 100;
+
+    .text {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      padding: 0.3em;
+      margin: 0.2em 0;
+
+      border-radius: $border-radius;
+
+      font-weight: $fw-bold;
+
+      span {
+        font-weight: $fw-regular;
+        margin-left: 0.5em;
+      }
+
+      &.color {
+        color: $bkg;
+      }
+    }
+  }
+
+  .btn {
+    @include blurred-bkg();
+
+    padding: 0.7em;
+    border-radius: $border-radius;
+
+    cursor: pointer;
+
+    z-index: 100;
+
+    position: absolute;
+    right: 4.5em;
+    top: 5.5em;
+
+    transition: color $transition, background-color $transition;
+
+    &:hover {
+      color: $bkg;
+      background: $primary;
+    }
+
+    &.show-clean {
+      top: 8.5em;
+    }
   }
 }
