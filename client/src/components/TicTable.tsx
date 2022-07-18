@@ -4,8 +4,9 @@ import TicDisposition from './TicDisposition';
 import { TableRows, ViewAgenda, Search } from '@mui/icons-material';
 import { exofopLink, searchTicList, sortTicList, TicBasicProperties, TicListSortByOptions } from '../utils';
 import { useTicGroups, useTicList } from '../handlers/databaseHandler';
+import ErrorPanel from './ErrorPanel';
 
-export default function TicTable(props: { onError?: Function }) {
+export default function TicTable() {
   const ticList = useTicList();
   const ticGroups = useTicGroups();
 
@@ -72,7 +73,19 @@ export default function TicTable(props: { onError?: Function }) {
           </div>
         </div>
 
-        {compact ? (
+        {getFilteredTicList().length === 0 ? (
+          <ErrorPanel
+            title="No Results"
+            message={
+              <>
+                No TICs matched your filters. If you believe this to be an error, contact the{' '}
+                <Link href="mailto:rssalik14@gmail.com" borderless>
+                  developers
+                </Link>
+              </>
+            }
+          />
+        ) : compact ? (
           <TicTableCompact ticData={getFilteredTicList()} sortBy={sortBy} />
         ) : (
           getFilteredTicList().map((tic: any) => <TicTableRow ticData={tic} sortBy={sortBy} key={tic.ticId} />)
