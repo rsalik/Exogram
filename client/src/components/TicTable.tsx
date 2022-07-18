@@ -3,15 +3,24 @@ import Link from './Link';
 import TicDisposition from './TicDisposition';
 import { TableRows, ViewAgenda, Search } from '@mui/icons-material';
 import { exofopLink, searchTicList, sortTicList, TicBasicProperties, TicListSortByOptions } from '../utils';
-import { useTicList } from '../handlers/databaseHandler';
+import { useTicGroups, useTicList } from '../handlers/databaseHandler';
 
 export default function TicTable(props: { onError?: Function }) {
   const ticList = useTicList();
+  const ticGroups = useTicGroups();
 
   const [compact, setCompact] = useState(true);
+  const [activeGroup, setActiveGroup] = useState(1000000);
   const [sortBy, setSortBy] = useState('ticId');
   const [search, setSearch] = useState('');
   const [publishedOnly, setPublishedOnly] = useState(false);
+
+  function getFilteredTicList() {
+    return sortTicList(
+      searchTicList(publishedOnly ? ticList.filter((t: any) => !!t.dispositions['paper']) : ticList, search),
+      sortBy
+    ).filter((t: any) => t.group === activeGroup);
+  }
 
   return (
     <>
@@ -49,20 +58,24 @@ export default function TicTable(props: { onError?: Function }) {
               ))}
             </select>
           </div>
+          {/* eslint-disable-next-line react/jsx-no-comment-textnodes*/}
+          <div className="sep">//</div>
+          <div className="group">
+            <label htmlFor="group"> Show Group</label>
+            <select name="group" onChange={(e) => setActiveGroup(parseInt(e.target.value))}>
+              {ticGroups.map((o) => (
+                <option key={o.id} value={o.id}>
+                  {o.name}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
 
         {compact ? (
-          <TicTableCompact
-            ticData={sortTicList(
-              searchTicList(publishedOnly ? ticList.filter((t: any) => !!t.dispositions['paper']) : ticList, search),
-              sortBy
-            )}
-            sortBy={sortBy}
-          />
+          <TicTableCompact ticData={getFilteredTicList()} sortBy={sortBy} />
         ) : (
-          sortTicList(searchTicList(publishedOnly ? ticList.filter((t: any) => !!t.dispositions['paper']) : ticList, search), sortBy).map(
-            (tic: any) => <TicTableRow ticData={tic} sortBy={sortBy} key={tic.ticId} />
-          )
+          getFilteredTicList().map((tic: any) => <TicTableRow ticData={tic} sortBy={sortBy} key={tic.ticId} />)
         )}
       </div>
     </>

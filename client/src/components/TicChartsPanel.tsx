@@ -17,18 +17,24 @@ export function TicChartsPanel(props: { ticId: string }) {
         </div>
       </div>
       {showHelp && (
-        <div className="help-wrapper" onClick={() => {setShowHelp(false)}}>
+        <div
+          className="help-wrapper"
+          onClick={() => {
+            setShowHelp(false);
+          }}
+        >
           <div className="help">
             <div className="title">Chart Instructions</div>
-            <div className="command">
-              <strong>Drag</strong>: Pan
+            <div className="row">
+              <strong>Click + Drag</strong>: Pan
             </div>
-            <div className="command">
+            <div className="row">
               <strong>
                 <span className="key">Alt</span> + Scroll
               </strong>
               : Zoom
             </div>
+            <div className="row resize">Charts can be resized by dragging the icon near the bottom right corner of the chart up or down.</div>
             <div className="close">Click anywhere to close.</div>
           </div>
         </div>

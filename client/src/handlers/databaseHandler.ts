@@ -2,7 +2,6 @@ import { ref, onValue, get } from 'firebase/database';
 import { useEffect, useState } from 'react';
 import { db } from './firebase';
 
-
 // Get Tics Hook
 export function useTicList() {
   const [tics, setTics] = useState<any[]>([]);
@@ -20,6 +19,24 @@ export function useTicList() {
   return tics;
 }
 
+// Get Tics Groups Hook
+export function useTicGroups() {
+  const [groups, setGroups] = useState<any[]>([]);
+
+  useEffect(() => {
+    const unsubscribe = onValue(ref(db, 'ticGroups'), (snapshot: any) => {
+      setGroups(convertTicGroupsObjToList(snapshot.val()));
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+  return groups;
+}
+
+// Get Individual Tic Data Hook
 export function useTicData(ticId: string) {
   const [tic, setTic] = useState<any>();
 
@@ -62,6 +79,18 @@ function convertTicsObjToList(tics: any) {
   }
 
   return ticList;
+}
+
+function convertTicGroupsObjToList(groups: any) {
+  const ticGroupsList = [];
+  for (const key in groups) {
+    ticGroupsList.push({
+      id: key,
+      name: groups[key],
+    });
+  }
+
+  return ticGroupsList;
 }
 
 function convertUsersObjToList(users: any) {

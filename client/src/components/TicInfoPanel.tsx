@@ -6,11 +6,14 @@ import InfoPanel from './InfoPanel';
 import Link from './Link';
 import TicDispositionTable from './TicDispositionTable';
 import { TicChartsPanel } from './TicChartsPanel';
+import { useTicGroups } from '../handlers/databaseHandler';
 
 export default function TicInfoPanel(props: { ticData: any }) {
   const [ticFiles, setTicFiles] = useState<any[]>([]);
   const [ticFilesLoading, setTicFilesLoading] = useState(true);
   const [ticFilesFailedLoading, setTicFilesFailedLoading] = useState(false);
+
+  const ticGroups = useTicGroups();
 
   useEffect(() => {
     getTicFiles(props.ticData.ticId).then((files) => {
@@ -28,7 +31,8 @@ export default function TicInfoPanel(props: { ticData: any }) {
       <div className="title-sec-wrapper">
         <div className="title-sec">
           <div className="title">
-            TIC <span>{props.ticData.ticId}</span>
+            TIC&nbsp;<span>{props.ticData.ticId}</span>
+            {ticGroups && ticGroups.length && <div className="group">{ticGroups.filter((g) => parseInt(g.id) === props.ticData.group)[0]?.name}</div>}
           </div>
           <a href={exofopLink(props.ticData.ticId)} className="exofop-link" target="_blank" rel="noreferrer">
             Exofop Link

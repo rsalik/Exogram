@@ -31,11 +31,11 @@
 
 @mixin blurred-bkg($color: $pri1) {
   @supports not (backdrop-filter: none) {
-    background: rgba($color, .95);
+    background: rgba($color, 0.95);
   }
 
   @supports (backdrop-filter: none) {
     background: rgba($color, 0.75);
-    backdrop-filter: blur(10px) saturate(125%); 
+    backdrop-filter: blur(10px) saturate(125%);
   }
 }

@@ -1,10 +1,17 @@
 .chart {
-  padding: 0 3em;
-  margin: 1em 0;
+  padding: 0 0em;
+  margin: 1em 3em;
   position: relative;
 
   font-size: 20px;
   height: 30em;
+
+  min-height: 20em;
+
+  overflow: auto;
+
+  resize: vertical;
+
 
   canvas {
     position: relative;
@@ -16,7 +23,7 @@
 
     position: absolute;
     top: 5rem;
-    left: 9rem;
+    left: 5.5rem;
 
     padding: 1em;
     border-radius: $border-radius;
@@ -59,7 +66,7 @@
     z-index: 100;
 
     position: absolute;
-    right: 4.5em;
+    right: 1.5em;
     top: 4.5em;
 
     transition: color $transition, background-color $transition;
