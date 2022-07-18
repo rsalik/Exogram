@@ -13,7 +13,7 @@ export class ChartDataGenerator {
   colorArr = ['#61dafb', '#fb61bd', '#ffe345'];
 
   constructor(tics: string[], title: string, xAxisLabel: string, yAxisLabel: string) {
-    this.tics = tics.sort();
+    this.tics = tics.map((t) => t.replaceAll(/\(.+\)/gm, '')).sort(); // Remove parenthesis from TIC names
     this.title = title;
     this.xAxisLabel = xAxisLabel;
     this.yAxisLabel = yAxisLabel;
@@ -48,6 +48,30 @@ export class ChartDataGenerator {
     return {
       min: 0,
       max: 10,
+    };
+  }
+
+  async getDefaultXAxisBounds() {
+    let min = -1;
+    let max = 0;
+
+    for (const ticId of this.tics) {
+      let data = await getTicChartData(ticId);
+      if (data && data.time) {
+        if (min === -1) min = data.time[0] - 50;
+        else min = Math.min(min, data.time[0] - 50);
+
+        if (max === 0) max = data.time[data.time.length - 1] + 50;
+        else max = Math.max(max, data.time[data.time.length - 1] + 50);
+      }
+    }
+
+    min = Math.floor(min / 10) * 10;
+    max = Math.ceil(max / 10) * 10;
+
+    return {
+      min,
+      max,
     };
   }
 }

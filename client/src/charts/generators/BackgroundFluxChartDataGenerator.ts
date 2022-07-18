@@ -29,8 +29,8 @@ export class BackgroundFluxChartDataGenerator extends ChartDataGenerator {
 
   getDefaultRange() {
     return {
-      min: -1000,
-      max: 1000,
+      min: -1500,
+      max: 1500,
     };
   }
 }

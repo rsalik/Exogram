@@ -4,16 +4,43 @@ import { NormalizedFluxChartDataGenerator } from '../charts/generators/Normalize
 import { Help } from '@mui/icons-material';
 import Chart from './Chart';
 import { useState } from 'react';
+import LinkedChartController from '../charts/LinkedChartController';
 
 export function TicChartsPanel(props: { ticId: string }) {
   const [showHelp, setShowHelp] = useState(false);
 
+  const [linkedChartController, setLinkedChartController] = useState<LinkedChartController | undefined>(new LinkedChartController());
+
   return (
     <div className="tic-charts-panel">
-      <div className="title">
-        Charts
-        <div className={`show-help ${showHelp ? 'active' : ''}`} onClick={() => setShowHelp(true)}>
-          <Help fontSize="large" />
+      <div className="title-sec">
+        <div className="title">
+          Charts
+          <div className={`show-help ${showHelp ? 'active' : ''}`} onClick={() => setShowHelp(true)}>
+            <Help fontSize="large" />
+          </div>
+        </div>
+        <div className="settings">
+          <div className="link-graphs">
+            Link Graphs&nbsp;
+            <div
+              className={`btn ${!!linkedChartController ? 'active' : ''}`}
+              onClick={() => {
+                if (!linkedChartController) setLinkedChartController(new LinkedChartController());
+              }}
+            >
+              On
+            </div>
+            <div className="sep">/</div>
+            <div
+              className={`btn ${!linkedChartController ? 'active' : ''}`}
+              onClick={() => {
+                setLinkedChartController(undefined);
+              }}
+            >
+              Off
+            </div>
+          </div>
         </div>
       </div>
       {showHelp && (
@@ -34,14 +61,16 @@ export function TicChartsPanel(props: { ticId: string }) {
               </strong>
               : Zoom
             </div>
-            <div className="row resize">Charts can be resized by dragging the icon near the bottom right corner of the chart up or down.</div>
+            <div className="row resize">
+              Charts can be resized by dragging the icon near the bottom right corner of the chart up or down.
+            </div>
             <div className="close">Click anywhere to close.</div>
           </div>
         </div>
       )}
-      <Chart generator={new NormalizedFluxChartDataGenerator([props.ticId])} />
-      <Chart generator={new CentroidOffsetChartDataGenerator([props.ticId])} />
-      <Chart generator={new BackgroundFluxChartDataGenerator([props.ticId])} />
+      <Chart generator={new NormalizedFluxChartDataGenerator([props.ticId])} linkController={linkedChartController} />
+      <Chart generator={new CentroidOffsetChartDataGenerator([props.ticId])} linkController={linkedChartController} />
+      <Chart generator={new BackgroundFluxChartDataGenerator([props.ticId])} linkController={linkedChartController} />
     </div>
   );
 }

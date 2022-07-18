@@ -1,36 +1,70 @@
 .tic-charts-panel {
   @include rounded-panel($pri2);
 
-  > .title {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    .show-help {
-      position: absolute;
-      right: 0;
-
-      width: 1em;
-      height: 1em;
-
-      margin: 0 0.2rem;
-
+  > .title-sec {
+    .title {
+      position: relative;
       display: flex;
       justify-content: center;
       align-items: center;
 
-      border-radius: $border-radius;
+      .show-help {
+        position: absolute;
+        right: 0;
 
-      cursor: pointer;
+        width: 1em;
+        height: 1em;
 
-      &:hover {
-        background: $pri4;
+        margin: 0 0.2rem;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        border-radius: $border-radius;
+
+        cursor: pointer;
+
+        &:hover {
+          background: $pri4;
+        }
+
+        &.active {
+          background: $tertiary;
+          color: $bkg;
+        }
+      }
+    }
+
+    .settings {
+      &,
+      & div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
 
-      &.active {
-        background: $tertiary;
-        color: $bkg;
+      .btn {
+        padding: 0.2rem 0.5rem;
+
+        border-radius: $border-radius;
+
+        cursor: pointer;
+
+        &:hover {
+          background: $white;
+          color: $bkg;
+        }
+
+        &.active {
+          background: $white;
+          color: $bkg;
+        }
+      }
+
+      .sep {
+        margin: 0 0.5rem;
+        color: $pri7;
       }
     }
   }

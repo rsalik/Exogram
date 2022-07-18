@@ -1,7 +1,10 @@
+import { Chart } from 'chart.js';
+
 export function getChartOptions(title: string, xAxisLabel: string, yAxisLabel: string) {
   return {
     responsive: true,
     maintainAspectRatio: false,
+    animation: false,
     scales: {
       y: {
         title: {
@@ -37,6 +40,7 @@ export function getChartOptions(title: string, xAxisLabel: string, yAxisLabel: s
         pan: {
           enabled: true,
           mode: 'xy',
+          onPanComplete: (state: { chart: Chart }) => {},
         },
         zoom: {
           wheel: {
@@ -48,6 +52,7 @@ export function getChartOptions(title: string, xAxisLabel: string, yAxisLabel: s
             modifierKey: 'alt',
           },
           mode: 'x',
+          onZoomComplete: (state: { chart: Chart }) => {},
         },
       },
       legend: {

@@ -28,7 +28,7 @@ export class NormalizedFluxChartDataGenerator extends ChartDataGenerator {
       backgroundColor: this.colorArr[index % this.colorArr.length],
       tension: 0.4,
       borderWidth: 2,
-      pointRadius: 2,
+      pointRadius: 1,
     }];
   }
 
