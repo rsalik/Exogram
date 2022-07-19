@@ -62,7 +62,7 @@ export default function TicTable() {
           {/* eslint-disable-next-line react/jsx-no-comment-textnodes*/}
           <div className="sep">//</div>
           <div className="group">
-            <label htmlFor="group"> Show Group</label>
+            <label htmlFor="group"> TIC Group</label>
             <select name="group" onChange={(e) => setActiveGroup(parseInt(e.target.value))}>
               {ticGroups.map((o) => (
                 <option key={o.id} value={o.id}>
