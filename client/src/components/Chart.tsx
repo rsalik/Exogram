@@ -169,7 +169,8 @@ export default function Chart(props: { type: TicChartType; tics: string[]; linkC
               <div
                 className={`text color ${
                   momentumDumps.filter(
-                    (m) => m.tic === p.dataset.label.replaceAll('TIC ', '') && Math.abs(m.time - p.raw.x) < MOMENTUM_DUMP_WIDTH / 2
+                    // Non-number regex: https://stackoverflow.com/questions/18082/validate-decimal-numbers-in-javascript-isnumeric
+                    (m) => m.tic === p.dataset.label.replace(/\D/g,'') && Math.abs(m.time - p.raw.x) < MOMENTUM_DUMP_WIDTH / 2
                   ).length > 0
                     ? 'md'
                     : ''
