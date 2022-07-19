@@ -1,6 +1,6 @@
 import { Chart } from 'chart.js';
 
-export function getChartOptions(title: string, xAxisLabel: string, yAxisLabel: string) {
+export function getChartOptions(title = "Default Title", xAxisLabel = "X Axis", yAxisLabel = "Y Axis") {
   return {
     responsive: true,
     maintainAspectRatio: false,
@@ -53,6 +53,19 @@ export function getChartOptions(title: string, xAxisLabel: string, yAxisLabel: s
           },
           mode: 'x',
           onZoomComplete: (state: { chart: Chart }) => {},
+        },
+      },
+      annotation: {
+        annotations: {} as {
+          [key: string]: {
+            type: string;
+            xMin: number;
+            xMax: number;
+            yMin?: number;
+            yMax?: number;
+            backgroundColor: string;
+            borderColor: string;
+          };
         },
       },
       legend: {

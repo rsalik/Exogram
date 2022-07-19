@@ -1,5 +1,12 @@
 import { getTicChartData } from './chartDataHandler';
 import { getChartOptions } from './defaultOptions';
+import generateMomentumDumpBands from './MomentumDumpAnnotationGenerator';
+
+export enum TicChartType {
+  NORMALIZED_FLUX,
+  CENTROID_OFFSET,
+  BACKGROUND_FLUX,
+}
 
 export class ChartDataGenerator {
   title: string;
@@ -42,6 +49,10 @@ export class ChartDataGenerator {
 
   generateOptions() {
     return getChartOptions(this.title, this.xAxisLabel, this.yAxisLabel);
+  }
+
+  async getMomentumDumps() {
+    return await generateMomentumDumpBands(this.tics);
   }
 
   getDefaultRange() {

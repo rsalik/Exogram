@@ -1,10 +1,8 @@
-import { BackgroundFluxChartDataGenerator } from '../charts/generators/BackgroundFluxChartDataGenerator';
-import { CentroidOffsetChartDataGenerator } from '../charts/generators/CentroidOffsetChartDataGenerator';
-import { NormalizedFluxChartDataGenerator } from '../charts/generators/NormalizedFluxChartDataGenerator';
 import { Help } from '@mui/icons-material';
 import Chart from './Chart';
 import { useState } from 'react';
 import LinkedChartController from '../charts/LinkedChartController';
+import { TicChartType } from '../charts/ChartDataGenerator';
 
 export function TicChartsPanel(props: { ticId: string }) {
   const [showHelp, setShowHelp] = useState(false);
@@ -51,7 +49,7 @@ export function TicChartsPanel(props: { ticId: string }) {
           }}
         >
           <div className="help">
-            <div className="title">Chart Instructions</div>
+            <div className="title">Chart Help</div>
             <div className="row">
               <strong>Click + Drag</strong>: Pan
             </div>
@@ -61,6 +59,9 @@ export function TicChartsPanel(props: { ticId: string }) {
               </strong>
               : Zoom
             </div>
+            <div className="row md">
+              <span></span>&nbsp;&nbsp;denotes a Momentum Dump.
+            </div>
             <div className="row resize">
               Charts can be resized by dragging the icon near the bottom right corner of the chart up or down.
             </div>
@@ -68,9 +69,9 @@ export function TicChartsPanel(props: { ticId: string }) {
           </div>
         </div>
       )}
-      <Chart generator={new NormalizedFluxChartDataGenerator([props.ticId])} linkController={linkedChartController} />
-      <Chart generator={new CentroidOffsetChartDataGenerator([props.ticId])} linkController={linkedChartController} />
-      <Chart generator={new BackgroundFluxChartDataGenerator([props.ticId])} linkController={linkedChartController} />
+      <Chart type={TicChartType.NORMALIZED_FLUX} tics={[props.ticId]} linkController={linkedChartController} />
+      <Chart type={TicChartType.CENTROID_OFFSET} tics={[props.ticId]} linkController={linkedChartController} />
+      <Chart type={TicChartType.BACKGROUND_FLUX} tics={[props.ticId]} linkController={linkedChartController} />
     </div>
   );
 }

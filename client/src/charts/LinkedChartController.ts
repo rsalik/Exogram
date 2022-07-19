@@ -1,5 +1,3 @@
-import { Chart } from 'chart.js';
-
 interface ChartObj {
   index: number;
   callback: (min: number, max: number) => void;
@@ -9,12 +7,8 @@ export default class LinkedChartController {
   charts: ChartObj[] = [];
   index = 0;
 
-  createListenerFunction() {
-    return (state: { chart: Chart }) => {
-      const { chart } = state;
-
-      this.updateCharts(chart.scales.x.min, chart.scales.x.max);
-    };
+  recordUpdate(min: number, max: number) {
+    this.updateCharts(min, max);
   }
 
   addChart(callback: (min: number, max: number) => void) {

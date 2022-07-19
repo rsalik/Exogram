@@ -89,7 +89,7 @@
 
       border-radius: $border-radius-large;
 
-      padding: 3em;
+      padding: 1em 3em 3em;
 
       width: 20em;
 
@@ -112,9 +112,26 @@
       .row {
         margin: 0.3rem 0;
 
-        &.resize {
+        &.resize,
+        &.md {
           font-size: 0.8em;
           margin-top: 1em;
+        }
+
+        &.md {
+          display: flex;
+
+          justify-content: center;
+          align-items: center;
+
+          span {
+            display: block;
+
+            width: 1em;
+            height: 1em;
+            background: $error;
+            border-radius: $border-radius;
+          }
         }
       }
 
