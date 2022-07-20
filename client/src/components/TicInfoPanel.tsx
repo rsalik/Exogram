@@ -32,7 +32,9 @@ export default function TicInfoPanel(props: { ticData: any }) {
         <div className="title-sec">
           <div className="title">
             TIC&nbsp;<span>{props.ticData.ticId}</span>
-            {ticGroups && ticGroups.length && <div className="group">{ticGroups.filter((g) => parseInt(g.id) === props.ticData.group)[0]?.name}</div>}
+            {ticGroups && ticGroups.length && (
+              <div className="group">{ticGroups.filter((g) => parseInt(g.id) === props.ticData.group)[0]?.name}</div>
+            )}
           </div>
           <a href={exofopLink(props.ticData.ticId)} className="exofop-link" target="_blank" rel="noreferrer">
             Exofop Link

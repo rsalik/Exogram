@@ -41,10 +41,14 @@ export default function Chart(props: { type: TicChartType; tics: string[]; linkC
   const [xMin, setXMin] = useState(0);
   const [xMax, setXMax] = useState(0);
 
+  const [yMin, setYMin] = useState(0);
+  const [yMax, setYMax] = useState(0);
+
   const [annotations, setAnnotations] = useState<any>(null);
   const [momentumDumps, setMomentumDumps] = useState<{ tic: string; time: number }[]>([]);
 
   const [defaultXAxisBounds, setDefaultXAxisBounds] = useState<any>({ min: 0, max: -1 });
+  const [defaultYAxisBounds, setDefaultYAxisBounds] = useState<any>({ min: 0, max: -1 });
 
   // Listener for when user maniuplates chart
   // Dependent on Link Controller
@@ -52,6 +56,9 @@ export default function Chart(props: { type: TicChartType; tics: string[]; linkC
     (state: { chart: ChartJS }) => {
       setXMin(state.chart.scales.x.min);
       setXMax(state.chart.scales.x.max);
+
+      setYMin(state.chart.scales.y.min);
+      setYMax(state.chart.scales.y.max);
 
       if (props.linkController) {
         props.linkController.recordUpdate(state.chart.scales.x.min, state.chart.scales.x.max);
@@ -70,6 +77,11 @@ export default function Chart(props: { type: TicChartType; tics: string[]; linkC
           ...persistentOptions.scales.x,
           max: xMax,
           min: xMin,
+        },
+        y: {
+          ...persistentOptions.scales.y,
+          max: yMax,
+          min: yMin,
         },
       },
       plugins: {
@@ -91,7 +103,7 @@ export default function Chart(props: { type: TicChartType; tics: string[]; linkC
         },
       },
     };
-  }, [persistentOptions, xMax, xMin, annotations, onChartBoundsChange]);
+  }, [persistentOptions, xMax, xMin, yMax, yMin, annotations, onChartBoundsChange]);
 
   const chart = useRef<any>(null);
 
@@ -117,8 +129,11 @@ export default function Chart(props: { type: TicChartType; tics: string[]; linkC
 
     let options = generator.generateOptions();
     options.plugins.tooltip.external = onTooltipUpdate;
-    options.scales.y.max = generator.getDefaultRange().max;
-    options.scales.y.min = generator.getDefaultRange().min;
+
+    setYMax(generator.getDefaultRange().max);
+    setYMin(generator.getDefaultRange().min);
+
+    setDefaultYAxisBounds({ min: generator.getDefaultRange().min, max: generator.getDefaultRange().max });
 
     generator.getMomentumDumps().then(({ annotations, momentumDumps }) => {
       setAnnotations(annotations);
@@ -169,8 +184,7 @@ export default function Chart(props: { type: TicChartType; tics: string[]; linkC
               <div
                 className={`text color ${
                   momentumDumps.filter(
-                    // Non-number regex: https://stackoverflow.com/questions/18082/validate-decimal-numbers-in-javascript-isnumeric
-                    (m) => m.tic === p.dataset.label.replace(/\D/g,'') && Math.abs(m.time - p.raw.x) < MOMENTUM_DUMP_WIDTH / 2
+                    (m) => m.tic === p.dataset.label.replace(/\D/g, '') && Math.abs(m.time - p.raw.x) < MOMENTUM_DUMP_WIDTH / 2
                   ).length > 0
                     ? 'md'
                     : ''
@@ -187,8 +201,16 @@ export default function Chart(props: { type: TicChartType; tics: string[]; linkC
       <div
         className="btn"
         onClick={() => {
-          if (props.linkController) props.linkController.zoomTo(defaultXAxisBounds);
-          else chart.current?.resetZoom();
+          if (props.linkController) {
+            props.linkController.zoomTo(defaultXAxisBounds);
+            setYMax(defaultYAxisBounds.max);
+            setYMin(defaultYAxisBounds.min);
+          } else {
+            setXMin(defaultXAxisBounds.min);
+            setXMax(defaultXAxisBounds.max);
+            setYMax(defaultYAxisBounds.max);
+            setYMin(defaultYAxisBounds.min);
+          }
         }}
       >
         Reset Zoom
