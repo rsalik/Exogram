@@ -1,4 +1,4 @@
-import { Help } from '@mui/icons-material';
+import { Help, MouseOutlined } from '@mui/icons-material';
 import Chart from './Chart';
 import { useState } from 'react';
 import LinkedChartController from '../charts/LinkedChartController';
@@ -51,7 +51,16 @@ export function TicChartsPanel(props: { ticId: string }) {
           <div className="help">
             <div className="title">Chart Help</div>
             <div className="row">
-              <strong>Click + Drag</strong>: Pan
+              <strong>
+                <span className="key">Shift</span> + <MouseOutlined fontSize='large' />
+              </strong>
+              : Pan
+            </div>
+            <div className="row">
+              <strong>
+                <span className="key">Alt</span> + <MouseOutlined fontSize='large' />
+              </strong>
+              : Zoom Box
             </div>
             <div className="row">
               <strong>

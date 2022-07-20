@@ -1,6 +1,6 @@
 import { Chart } from 'chart.js';
 
-export function getChartOptions(title = "Default Title", xAxisLabel = "X Axis", yAxisLabel = "Y Axis") {
+export function getChartOptions(title = 'Default Title', xAxisLabel = 'X Axis', yAxisLabel = 'Y Axis') {
   return {
     responsive: true,
     maintainAspectRatio: false,
@@ -41,6 +41,7 @@ export function getChartOptions(title = "Default Title", xAxisLabel = "X Axis", 
           enabled: true,
           mode: 'xy',
           onPanComplete: (state: { chart: Chart }) => {},
+          modifierKey: 'shift',
         },
         zoom: {
           wheel: {
@@ -51,7 +52,11 @@ export function getChartOptions(title = "Default Title", xAxisLabel = "X Axis", 
             enabled: true,
             modifierKey: 'alt',
           },
-          mode: 'x',
+          drag: {
+            enabled: true,
+            modifierKey: 'alt',
+          },
+          mode: 'xy',
           onZoomComplete: (state: { chart: Chart }) => {},
         },
       },
