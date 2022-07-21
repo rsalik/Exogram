@@ -25,6 +25,8 @@ function HeaderAndFooterContent() {
       <div className="links">
         <a href="/table">TIC Table</a>
         <div className="sep">/</div>
+        <a href="/charts">TIC Charts</a>
+        <div className="sep">/</div>
         <a href="/dictionary">Dictionary</a>
       </div>
     </>

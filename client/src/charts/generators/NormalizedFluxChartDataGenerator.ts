@@ -24,8 +24,8 @@ export class NormalizedFluxChartDataGenerator extends ChartDataGenerator {
             };
       }),
       showLine: true,
-      borderColor: this.colorArr[index % this.colorArr.length],
-      backgroundColor: this.colorArr[index % this.colorArr.length],
+      borderColor: this.colorArr[(index * 2) % this.colorArr.length],
+      backgroundColor: this.colorArr[(index * 2) % this.colorArr.length],
       tension: 0.4,
       borderWidth: 2,
       pointRadius: 1,

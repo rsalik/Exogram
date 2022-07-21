@@ -73,7 +73,7 @@ export default function TicTable() {
           </div>
         </div>
 
-        {getFilteredTicList().length === 0 ? (
+        {getFilteredTicList().length === 0 && ticList.length > 0 ? (
           <ErrorPanel
             title="No Results"
             message={

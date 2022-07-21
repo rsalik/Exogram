@@ -3,11 +3,16 @@ import Chart from './Chart';
 import { useState } from 'react';
 import LinkedChartController from '../charts/LinkedChartController';
 import { TicChartType } from '../charts/ChartDataGenerator';
+import InfoPanel from './InfoPanel';
 
-export function TicChartsPanel(props: { ticId: string }) {
+export function TicChartsPanel(props: { tics: string[] }) {
   const [showHelp, setShowHelp] = useState(false);
 
   const [linkedChartController, setLinkedChartController] = useState<LinkedChartController | undefined>(new LinkedChartController());
+
+  if (!props.tics.length) {
+    return <InfoPanel title="No TICs" message="Track a TIC to get started." />;
+  }
 
   return (
     <div className="tic-charts-panel">
@@ -52,13 +57,13 @@ export function TicChartsPanel(props: { ticId: string }) {
             <div className="title">Chart Help</div>
             <div className="row">
               <strong>
-                <span className="key">Shift</span> + <MouseOutlined fontSize='large' />
+                <span className="key">Shift</span> + <MouseOutlined fontSize="large" />
               </strong>
               : Pan
             </div>
             <div className="row">
               <strong>
-                <span className="key">Alt</span> + <MouseOutlined fontSize='large' />
+                <span className="key">Alt</span> + <MouseOutlined fontSize="large" />
               </strong>
               : Zoom Box
             </div>
@@ -78,9 +83,9 @@ export function TicChartsPanel(props: { ticId: string }) {
           </div>
         </div>
       )}
-      <Chart type={TicChartType.NORMALIZED_FLUX} tics={[props.ticId]} linkController={linkedChartController} />
-      <Chart type={TicChartType.CENTROID_OFFSET} tics={[props.ticId]} linkController={linkedChartController} />
-      <Chart type={TicChartType.BACKGROUND_FLUX} tics={[props.ticId]} linkController={linkedChartController} />
+      <Chart type={TicChartType.NORMALIZED_FLUX} tics={props.tics} linkController={linkedChartController} />
+      <Chart type={TicChartType.CENTROID_OFFSET} tics={props.tics} linkController={linkedChartController} />
+      <Chart type={TicChartType.BACKGROUND_FLUX} tics={props.tics} linkController={linkedChartController} />
     </div>
   );
 }

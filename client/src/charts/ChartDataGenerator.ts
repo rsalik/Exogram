@@ -17,7 +17,7 @@ export class ChartDataGenerator {
 
   hasCleanData = false;
 
-  colorArr = ['#61dafb', '#fb61bd', '#ffe345'];
+  colorArr = ['#61dafb', '#ffe345', '#fb61bd', '#8afb61', '#fb9261', '#9261fb'];
 
   constructor(tics: string[], title: string, xAxisLabel: string, yAxisLabel: string) {
     this.tics = tics.map((t) => t.replaceAll(/\(.+\)/gm, '')).sort(); // Remove parenthesis from TIC names

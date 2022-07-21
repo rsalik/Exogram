@@ -1,5 +1,5 @@
 import { Scatter } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Interaction } from 'chart.js';
 import zoomPlugin from 'chartjs-plugin-zoom';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { CrosshairPlugin } from 'chartjs-plugin-crosshair';
@@ -9,6 +9,8 @@ import LinkedChartController from '../charts/LinkedChartController';
 import { MOMENTUM_DUMP_WIDTH } from '../charts/MomentumDumpAnnotationGenerator';
 import { getChartOptions } from '../charts/defaultOptions';
 import { createGenerator } from '../charts/chartDataHandler';
+import { getRelativePosition } from 'chart.js/helpers';
+import { getNearestItemsPerDataset } from '../charts/NearestPerDatasetInteraction';
 
 ChartJS.register(
   zoomPlugin,
@@ -22,6 +24,17 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+
+declare module 'chart.js' {
+  interface InteractionModeMap {
+    nearestPerDataset: InteractionModeFunction;
+  }
+}
+
+Interaction.modes.nearestPerDataset = function (chart, e, _options, useFinalPosition) {
+  const position = getRelativePosition(e, chart);
+  return getNearestItemsPerDataset(chart, position, useFinalPosition);
+};
 
 // Default Styling
 ChartJS.defaults.color = '#fff';
@@ -43,6 +56,8 @@ export default function Chart(props: { type: TicChartType; tics: string[]; linkC
 
   const [yMin, setYMin] = useState(0);
   const [yMax, setYMax] = useState(0);
+
+  const [xMousePos, setXMousePos] = useState(0);
 
   const [annotations, setAnnotations] = useState<any>(null);
   const [momentumDumps, setMomentumDumps] = useState<{ tic: string; time: number }[]>([]);
@@ -130,6 +145,10 @@ export default function Chart(props: { type: TicChartType; tics: string[]; linkC
     let options = generator.generateOptions();
     options.plugins.tooltip.external = onTooltipUpdate;
 
+    options.onHover = (event: any, _active: any) => {
+      if (event.type === 'mousemove') setXMousePos(event.x);
+    };
+
     setYMax(generator.getDefaultRange().max);
     setYMin(generator.getDefaultRange().min);
 
@@ -177,24 +196,27 @@ export default function Chart(props: { type: TicChartType; tics: string[]; linkC
           <div className="tooltip">
             {tooltipData.points?.[0]?.raw.x && (
               <div className="text">
-                Time: <span className="mono">{tooltipData.points[0].raw.x.toFixed(4)}</span>
+                Time: <span className="mono">{chart.current?.scales.x.getValueForPixel(xMousePos).toFixed(3)}</span>
               </div>
             )}
-            {tooltipData.points?.map((p: any, i: number) => (
-              <div
-                className={`text color ${
-                  momentumDumps.filter(
-                    (m) => m.tic === p.dataset.label.replace(/\D/g, '') && Math.abs(m.time - p.raw.x) < MOMENTUM_DUMP_WIDTH / 2
-                  ).length > 0
-                    ? 'md'
-                    : ''
-                }`}
-                key={i}
-                style={{ backgroundColor: p.dataset.backgroundColor }}
-              >
-                {p.dataset.label}: <span className="mono">{p.raw.y.toFixed(6)}</span>
-              </div>
-            ))}
+            {tooltipData.points?.map((p: any, i: number) => {
+              if (Math.abs(p.raw.x - chart.current?.scales.x.getValueForPixel(xMousePos)) > 1) return null;
+              return (
+                <div
+                  className={`text color ${
+                    momentumDumps.filter(
+                      (m) => m.tic === p.dataset.label.replace(/\D/g, '') && Math.abs(m.time - p.raw.x) < MOMENTUM_DUMP_WIDTH / 2
+                    ).length > 0
+                      ? 'md'
+                      : ''
+                  }`}
+                  key={i}
+                  style={{ backgroundColor: p.dataset.backgroundColor }}
+                >
+                  {p.dataset.label}: <span className="mono">{p.raw.y.toFixed(6)}</span>
+                </div>
+              );
+            })}
           </div>
         </>
       )}

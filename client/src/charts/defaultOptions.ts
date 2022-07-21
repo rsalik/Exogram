@@ -4,7 +4,13 @@ export function getChartOptions(title = 'Default Title', xAxisLabel = 'X Axis', 
   return {
     responsive: true,
     maintainAspectRatio: false,
-    animation: false,
+    // animations: false,
+    interaction: {
+      intersect: false,
+      mode: 'nearestPerDataset',
+      axis: 'x'
+    },
+    onHover: (event: any, active: any) => {},
     scales: {
       y: {
         title: {
@@ -98,8 +104,6 @@ export function getChartOptions(title = 'Default Title', xAxisLabel = 'X Axis', 
         },
       },
       tooltip: {
-        mode: 'index',
-        intersect: false,
         enabled: false,
         external: (ctx: any) => {},
       },

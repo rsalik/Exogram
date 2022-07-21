@@ -26,6 +26,20 @@ export default function TicInfoPanel(props: { ticData: any }) {
     });
   }, [props.ticData]);
 
+  // No Tic Data, or the TIC ID is the only value in TIC data
+  if (!props.ticData || Object.keys(props.ticData).length === 1)
+    return (
+      <ErrorPanel
+        title="Invalid TIC ID"
+        message={
+          <>
+            No data for <strong>TIC {props.ticData.ticId}</strong> was found on the server.&nbsp;
+            <Link href="/table">Return to the TIC Table</Link>
+          </>
+        }
+      />
+    );
+
   return (
     <div className="tic-info">
       <div className="title-sec-wrapper">
@@ -86,7 +100,7 @@ export default function TicInfoPanel(props: { ticData: any }) {
         <TicDispositionTable data={props.ticData.dispositions} />
       </div>
 
-      <TicChartsPanel ticId={props.ticData.ticId} />
+      <TicChartsPanel tics={[props.ticData.ticId]} />
     </div>
   );
 }

@@ -33,8 +33,8 @@ export class CentroidOffsetChartDataGenerator extends ChartDataGenerator {
           };
         }),
         showLine: true,
-        borderColor: this.colorArr[index +1 % this.colorArr.length],
-        backgroundColor: this.colorArr[index + 1 % this.colorArr.length],
+        borderColor: this.colorArr[(index + 1) % this.colorArr.length],
+        backgroundColor: this.colorArr[(index + 1) % this.colorArr.length],
         tension: 0.4,
         borderWidth: 2,
         pointRadius: 1,
