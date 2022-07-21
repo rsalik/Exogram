@@ -277,13 +277,6 @@
 
   input {
     background: $primary;
-    border: none;
-    outline: none;
-
-    padding: 0.3em 0.5em;
-
-    border-radius: $border-radius;
-    font-size: 1em;
 
     &::placeholder {
       color: $pri3;

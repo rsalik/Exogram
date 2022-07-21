@@ -167,14 +167,12 @@ export default function Chart(props: { type: TicChartType; tics: string[]; linkC
     if (!generator) return;
 
     generator.getDefaultXAxisBounds().then(({ min, max }) => {
-      if (defaultXAxisBounds.max === -1 && defaultXAxisBounds.min === 0) {
-        setDefaultXAxisBounds({ min, max });
+      setDefaultXAxisBounds({ min, max });
 
-        setXMin(min);
-        setXMax(max);
-      }
+      setXMin(min);
+      setXMax(max);
     });
-  }, [generator, defaultXAxisBounds]);
+  }, [generator]);
 
   // Handle Link Controller Changes
   useEffect(() => {

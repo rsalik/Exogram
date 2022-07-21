@@ -1,3 +1,94 @@
 .charts-page {
   @include rounded-panel();
+
+  .track {
+    input {
+      font-size: 1.2em;
+    }
+
+    .input-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      input {
+        height: 2.4rem;
+        box-sizing: border-box;
+
+        font-family: $mono;
+
+        &::placeholder {
+          font-family: $font;
+        }
+      }
+
+      .go {
+        background: $primary;
+        border-radius: $border-radius;
+
+        margin-left: 0.3em;
+
+        width: 2.4rem;
+        height: 2.4rem;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        cursor: pointer;
+
+        transition: background-color $transition;
+
+        &:hover {
+          background: $white;
+        }
+
+        color: $bkg;
+      }
+    }
+
+    .tracked {
+      margin: 0.5rem 0;
+
+      .title {
+        font-size: 1.5em;
+        font-weight: $fw-semibold;
+      }
+
+      .tic {
+        color: $bkg;
+        display: inline-flex;
+
+        justify-content: center;
+        align-items: center;
+
+        padding: 0.2em 0.5em;
+        margin: 0.3rem;
+
+        border-radius: $border-radius;
+
+        user-select: none;
+        cursor: pointer;
+
+        transition: background $transition;
+
+        &:hover {
+          background: $error !important;
+        }
+
+        // Numbered the way it is because of .title being 1st child
+        &:nth-child(3n + 2) {
+          background: $primary;
+        }
+
+        &:nth-child(3n) {
+          background: $secondary;
+        }
+
+        &:nth-child(3n + 1) {
+          background: #fb9261;
+        }
+      }
+    }
+  }
 }

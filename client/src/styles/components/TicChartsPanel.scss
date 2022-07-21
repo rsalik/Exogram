@@ -9,13 +9,10 @@
       align-items: center;
 
       .show-help {
-        position: absolute;
-        right: 0;
-
         width: 1em;
         height: 1em;
 
-        margin: 0 0.2rem;
+        margin: 0 0.8rem;
 
         display: flex;
         justify-content: center;
@@ -112,7 +109,8 @@
       .row {
         margin: 0.75rem 0;
 
-        &, strong {
+        &,
+        strong {
           display: flex;
 
           justify-content: center;
