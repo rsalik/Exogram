@@ -34,21 +34,23 @@ export default function TicChartsPage() {
             {<ChevronRight fontSize="large" />}
           </div>
         </div>
-        {!!ticIds.length && <div className="tracked">
-          <div className="title">Tracked TICs</div>
-          {ticIds.sort().map((ticId) => (
-            <div
-              className="tic"
-              key={ticId}
-              onClick={() => {
-                setTicIds(ticIds.filter((i) => i !== ticId));
-              }}
-            >
-              TIC&nbsp;<span className="mono">{ticId}&nbsp;</span>
-              <Backspace />
-            </div>
-          ))}
-        </div>}
+        {!!ticIds.length && (
+          <div className="tracked">
+            <div className="title">Tracked TICs</div>
+            {ticIds.sort().map((ticId) => (
+              <div
+                className="tic"
+                key={ticId}
+                onClick={() => {
+                  setTicIds(ticIds.filter((i) => i !== ticId));
+                }}
+              >
+                TIC&nbsp;<span className="mono">{ticId}&nbsp;</span>
+                <Backspace />
+              </div>
+            ))}
+          </div>
+        )}
       </div>
       <TicChartsPanel tics={ticIds} />
     </div>

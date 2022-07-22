@@ -4,6 +4,7 @@ import { Header, Footer } from './components/Header';
 import DictionaryPage from './routes/DictionaryPage';
 import Home from './routes/Home';
 import PageNotFound from './routes/PageNotFound';
+import SignInPage from './routes/SignInPage';
 import TicChartsPage from './routes/TicChartsPage';
 import { TicPage } from './routes/TicPage';
 import TicTablePage from './routes/TicTablePage';
@@ -23,6 +24,7 @@ function App() {
             </Route>
             <Route path="dictionary" element={<DictionaryPage />} />
             <Route path="tic/:ticId" element={<TicPage />} />
+            <Route path="signin" element={<SignInPage />} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </div>
