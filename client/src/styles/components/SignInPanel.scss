@@ -1,0 +1,45 @@
+.sign-in {
+  @include rounded-panel();
+  height: 25em;
+}
+
+.firebaseui-container {
+  background: $pri2;
+
+  border-radius: $border-radius;
+  box-shadow: none;
+
+  margin-top: 1em;
+
+  padding: 1em 0;
+
+  * {
+    color: $white;
+  }
+
+  .mdl-button {
+    background: $pri3;
+    color: $white;
+
+    &:hover {
+      background: $pri4;
+    }
+
+    &.mdl-button--colored {
+      background: $primary !important;
+      color: $bkg !important;
+    }
+  }
+
+  input {
+    border-color: $pri4 !important;
+  }
+
+  label {
+    color: $pri7 !important;
+
+    &::after {
+      background-color: $primary !important;
+    }
+  }
+}
