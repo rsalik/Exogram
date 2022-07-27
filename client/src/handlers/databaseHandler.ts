@@ -86,7 +86,7 @@ function convertTicGroupsObjToList(groups: any) {
   for (const key in groups) {
     ticGroupsList.push({
       id: key,
-      name: groups[key],
+      ...groups[key],
     });
   }
 

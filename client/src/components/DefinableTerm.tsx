@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export function generateDefinableTermsFromText(text: string, dictionary: any[]) {
   return (
@@ -30,10 +30,24 @@ export function generateDefinableTermsFromText(text: string, dictionary: any[]) 
 
 export default function DefinableTerm(props: { text: string; term: string; definition: string }) {
   const [showTooltip, setShowTooltip] = useState(false);
+  const [hovering, setHovering] = useState(false);
+
+  useEffect(() => {
+    if (!hovering) setShowTooltip(false);
+  }, [hovering, showTooltip]);
 
   return (
     <div className="definable">
-      <div className="text" onMouseEnter={() => setShowTooltip(true)} onMouseLeave={() => setShowTooltip(false)}>
+      <div
+        className="text"
+        onMouseEnter={() => {
+          setHovering(true);
+          setTimeout(() => { 
+            setShowTooltip(true);
+          }, 200);
+        }}
+        onMouseLeave={() => setHovering(false)}
+      >
         {props.text}
       </div>
       {showTooltip && (
