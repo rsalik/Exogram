@@ -1,4 +1,5 @@
 import { Person } from '@mui/icons-material';
+import { Link } from 'react-router-dom';
 import { UserContext } from '../App';
 
 export function Header() {
@@ -8,9 +9,9 @@ export function Header() {
       <UserContext.Consumer>
         {(user) => {
           return (
-            <a href={`/${!!user ? 'profile' : 'signin'}`}>
+            <Link to={`/${!!user ? 'profile' : 'signin'}`}>
               <div className="profile">{<Person fontSize="large" />}</div>
-            </a>
+            </Link>
           );
         }}
       </UserContext.Consumer>
@@ -30,16 +31,16 @@ function HeaderAndFooterContent() {
   return (
     <div className="content">
       <div className="title">
-        <a href="/">
+        <Link to="/">
           Exo<span>gram</span>
-        </a>
+        </Link>
       </div>
       <div className="links">
-        <a href="/table">TIC Table</a>
+        <Link to="/table">TIC Table</Link>
         <div className="sep">/</div>
-        <a href="/charts">TIC Charts</a>
+        <Link to="/charts">TIC Charts</Link>
         <div className="sep">/</div>
-        <a href="/dictionary">Dictionary</a>
+        <Link to="/dictionary">Dictionary</Link>
       </div>
     </div>
   );

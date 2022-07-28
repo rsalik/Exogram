@@ -1,10 +1,19 @@
-import { useContext } from 'react';
+import { IdTokenResult } from 'firebase/auth';
+import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../App';
 import ErrorPanel from '../components/ErrorPanel';
 import Link from '../components/Link';
 
 export default function ProfilePage() {
   const user = useContext(UserContext);
+
+  const [idTokenResult, setIdTokenResult] = useState<IdTokenResult | null>(null);
+
+  useEffect(() => {
+    if (user) {
+      user.getIdTokenResult().then(setIdTokenResult);
+    }
+  }, [user]);
 
   if (user === null)
     return (
@@ -17,6 +26,8 @@ export default function ProfilePage() {
         }
       />
     );
+
+  console.log(idTokenResult);
 
   return (
     <div className="profile-page">

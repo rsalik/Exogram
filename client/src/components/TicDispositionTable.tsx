@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { getDictionary, useUsers } from '../handlers/databaseHandler';
 import { generateDefinableTermsFromText } from './DefinableTerm';
 
-export default function TicDispositionTable(props: { data: any }) {
+export default function TicDispositionTable(props: { data: any; paperDisposition?: any }) {
   const users = useUsers();
 
   const [dictionary, setDictionary] = useState<any[]>([]);
@@ -22,16 +22,11 @@ export default function TicDispositionTable(props: { data: any }) {
           </tr>
         </thead>
         <tbody>
+          {props.paperDisposition && <TicDispositionTableRow paper users={users} dictionary={dictionary} data={props.paperDisposition} />}
           {Object.keys(props.data)
-            .sort((k: any) => {
-              if (k === 'paper') {
-                return -1;
-              }
-              return 0;
-            })
+            .sort()
             .map((k: any) => (
-              // This should probably be refactored lol
-              <TicDispositionTableRow data={{ ...props.data[k], userId: k }} users={users} key={k} dictionary={dictionary} />
+              <TicDispositionTableRow data={props.data[k]} users={users} key={k} dictionary={dictionary} />
             ))}
         </tbody>
       </table>
@@ -39,11 +34,13 @@ export default function TicDispositionTable(props: { data: any }) {
   );
 }
 
-function TicDispositionTableRow(props: { data: any; users: any; dictionary: any[] }) {
+function TicDispositionTableRow(props: { data: any; users: any; dictionary: any[]; paper?: boolean }) {
   return (
-    <tr className={`${props.data.userId === 'paper' ? 'paper' : ''}`}>
+    <tr className={`${props.paper ? 'paper' : ''}`}>
       <td>
-        {isNaN(props.data.userId)
+        {props.paper
+          ? 'Paper'
+          : isNaN(props.data.userId)
           ? props.data.userId[0].toUpperCase() + props.data.userId.substring(1) // Crazy, I know lol
           : props.users?.filter((u: any) => u.id === props.data.userId)[0]?.name}
       </td>

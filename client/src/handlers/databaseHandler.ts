@@ -53,6 +53,29 @@ export function useTicData(ticId: string) {
   return tic;
 }
 
+// Get Individual Tic Data Hook
+export function useTicDispositions(ticId: string) {
+  const [dispositions, setDispositions] = useState<any>();
+
+  useEffect(() => {
+    const unsubscribe = onValue(
+      ref(db, `dispositions/${ticId}`),
+      (snapshot: any) => {
+        setDispositions(convertDispositionsObjectToList(snapshot.val()));
+      },
+      () => {
+        setDispositions({ error: true });
+      }
+    );
+
+    return () => {
+      unsubscribe();
+    };
+  }, [ticId]);
+
+  return dispositions;
+}
+
 export function useUsers() {
   const [users, setUsers] = useState<any>();
 
@@ -103,6 +126,18 @@ function convertUsersObjToList(users: any) {
   }
 
   return userList;
+}
+
+function convertDispositionsObjectToList(dispositions: any) {
+  const dispositionList = [];
+  for (const key in dispositions) {
+    dispositionList.push({
+      ...dispositions[key],
+      userId: key,
+    });
+  }
+
+  return dispositionList;
 }
 
 export async function getDictionary() {

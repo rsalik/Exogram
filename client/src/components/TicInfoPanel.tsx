@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { getTicFiles } from '../handlers/functionsHandler';
 import { exofopLink, TicBasicProperties } from '../utils';
 import ErrorPanel from './ErrorPanel';
@@ -6,7 +6,8 @@ import InfoPanel from './InfoPanel';
 import Link from './Link';
 import TicDispositionTable from './TicDispositionTable';
 import { TicChartsPanel } from './TicChartsPanel';
-import { useTicGroups } from '../handlers/databaseHandler';
+import { useTicDispositions, useTicGroups } from '../handlers/databaseHandler';
+import { UserContext } from '../App';
 
 export default function TicInfoPanel(props: { ticData: any }) {
   const [ticFiles, setTicFiles] = useState<any[]>([]);
@@ -14,6 +15,9 @@ export default function TicInfoPanel(props: { ticData: any }) {
   const [ticFilesFailedLoading, setTicFilesFailedLoading] = useState(false);
 
   const ticGroups = useTicGroups();
+  const dispositions = useTicDispositions(props.ticData.ticId);
+
+  const user = useContext(UserContext);
 
   useEffect(() => {
     getTicFiles(props.ticData.ticId).then((files) => {
@@ -46,14 +50,14 @@ export default function TicInfoPanel(props: { ticData: any }) {
         <div className="title-sec">
           <div className="title">
             TIC&nbsp;<span>{props.ticData.ticId}</span>
-            {ticGroups && ticGroups.length && (
+            {!!ticGroups && !!ticGroups.length && (
               <div className="group">{ticGroups.filter((g) => parseInt(g.id) === props.ticData.group)[0]?.name}</div>
             )}
           </div>
           <a href={exofopLink(props.ticData.ticId)} className="exofop-link" target="_blank" rel="noreferrer">
             Exofop Link
           </a>
-          {!!props.ticData.dispositions['paper'] && <div className="published-badge">This TIC was published in a Planet Patrol Paper</div>}
+          {!!props.ticData.paperDisposition && <div className="published-badge">This TIC was published in a Planet Patrol Paper</div>}
         </div>
       </div>
 
@@ -95,10 +99,19 @@ export default function TicInfoPanel(props: { ticData: any }) {
         <InfoPanel title="No Files" />
       )}
 
-      <div className="dispositions">
-        <div className="title">Dispositions</div>
-        <TicDispositionTable data={props.ticData.dispositions} />
-      </div>
+      {dispositions?.error && (
+        <ErrorPanel
+          title="Access Denied"
+          message={`${user ? 'You do not have permission to view these dispositions.' : 'Try logging in to view these dispositions.'}`}
+        />
+      )}
+
+      {dispositions && !dispositions.error && (
+        <div className="dispositions">
+          <div className="title">Dispositions</div>
+          <TicDispositionTable data={dispositions} paperDisposition={props.ticData.paperDisposition} />
+        </div>
+      )}
 
       <TicChartsPanel tics={[props.ticData.ticId]} />
     </div>

@@ -98,32 +98,20 @@ export const TicBasicProperties = [
 export function sortTicList(ticList: any[], sortBy: string) {
   if (sortBy === 'dispDesc') {
     return ticList.sort((a, b) => {
-      if (Object.keys(a.dispositions).length < Object.keys(b.dispositions).length) {
-        return 1;
-      }
-      if (Object.keys(a.dispositions).length > Object.keys(b.dispositions).length) {
-        return -1;
-      }
-      return 0;
+      return b.dispositionCount - a.dispositionCount;
     });
   }
 
   if (sortBy === 'dispAsc') {
     return ticList.sort((a, b) => {
-      if (Object.keys(a.dispositions).length < Object.keys(b.dispositions).length) {
-        return -1;
-      }
-      if (Object.keys(a.dispositions).length > Object.keys(b.dispositions).length) {
-        return 1;
-      }
-      return 0;
+      return a.dispositionCount - b.dispositionCount;
     });
   }
 
   if (sortBy === 'paperDisp') {
     return ticList.sort((a, b) => {
-      let aD = a.dispositions['paper']?.disposition;
-      let bD = b.dispositions['paper']?.disposition;
+      let aD = a.paperDisposition.disposition;
+      let bD = b.paperDisposition.disposition;
 
       if (aD && !bD) return -1;
       if (!aD && bD) return 1;

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Link from './Link';
+import { Link as ReactLink } from 'react-router-dom';
 import TicDisposition from './TicDisposition';
 import { TableRows, ViewAgenda, Search } from '@mui/icons-material';
 import { exofopLink, searchTicList, sortTicList, TicBasicProperties, TicListSortByOptions } from '../utils';
@@ -17,10 +18,9 @@ export default function TicTable() {
   const [publishedOnly, setPublishedOnly] = useState(false);
 
   function getFilteredTicList() {
-    return sortTicList(
-      searchTicList(publishedOnly ? ticList.filter((t: any) => !!t.dispositions['paper']) : ticList, search),
-      sortBy
-    ).filter((t: any) => t.group === activeGroup);
+    return sortTicList(searchTicList(publishedOnly ? ticList.filter((t: any) => !!t.paperDisposition) : ticList, search), sortBy).filter(
+      (t: any) => t.group === activeGroup
+    );
   }
 
   return (
@@ -140,8 +140,8 @@ function TicTableCompactRow(props: { ticData: any }) {
       <td className="mono">{fixedString(props.ticData.rStar, 2)}</td>
       <td className="mono">{props.ticData.tmag}</td>
       <td className="mono">{fixedString(props.ticData.deltaTmag, 2)}</td>
-      <td>{props.ticData.dispositions['paper']?.disposition}</td>
-      <td>{Object.keys(props.ticData.dispositions).length}</td>
+      <td>{props.ticData.paperDisposition?.disposition}</td>
+      <td>{props.ticData.dispositionCount}</td>
     </tr>
   );
 }
@@ -150,9 +150,9 @@ function TicTableRow(props: { ticData: any; sortBy: string }) {
   return (
     <div className="row">
       <div className="header">
-        <a className="tic-id" href={`/tic/${props.ticData.ticId}`}>
+        <ReactLink className="tic-id" to={`/tic/${props.ticData.ticId}`}>
           TIC {props.ticData.ticId}
-        </a>
+        </ReactLink>
         <Link newTab href={exofopLink(props.ticData.ticId)}>
           Exofop
         </Link>
@@ -169,10 +169,8 @@ function TicTableRow(props: { ticData: any; sortBy: string }) {
           );
         })}
         <div className="flex-br" style={{ width: '100%' }}></div>
-        {props.ticData.dispositions['paper'] && (
-          <TicDisposition data={{ ...props.ticData.dispositions['paper'], name: 'Paper Disposition' }} />
-        )}
-        <div className="num-dispositions">{Object.keys(props.ticData.dispositions).length} Dispositions</div>
+        {props.ticData.paperDisposition && <TicDisposition data={{ ...props.ticData.paperDisposition, name: 'Paper Disposition' }} />}
+        <div className="num-dispositions">{props.ticData.dispositionCount} Dispositions</div>
       </div>
     </div>
   );
