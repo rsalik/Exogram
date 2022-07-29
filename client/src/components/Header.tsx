@@ -10,7 +10,7 @@ export function Header() {
         {(user) => {
           return (
             <Link to={`/${!!user ? 'profile' : 'signin'}`}>
-              <div className="profile">{<Person fontSize="large" />}</div>
+              <div className={`${!!user ? 'signed-in' : ''} profile`} >{<Person fontSize="large" />}</div>
             </Link>
           );
         }}

@@ -71,6 +71,15 @@
     &:hover {
       background: $pri3;
     }
+
+    &.signed-in {
+      color: $bkg;
+      background: $primary;
+
+      &:hover {
+        background: $pri7;
+      }
+    }
   }
 }
 

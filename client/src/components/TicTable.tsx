@@ -1,25 +1,41 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from './Link';
-import { Link as ReactLink } from 'react-router-dom';
+import { Link as ReactLink, useParams } from 'react-router-dom';
 import TicDisposition from './TicDisposition';
 import { TableRows, ViewAgenda, Search } from '@mui/icons-material';
 import { exofopLink, searchTicList, sortTicList, TicBasicProperties, TicListSortByOptions } from '../utils';
-import { useTicGroups, useTicList } from '../handlers/databaseHandler';
+import { getAllTicDispositions, useTicGroups } from '../handlers/databaseHandler';
 import ErrorPanel from './ErrorPanel';
 
-export default function TicTable() {
-  const ticList = useTicList();
+export default function TicTable(props: { ticList: any[] }) {
+  const ticList = props.ticList;
   const ticGroups = useTicGroups();
 
+  const { group } = useParams();
+
+  const [dispositions, setDispositions] = useState<any>({});
+
   const [compact, setCompact] = useState(true);
-  const [activeGroup, setActiveGroup] = useState(1000000);
+  const [activeGroup, setActiveGroup] = useState(group || '1000000');
   const [sortBy, setSortBy] = useState('ticId');
   const [search, setSearch] = useState('');
   const [publishedOnly, setPublishedOnly] = useState(false);
 
+  useEffect(() => {
+    getAllTicDispositions(ticList).then(setDispositions);
+  }, [ticList]);
+
+  useEffect(() => {
+    if (activeGroup !== 'all' && isNaN(parseInt(activeGroup))) {
+      setActiveGroup('1000000');
+    }
+
+    if (window.location.pathname.includes('table')) window.history.pushState({}, '', `/table/${activeGroup}`);
+  }, [activeGroup]);
+
   function getFilteredTicList() {
-    return sortTicList(searchTicList(publishedOnly ? ticList.filter((t: any) => !!t.paperDisposition) : ticList, search), sortBy).filter(
-      (t: any) => t.group === activeGroup
+    return sortTicList(searchTicList(publishedOnly ? ticList.filter((t: any) => !!t.paperDisposition) : ticList, search, dispositions), sortBy).filter(
+      (t: any) => activeGroup === 'all' || t.group === parseInt(activeGroup)
     );
   }
 
@@ -53,7 +69,7 @@ export default function TicTable() {
             <label htmlFor="sortby"> Sort by</label>
             <select name="sortby" onChange={(e) => setSortBy(e.target.value)}>
               {TicListSortByOptions.map((o) => (
-                <option key={o.value} value={o.value}>
+                <option key={o.value} value={o.value.toString()}>
                   {o.name}
                 </option>
               ))}
@@ -63,12 +79,13 @@ export default function TicTable() {
           <div className="sep">//</div>
           <div className="group">
             <label htmlFor="group"> TIC Group</label>
-            <select name="group" onChange={(e) => setActiveGroup(parseInt(e.target.value))}>
+            <select name="group" value={activeGroup} onChange={(e) => setActiveGroup(e.target.value)}>
               {ticGroups.map((o) => (
                 <option key={o.id} value={o.id}>
                   {o.name}
                 </option>
               ))}
+              <option value="all">All Groups</option>
             </select>
           </div>
         </div>

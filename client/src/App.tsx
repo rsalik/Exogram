@@ -37,7 +37,9 @@ function App() {
           <div>
             <Routes>
               <Route index element={<Home />} />
-              <Route path="table" element={<TicTablePage />} />
+              <Route path="table" element={<TicTablePage />}>
+                <Route path=":group" element={<TicTablePage />} />
+              </Route>
               <Route path="charts" element={<TicChartsPage />}>
                 <Route path=":ticIds" element={<TicChartsPage />} />
               </Route>

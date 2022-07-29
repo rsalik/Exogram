@@ -152,7 +152,7 @@ export function sortTicList(ticList: any[], sortBy: string) {
   });
 }
 
-export function searchTicList(ticList: any[], search: string) {
+export function searchTicList(ticList: any[], search: string, dispositions: any) {
   search = search.toLowerCase();
 
   return ticList.filter((tic) => {
@@ -162,10 +162,12 @@ export function searchTicList(ticList: any[], search: string) {
       .map((s) => {
         if (tic.ticId.startsWith(s)) return true;
 
+        if (!dispositions[tic.ticId]) return false;
+
         if (
-          Object.keys(tic.dispositions).some((d) => {
-            if (tic.dispositions[d].disposition.toLowerCase().includes(s)) return true;
-            if (tic.dispositions[d].comments.toLowerCase().includes(s)) return true;
+          Object.keys(dispositions[tic.ticId]).some((d) => {
+            if (dispositions[tic.ticId][d].disposition.toLowerCase().includes(s)) return true;
+            if (dispositions[tic.ticId][d].comments.toLowerCase().includes(s)) return true;
             return false;
           })
         )

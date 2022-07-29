@@ -1,0 +1,52 @@
+.profile-panel {
+  @include rounded-panel();
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .name {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-weight: $fw-semibold;
+    font-size: 2em;
+
+    .superuser-badge {
+      font-size: .6em;
+      display: inline-block;
+
+      margin-left: .6rem;
+
+      padding: 0.2em 0.3em;
+      border-radius: $border-radius;
+
+      background: $secondary;
+      color: $bkg;
+    }
+  }
+
+  .sign-out {
+    background: $error;
+    color: $bkg;
+
+    padding: 0.3em 0.5em;
+    font-size: 1.3em;
+    border-radius: $border-radius;
+
+    font-weight: $fw-semibold;
+
+    margin: 0.5em 0;
+
+    cursor: pointer;
+
+    transition: background-color $transition;
+
+    &:hover {
+      background-color: mix($error, $bkg, 70%);
+    }
+
+    display: inline-block;
+  }
+}
