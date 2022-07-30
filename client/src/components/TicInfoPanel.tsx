@@ -113,11 +113,15 @@ export default function TicInfoPanel(props: { ticData: any }) {
         <div className="dispositions">
           <div className="title">Dispositions</div>
           <TicDispositionTable data={dispositions} paperDisposition={props.ticData.paperDisposition} />
-          {!!ticGroups && ticGroups.filter((g) => parseInt(g.id) === props.ticData.group)[0]?.write ? (
-            user && <CreateDispositionPanel ticId={props.ticData.ticId} existingDisposition={dispositions.filter((d: any) => d.userId === user.uid)[0]} />
-          ) : (
-            <div className="no-disps">This TIC is no longer accepting new dispositions.</div>
-          )}
+          {user &&
+            (!!ticGroups && ticGroups.filter((g) => parseInt(g.id) === props.ticData.group)[0]?.write ? (
+              <CreateDispositionPanel
+                ticId={props.ticData.ticId}
+                existingDisposition={dispositions.filter((d: any) => d.userId === user.uid)[0]}
+              />
+            ) : (
+              <div className="no-disps">This TIC is no longer accepting new dispositions.</div>
+            ))}
         </div>
       )}
 
