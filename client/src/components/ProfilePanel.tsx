@@ -1,14 +1,16 @@
 import { IdTokenResult, User } from 'firebase/auth';
 import { useEffect, useState } from 'react';
-import { getTicDispositions, useTicList } from '../handlers/databaseHandler';
+import { getTicDispositions, useTicGroups, useTicList } from '../handlers/databaseHandler';
 import { auth } from '../handlers/firebase';
 import TicTable from './TicTable';
 
 export default function ProfilePanel(props: { user: User }) {
   const [idTokenResult, setIdTokenResult] = useState<IdTokenResult | null>(null);
   const tics = useTicList();
+  const ticGroups = useTicGroups();
 
   const [ticsWithoutUserDisposition, setTicsWithoutUserDisposition] = useState<any[]>([]);
+  const [dispositionCount, setDispositionCount] = useState(0);
 
   useEffect(() => {
     async function findTicsWithoutUserDisposition() {
@@ -33,11 +35,14 @@ export default function ProfilePanel(props: { user: User }) {
         }
       });
 
-      setTicsWithoutUserDisposition(arr);
+      setTicsWithoutUserDisposition(arr.filter((t: any) => {
+        return ticGroups.filter((g: any) => g.id === t.group.toString())[0]?.write;
+      }));
+      setDispositionCount(tics.length - arr.length);
     }
 
     if (tics) findTicsWithoutUserDisposition();
-  }, [tics, props.user.uid]);
+  }, [tics, ticGroups, props.user.uid]);
 
   useEffect(() => {
     if (props.user) {
@@ -46,22 +51,35 @@ export default function ProfilePanel(props: { user: User }) {
   }, [props.user]);
 
   return (
-    <div className="profile-panel">
-      <div className="title">Profile</div>
-      <div className="name">
-        {props.user.displayName} {idTokenResult?.claims.superuser && <div className="superuser-badge">SuperUser</div>}
+    <>
+      <div className="profile-panel">
+        <div className="title">
+          Profile{' '}
+          <div
+            className="sign-out"
+            onClick={() => {
+              auth.signOut();
+              window.location.href = '/signin';
+            }}
+          >
+            Sign Out
+          </div>
+        </div>
+        <div className="name">
+          {props.user.displayName} {idTokenResult?.claims.superuser && <div className="superuser-badge">SuperUser</div>}
+        </div>
+        <div className="stats">
+          <div className="stat">
+            <div className="name">Dispositions</div>
+            <div className="value">{dispositionCount}</div>
+          </div>
+          <div className="stat">
+            <div className="name">Email</div>
+            <div className="value">{props.user.email}</div>
+          </div>
+        </div>
       </div>
-      <div
-        className="sign-out"
-        onClick={() => {
-          auth.signOut();
-          window.location.href = '/signin';
-        }}
-      >
-        Sign Out
-      </div>
-      These TICs need your attention:
-      <TicTable ticList={ticsWithoutUserDisposition} />
-    </div>
+      <TicTable title="Needs Your Attention" ticList={ticsWithoutUserDisposition} />
+    </>
   );
 }

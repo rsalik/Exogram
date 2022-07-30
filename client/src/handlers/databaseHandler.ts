@@ -77,7 +77,11 @@ export function useTicDispositions(ticId: string) {
 }
 
 export async function getTicDispositions(ticId: string) {
-  return convertDispositionsObjectToList((await get(ref(db, `dispositions/${ticId}`))).val());
+  try {
+    return convertDispositionsObjectToList((await get(ref(db, `dispositions/${ticId}`))).val());
+  } catch {
+    return null;
+  }
 }
 
 export async function getAllTicDispositions(ticList: any[]) {
@@ -95,24 +99,34 @@ export async function getAllTicDispositions(ticList: any[]) {
   }
 
   await Promise.all(promises);
-  console.log(dispositions);
   return dispositions;
 }
 
-export function useUsers() {
-  const [users, setUsers] = useState<any>();
+export function useUsernames(uids: string[]) {
+  const [usernames, setUsernames] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
-    const unsubscribe = onValue(ref(db, `users`), (snapshot: any) => {
-      setUsers(convertUsersObjToList(snapshot.val()));
-    });
+    let unsubscribes = [] as Function[];
+
+    for (const uid of uids) {
+      unsubscribes.push(
+        onValue(ref(db, `users/${uid}/name`), (snapshot: any) => {
+          setUsernames((users: any) => ({
+            ...users,
+            [uid]: snapshot.val(),
+          }));
+        })
+      );
+    }
 
     return () => {
-      unsubscribe();
+      unsubscribes.forEach((f) => {
+        f();
+      });
     };
-  }, [users]);
+  }, [uids]);
 
-  return users;
+  return usernames;
 }
 
 function convertTicsObjToList(tics: any) {
@@ -137,18 +151,6 @@ function convertTicGroupsObjToList(groups: any) {
   }
 
   return ticGroupsList;
-}
-
-function convertUsersObjToList(users: any) {
-  const userList = [];
-  for (const key in users) {
-    userList.push({
-      ...users[key],
-      id: key,
-    });
-  }
-
-  return userList;
 }
 
 function convertDispositionsObjectToList(dispositions: any) {
@@ -203,4 +205,20 @@ export async function deleteDisposition(ticId: string) {
   } catch {
     return false;
   }
+}
+
+export async function writeUserData() {
+  const user = auth.currentUser;
+  if (!user) return;
+
+  const userId = user.uid;
+
+  try {
+    await set(ref(db, `users/${userId}`), {
+      email: user.email,
+      name: user.displayName,
+    });
+
+    console.log('e2e');
+  } catch {}
 }

@@ -7,7 +7,7 @@ import { exofopLink, searchTicList, sortTicList, TicBasicProperties, TicListSort
 import { getAllTicDispositions, useTicGroups } from '../handlers/databaseHandler';
 import ErrorPanel from './ErrorPanel';
 
-export default function TicTable(props: { ticList: any[] }) {
+export default function TicTable(props: { ticList: any[], title?: string }) {
   const ticList = props.ticList;
   const ticGroups = useTicGroups();
 
@@ -16,7 +16,7 @@ export default function TicTable(props: { ticList: any[] }) {
   const [dispositions, setDispositions] = useState<any>({});
 
   const [compact, setCompact] = useState(true);
-  const [activeGroup, setActiveGroup] = useState(group || '1000000');
+  const [activeGroup, setActiveGroup] = useState(group || 'all');
   const [sortBy, setSortBy] = useState('ticId');
   const [search, setSearch] = useState('');
   const [publishedOnly, setPublishedOnly] = useState(false);
@@ -44,7 +44,7 @@ export default function TicTable(props: { ticList: any[] }) {
       <FloatingSearchBar value={search} onChange={setSearch} />
       <div className="tic-table">
         <div className="title">
-          TIC Table
+          {props.title || 'TIC Table'}
           <div className="style-toggle">
             <div className={`icon ${compact ? 'active' : ''}`} onClick={() => setCompact(true)}>
               <TableRows fontSize="large" />

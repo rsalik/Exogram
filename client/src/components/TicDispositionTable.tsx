@@ -1,10 +1,10 @@
 import { useState, useEffect, useContext } from 'react';
 import { UserContext } from '../App';
-import { getDictionary, useUsers } from '../handlers/databaseHandler';
+import { getDictionary, useUsernames } from '../handlers/databaseHandler';
 import { generateDefinableTermsFromText } from './DefinableTerm';
 
 export default function TicDispositionTable(props: { data: any; paperDisposition?: any }) {
-  const users = useUsers();
+  const users = useUsernames(props.data.map((d: any) => d.userId));
 
   const [dictionary, setDictionary] = useState<any[]>([]);
 
@@ -40,13 +40,7 @@ function TicDispositionTableRow(props: { data: any; users: any; dictionary: any[
 
   return (
     <tr className={`${props.paper ? 'paper' : ''} ${user?.uid === props.data.userId ? 'self' : ''}`}>
-      <td>
-        {props.paper
-          ? 'Paper'
-          : isNaN(props.data.userId)
-          ? props.data.userId[0].toUpperCase() + props.data.userId.substring(1) // Crazy, I know lol
-          : props.users?.filter((u: any) => u.id === props.data.userId)[0]?.name}
-      </td>
+      <td>{props.paper ? 'Paper' : props.data.userId === 'group' ? 'Group' : props.users[props.data.userId] || ''}</td>
       <td>{generateDefinableTermsFromText(props.data.disposition, props.dictionary)}</td>
       <td>{generateDefinableTermsFromText(props.data.comments, props.dictionary)}</td>
     </tr>

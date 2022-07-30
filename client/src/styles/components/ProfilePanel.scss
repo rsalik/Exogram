@@ -5,7 +5,13 @@
   flex-direction: column;
   align-items: center;
 
-  .name {
+  > .title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  > .name {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -14,16 +20,68 @@
     font-size: 2em;
 
     .superuser-badge {
-      font-size: .6em;
+      font-size: 0.6em;
       display: inline-block;
 
-      margin-left: .6rem;
+      margin-left: 0.6rem;
 
       padding: 0.2em 0.3em;
       border-radius: $border-radius;
 
-      background: $secondary;
-      color: $bkg;
+      border: 3px solid $secondary;
+      color: $secondary;
+    }
+  }
+
+  .stats {
+    margin: 1em 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .stat {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      flex-direction: column;
+
+      font-size: 1.5em;
+
+      min-width: 8em;
+
+      margin: 0.2em .4em;
+
+      box-sizing: border-box;
+
+      :nth-child(1) {
+        border-top-left-radius: $border-radius;
+        border-top-right-radius: $border-radius;
+      }
+
+      :nth-child(2) {
+        border-bottom-left-radius: $border-radius;
+        border-bottom-right-radius: $border-radius;
+      }
+
+      .value,
+      .name {
+        width: 100%;
+        padding: 0.2em;
+      }
+
+      .value {
+        background: $pri2;
+
+        font-weight: $fw-regular;
+      }
+
+      .name {
+        font-weight: $fw-bold;
+        background: $pri6;
+        color: $bkg;
+      }
     }
   }
 
@@ -32,21 +90,25 @@
     color: $bkg;
 
     padding: 0.3em 0.5em;
-    font-size: 1.3em;
+    font-size: 0.5em;
     border-radius: $border-radius;
 
     font-weight: $fw-semibold;
 
-    margin: 0.5em 0;
+    margin: 0 0.5em;
 
     cursor: pointer;
 
     transition: background-color $transition;
 
     &:hover {
-      background-color: mix($error, $bkg, 70%);
+      background-color: $err7;
     }
 
     display: inline-block;
+  }
+
+  .tic-table {
+    margin: 0;
   }
 }

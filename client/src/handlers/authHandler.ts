@@ -1,4 +1,5 @@
 import { GoogleAuthProvider, EmailAuthProvider } from 'firebase/auth';
+import { writeUserData } from './databaseHandler';
 import { auth } from './firebase';
 
 export const uiConfig = {
@@ -10,3 +11,10 @@ export const uiConfig = {
 export function getCurrentUser() {
   return auth.currentUser;
 }
+
+auth.onAuthStateChanged((user) => {
+  if (user) {
+    console.log("ee");
+    writeUserData();
+  }
+});
