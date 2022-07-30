@@ -23,7 +23,7 @@
 
   text-align: center;
 
-  > .title {
+  > .title, > .title-sec .title, > .title-sec-wrapper .title {
     font-size: 3em;
     font-weight: $fw-bold;
   }
