@@ -27,10 +27,10 @@
           color: $bkg;
           background: $secondary;
 
-          padding: .2em .3em;
-          font-size: .5em;
+          padding: 0.2em 0.3em;
+          font-size: 0.5em;
 
-          margin: 0 .7em;
+          margin: 0 0.7em;
 
           border-radius: $border-radius;
         }
@@ -97,7 +97,6 @@
 
         height: 1.37em;
 
-
         font-weight: $fw-bold;
 
         text-align: center;
@@ -132,7 +131,7 @@
 
       tr {
         td {
-          padding: .6em;
+          padding: 0.6em;
           border-radius: $border-radius;
         }
 
@@ -149,6 +148,36 @@
     .title {
       text-align: center;
       font-size: 2.6em;
+    }
+
+    .no-disps {
+      margin-top: 1em;
+
+      display: inline-block;
+      padding: .3em .5em;
+
+      border-radius: $border-radius;
+
+      font-weight: $fw-semibold;
+      font-size: 1.5em;
+
+      background: $sec4;
+    }
+  }
+
+  .show-charts-panel {    
+    @include rounded-panel($pri2);
+
+    cursor: pointer;
+
+    transition: background-color $transition;
+
+    .message {
+      font-size: 1.3em;
+    }
+
+    &:hover {
+      background: $pri3;
     }
   }
 }

@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { UserContext } from '../App';
 import { getDictionary, useUsers } from '../handlers/databaseHandler';
 import { generateDefinableTermsFromText } from './DefinableTerm';
 
@@ -35,8 +36,10 @@ export default function TicDispositionTable(props: { data: any; paperDisposition
 }
 
 function TicDispositionTableRow(props: { data: any; users: any; dictionary: any[]; paper?: boolean }) {
+  const user = useContext(UserContext);
+
   return (
-    <tr className={`${props.paper ? 'paper' : ''}`}>
+    <tr className={`${props.paper ? 'paper' : ''} ${user?.uid === props.data.userId ? 'self' : ''}`}>
       <td>
         {props.paper
           ? 'Paper'

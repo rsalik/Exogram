@@ -48,5 +48,10 @@
       background: $tertiary;
       color: $bkg;
     }
+
+    tr.self {
+      background: $secondary;
+      color: $bkg;
+    }
   }
 }

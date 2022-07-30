@@ -1,6 +1,6 @@
-import { ref, onValue, get } from 'firebase/database';
+import { ref, onValue, get, set, remove } from 'firebase/database';
 import { useEffect, useState } from 'react';
-import { db } from './firebase';
+import { auth, db } from './firebase';
 
 // Get Tics Hook
 export function useTicList() {
@@ -175,4 +175,32 @@ export async function getDictionary() {
   }
 
   return dictArr;
+}
+
+export async function submitDisposition(disposition: { disposition: string; comments: string }, ticId: string) {
+  const user = auth.currentUser;
+  if (!user) return false;
+
+  const userId = user.uid;
+
+  try {
+    await set(ref(db, `dispositions/${ticId}/${userId}`), disposition);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export async function deleteDisposition(ticId: string) {
+  const user = auth.currentUser;
+  if (!user) return false;
+
+  const userId = user.uid;
+
+  try {
+    await remove(ref(db, `dispositions/${ticId}/${userId}`));
+    return true;
+  } catch {
+    return false;
+  }
 }

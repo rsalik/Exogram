@@ -8,11 +8,14 @@ import TicDispositionTable from './TicDispositionTable';
 import { TicChartsPanel } from './TicChartsPanel';
 import { useTicDispositions, useTicGroups } from '../handlers/databaseHandler';
 import { UserContext } from '../App';
+import CreateDispositionPanel from './CreateDispositionPanel';
 
 export default function TicInfoPanel(props: { ticData: any }) {
   const [ticFiles, setTicFiles] = useState<any[]>([]);
   const [ticFilesLoading, setTicFilesLoading] = useState(true);
   const [ticFilesFailedLoading, setTicFilesFailedLoading] = useState(false);
+
+  const [showCharts, setShowCharts] = useState(false);
 
   const ticGroups = useTicGroups();
   const dispositions = useTicDispositions(props.ticData.ticId);
@@ -110,10 +113,22 @@ export default function TicInfoPanel(props: { ticData: any }) {
         <div className="dispositions">
           <div className="title">Dispositions</div>
           <TicDispositionTable data={dispositions} paperDisposition={props.ticData.paperDisposition} />
+          {!!ticGroups && ticGroups.filter((g) => parseInt(g.id) === props.ticData.group)[0]?.write ? (
+            user && <CreateDispositionPanel ticId={props.ticData.ticId} existingDisposition={dispositions.filter((d: any) => d.userId === user.uid)[0]} />
+          ) : (
+            <div className="no-disps">This TIC is no longer accepting new dispositions.</div>
+          )}
         </div>
       )}
 
-      <TicChartsPanel tics={[props.ticData.ticId]} />
+      {showCharts ? (
+        <TicChartsPanel tics={[props.ticData.ticId]} />
+      ) : (
+        <div className="show-charts-panel" onClick={() => setShowCharts(true)}>
+          <div className="title">Click to Show Charts</div>
+          <div className="message">Targets with many sectors of data may cause performance issues.</div>
+        </div>
+      )}
     </div>
   );
 }
