@@ -7,13 +7,19 @@ export function useTicList() {
   const [tics, setTics] = useState<any[]>([]);
 
   useEffect(() => {
-    const unsubscribe = onValue(ref(db, 'tics'), (snapshot: any) => {
-      setTics(convertTicsObjToList(snapshot.val()));
-    });
-
-    return () => {
-      unsubscribe();
-    };
+    get(ref(db, 'ticsLastModified')).then((snapshot) => {
+      const ct = window.localStorage.getItem('ticsLastModified');
+      const ticsString = window.localStorage.getItem('tics');
+      if (ct && parseInt(ct) > snapshot.val() && ticsString) {
+        setTics(convertTicsObjToList(JSON.parse(ticsString)));
+      } else {
+        get(ref(db, 'tics')).then((snapshot) => {
+          setTics(convertTicsObjToList(snapshot.val()));
+          window.localStorage.setItem('tics', JSON.stringify(snapshot.val()));
+          window.localStorage.setItem('ticsLastModified', Date.now().toString());
+        });
+      }
+    })
   }, []);
 
   return tics;
