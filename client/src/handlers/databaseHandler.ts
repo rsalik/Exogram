@@ -19,7 +19,7 @@ export function useTicList() {
           window.localStorage.setItem('ticsLastModified', Date.now().toString());
         });
       }
-    })
+    });
   }, []);
 
   return tics;
@@ -135,6 +135,12 @@ export function useUsernames(uids: string[]) {
   return usernames;
 }
 
+export async function amISuperuser() {
+  if (!auth.currentUser) return false;
+
+  return !!(await get(ref(db, `users/${auth.currentUser.uid}/superuser`))).val();
+}
+
 function convertTicsObjToList(tics: any) {
   const ticList = [];
   for (const key in tics) {
@@ -220,9 +226,7 @@ export async function writeUserData() {
   const userId = user.uid;
 
   try {
-    await set(ref(db, `users/${userId}`), {
-      email: user.email,
-      name: user.displayName,
-    });
+    await set(ref(db, `users/${userId}/email`), user.email);
+    await set(ref(db, `users/${userId}/name`), user.displayName);
   } catch {}
 }

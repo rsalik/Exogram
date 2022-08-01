@@ -1,16 +1,21 @@
-import { IdTokenResult, User } from 'firebase/auth';
+import { User } from 'firebase/auth';
 import { useEffect, useState } from 'react';
-import { getTicDispositions, useTicGroups, useTicList } from '../handlers/databaseHandler';
+import { amISuperuser, getTicDispositions, useTicGroups, useTicList } from '../handlers/databaseHandler';
 import { auth } from '../handlers/firebase';
 import TicTable from './TicTable';
 
 export default function ProfilePanel(props: { user: User }) {
-  const [idTokenResult, setIdTokenResult] = useState<IdTokenResult | null>(null);
   const tics = useTicList();
   const ticGroups = useTicGroups();
 
   const [ticsWithoutUserDisposition, setTicsWithoutUserDisposition] = useState<any[]>([]);
   const [dispositionCount, setDispositionCount] = useState(0);
+
+  const [superuser, setSuperuser] = useState(false);
+
+  useEffect(() => {
+    amISuperuser().then(setSuperuser);
+  }, []);
 
   useEffect(() => {
     async function findTicsWithoutUserDisposition() {
@@ -35,20 +40,16 @@ export default function ProfilePanel(props: { user: User }) {
         }
       });
 
-      setTicsWithoutUserDisposition(arr.filter((t: any) => {
-        return ticGroups.filter((g: any) => g.id === t.group.toString())[0]?.write;
-      }));
+      setTicsWithoutUserDisposition(
+        arr.filter((t: any) => {
+          return ticGroups.filter((g: any) => g.id === t.group.toString())[0]?.write;
+        })
+      );
       setDispositionCount(tics.length - arr.length);
     }
 
     if (tics) findTicsWithoutUserDisposition();
   }, [tics, ticGroups, props.user.uid]);
-
-  useEffect(() => {
-    if (props.user) {
-      props.user.getIdTokenResult().then(setIdTokenResult);
-    }
-  }, [props.user]);
 
   return (
     <>
@@ -66,7 +67,7 @@ export default function ProfilePanel(props: { user: User }) {
           </div>
         </div>
         <div className="name">
-          {props.user.displayName} {idTokenResult?.claims.superuser && <div className="superuser-badge">SuperUser</div>}
+          {props.user.displayName} {superuser && <div className="superuser-badge">SuperUser</div>}
         </div>
         <div className="stats">
           <div className="stat">
