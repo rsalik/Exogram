@@ -110,8 +110,8 @@ export function sortTicList(ticList: any[], sortBy: string) {
 
   if (sortBy === 'paperDisp') {
     return ticList.sort((a, b) => {
-      let aD = a.paperDisposition.disposition;
-      let bD = b.paperDisposition.disposition;
+      let aD = a.paperDisposition?.disposition;
+      let bD = b.paperDisposition?.disposition;
 
       if (aD && !bD) return -1;
       if (!aD && bD) return 1;
