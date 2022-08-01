@@ -218,7 +218,5 @@ export async function writeUserData() {
       email: user.email,
       name: user.displayName,
     });
-
-    console.log('e2e');
   } catch {}
 }

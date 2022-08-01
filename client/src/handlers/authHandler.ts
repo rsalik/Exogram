@@ -14,7 +14,6 @@ export function getCurrentUser() {
 
 auth.onAuthStateChanged((user) => {
   if (user) {
-    console.log("ee");
     writeUserData();
   }
 });
