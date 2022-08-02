@@ -25,6 +25,23 @@ export function useTicList() {
   return tics;
 }
 
+// Get Users Hook (Admins Only)
+export function useUsers() {
+  const [users, setUsers] = useState<any[]>([]);
+
+  useEffect(() => {
+    const unsubscribe = onValue(ref(db, 'users'), (snapshot: any) => {
+      setUsers(convertUsersObjToList(snapshot.val()));
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+  return users;
+}
+
 // Get Tics Groups Hook
 export function useTicGroups() {
   const [groups, setGroups] = useState<any[]>([]);
@@ -145,6 +162,14 @@ export async function amISuperuser() {
   return !!(await get(ref(db, `users/${auth.currentUser.uid}/superuser`))).val();
 }
 
+export async function amIAdmin() {
+  if (!auth.currentUser) return false;
+
+  const token = await auth.currentUser.getIdTokenResult();
+  console.log(token);
+  return !!token.claims.admin;
+}
+
 function convertTicsObjToList(tics: any) {
   const ticList = [];
   for (const key in tics) {
@@ -167,6 +192,18 @@ function convertTicGroupsObjToList(groups: any) {
   }
 
   return ticGroupsList;
+}
+
+function convertUsersObjToList(users: any) {
+  const usersList = [];
+  for (const key in users) {
+    usersList.push({
+      uid: key,
+      ...users[key],
+    });
+  }
+
+  return usersList;
 }
 
 function convertDispositionsObjectToList(dispositions: any) {
@@ -237,7 +274,7 @@ async function updateDispositionCount(ticId: string, dispositions?: any[]) {
     await set(ref(db, `tics/${ticId}/dispositionCount`), count);
     await set(ref(db, `ticsLastModified`), Date.now());
 
-    console.log("eee");
+    console.log('eee');
   }
 }
 
@@ -250,5 +287,23 @@ export async function writeUserData() {
   try {
     await set(ref(db, `users/${userId}/email`), user.email);
     await set(ref(db, `users/${userId}/name`), user.displayName);
+  } catch {}
+}
+
+export async function setTicGroupWritePermission(groupId: string, write: boolean) {
+  try {
+    await set(ref(db, `ticGroups/${groupId}/write`), write);
+  } catch {}
+}
+
+export async function setTicGroupReadPermission(groupId: string, read: boolean) {
+  try {
+    await set(ref(db, `ticGroups/${groupId}/public`), read);
+  } catch {}
+}
+
+export async function setUserSuperuserStatus(uid: string, superuser: boolean) {
+  try {
+    await set(ref(db, `users/${uid}/superuser`), superuser);
   } catch {}
 }

@@ -23,9 +23,5 @@ export default function ProfilePage() {
       />
     );
 
-  return (
-    <>
-      <ProfilePanel user={user} />
-    </>
-  );
+  return <ProfilePanel user={user} />;
 }

@@ -1,6 +1,6 @@
 import { User } from 'firebase/auth';
 import { useEffect, useState } from 'react';
-import { amISuperuser, getTicDispositions, useTicGroups, useTicList } from '../handlers/databaseHandler';
+import { amIAdmin, amISuperuser, getTicDispositions, useTicGroups, useTicList } from '../handlers/databaseHandler';
 import { auth } from '../handlers/firebase';
 import TicTable from './TicTable';
 
@@ -11,10 +11,12 @@ export default function ProfilePanel(props: { user: User }) {
   const [ticsWithoutUserDisposition, setTicsWithoutUserDisposition] = useState<any[]>([]);
   const [dispositionCount, setDispositionCount] = useState(0);
 
-  const [superuser, setSuperuser] = useState(false);
+  const [isSuperuser, setIsSuperuser] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    amISuperuser().then(setSuperuser);
+    amISuperuser().then(setIsSuperuser);
+    amIAdmin().then(setIsAdmin);
   }, []);
 
   useEffect(() => {
@@ -67,7 +69,7 @@ export default function ProfilePanel(props: { user: User }) {
           </div>
         </div>
         <div className="name">
-          {props.user.displayName} {superuser && <div className="superuser-badge">SuperUser</div>}
+          {props.user.displayName} {isSuperuser && <div className="superuser-badge">SuperUser</div>} {isAdmin && <div className="superuser-badge">Admin</div>}
         </div>
         <div className="stats">
           <div className="stat">

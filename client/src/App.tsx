@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
 import { Header, Footer } from './components/HeaderAndFooter';
 import { auth } from './handlers/firebase';
+import AdminPage from './routes/AdminPage';
 import DictionaryPage from './routes/DictionaryPage';
 import Home from './routes/Home';
 import PageNotFound from './routes/PageNotFound';
@@ -45,6 +46,7 @@ function App() {
             <Route path="tic/:ticId" element={<TicPage />} />
             <Route path="signin" element={<SignInPage />} />
             <Route path="profile" element={<ProfilePage />} />
+            <Route path="admin" element={<AdminPage />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>
         </Routes>

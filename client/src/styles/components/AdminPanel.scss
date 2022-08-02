@@ -1,0 +1,117 @@
+.admin-panel {
+  @include rounded-panel($sec1);
+
+  .groups {
+    @include rounded-panel($sec2);
+
+    .group {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      font-size: 1.5em;
+
+      margin: 0.2em 0;
+
+      .name {
+        font-weight: $fw-semibold;
+      }
+
+      div {
+        margin: 0 0.5em;
+        min-width: 6em;
+      }
+
+      .write,
+      .public {
+        padding: 0.3em;
+        border-radius: $border-radius;
+        border: 3px solid;
+        cursor: pointer;
+
+        &.off {
+          background: none;
+          color: $white;
+        }
+
+        transition: $transition background-color, $transition border-color, color $transition;
+      }
+
+      .write {
+        border-color: $secondary;
+
+        &.on,
+        &.off:hover {
+          background: $secondary;
+          color: $bkg;
+        }
+      }
+
+      .public {
+        border-color: $primary;
+
+        &.on,
+        &.off:hover {
+          background: $primary;
+          color: $bkg;
+        }
+      }
+    }
+  }
+
+  .users {
+    @include rounded-panel($sec2);
+
+    table {
+      border-collapse: collapse;
+      margin: 0 auto;
+
+      font-size: 1.2em;
+
+      tr {
+        th,
+        td {
+          padding: 0.5em 1em;
+
+          &:first-of-type {
+            border-top-left-radius: $border-radius;
+            border-bottom-left-radius: $border-radius;
+          }
+
+          &:last-of-type {
+            border-top-right-radius: $border-radius;
+            border-bottom-right-radius: $border-radius;
+          }
+        }
+
+        th {
+          background: $secondary;
+          color: $bkg;
+        }
+
+        &:nth-of-type(even) {
+          background: $sec3;
+        }
+      }
+
+      .superuser {
+        margin-left: 0.6rem;
+
+        padding: 0.2em 0.3em;
+        border-radius: $border-radius;
+
+        border: 3px solid $secondary;
+        
+        cursor: pointer;
+
+        transition: $transition color, $transition border-color;
+
+        &.active,
+        &:hover {
+          background-color: $secondary;
+          color: $bkg;
+        }
+      }
+    }
+  }
+}

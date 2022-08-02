@@ -1,8 +1,18 @@
 import { ChevronRight } from '@mui/icons-material';
+import { useContext, useEffect, useState } from 'react';
+import { UserContext } from '../App';
 import Link from '../components/Link';
-import { getCurrentUser } from '../handlers/authHandler';
+import { amIAdmin } from '../handlers/databaseHandler';
 
 export default function Home() {
+  const user = useContext(UserContext);
+
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    amIAdmin().then(setIsAdmin);
+  }, []);
+
   return (
     <div className="home">
       <div className="title">
@@ -18,13 +28,18 @@ export default function Home() {
         <Link href="/dictionary">
           Term Dictionary <ChevronRight fontSize="large" />
         </Link>
-        {!!getCurrentUser() ? (
+        {!!user ? (
           <Link href="/profile">
             Profile <ChevronRight fontSize="large" />
           </Link>
         ) : (
           <Link href="/signin">
             Sign In <ChevronRight fontSize="large" />
+          </Link>
+        )}
+        {isAdmin && (
+          <Link href="/admin">
+            Admin <ChevronRight fontSize="large" />
           </Link>
         )}
       </div>
