@@ -104,7 +104,7 @@
         
         cursor: pointer;
 
-        transition: $transition color, $transition border-color;
+        transition: $transition color, $transition background-color;
 
         &.active,
         &:hover {
