@@ -79,6 +79,10 @@ export function useTicDispositions(ticId: string) {
     };
   }, [ticId]);
 
+  useEffect(() => {
+    updateDispositionCount(ticId, dispositions);
+  }, [ticId, dispositions]);
+
   return dispositions;
 }
 
@@ -199,6 +203,7 @@ export async function submitDisposition(disposition: { disposition: string; comm
 
   try {
     await set(ref(db, `dispositions/${ticId}/${userId}`), disposition);
+    await updateDispositionCount(ticId);
     return true;
   } catch {
     return false;
@@ -213,9 +218,22 @@ export async function deleteDisposition(ticId: string) {
 
   try {
     await remove(ref(db, `dispositions/${ticId}/${userId}`));
+    await updateDispositionCount(ticId);
     return true;
   } catch {
     return false;
+  }
+}
+
+async function updateDispositionCount(ticId: string, dispositions?: any[]) {
+  if (!dispositions) return;
+
+  const count = dispositions.length;
+  const curValue = (await get(ref(db, `tics/${ticId}/dispositionCount`))).val();
+
+  if (curValue !== count) {
+    await set(ref(db, `tics/${ticId}/dispositionCount`), count);
+    await set(ref(db, `ticsLastModified`), Date.now());
   }
 }
 
