@@ -23,7 +23,9 @@
 
   text-align: center;
 
-  > .title, > .title-sec .title, > .title-sec-wrapper .title {
+  > .title,
+  > .title-sec .title,
+  > .title-sec-wrapper .title {
     font-size: 3em;
     font-weight: $fw-bold;
   }
@@ -37,5 +39,20 @@
   @supports (backdrop-filter: none) {
     background: rgba($color, 0.75);
     backdrop-filter: blur(10px) saturate(125%);
+  }
+}
+
+@mixin styled-title() {
+  margin: 0 1rem;
+
+  font-weight: $fw-black;
+
+  span {
+    background: $primary;
+    color: $bkg;
+
+    padding: 0 0.2em;
+    margin: 0 0.1em;
+    border-radius: $border-radius;
   }
 }

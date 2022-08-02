@@ -1,30 +1,32 @@
-import TableImage from '../imgs/table.png';
-import DispositionImage from '../imgs/dispositions.png';
+import { ChevronRight } from '@mui/icons-material';
+import Link from '../components/Link';
+import { getCurrentUser } from '../handlers/authHandler';
 
 export default function Home() {
   return (
     <div className="home">
-      <div className="title">Welcome to Exogram!</div>
-      <div className="description">Lorem ipsum dolor, sit amet consectetur adipisicing elit.</div>
-      <div className="section">
-        <img src={TableImage} alt="TIC Table" />
-        <div className="text">
-          <div className="title">TIC Table</div>
-          <div className="description">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi pariatur eum odit vel ducimus laboriosam, fugiat rem blanditiis
-            quisquam inventore quia dolorem fugit, minima maxime! Illo unde aliquam alias suscipit!
-          </div>
-        </div>
+      <div className="title">
+        Exo<span>gram</span>
       </div>
-      <div className="section">
-        <div className="text">
-          <div className="title">View and Create Dispositions</div>
-          <div className="description">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi pariatur eum odit vel ducimus laboriosam, fugiat rem blanditiis
-            quisquam inventore quia dolorem fugit, minima maxime! Illo unde aliquam alias suscipit!
-          </div>
-        </div>
-        <img src={DispositionImage} alt="TIC Table" />
+      <div className="links">
+        <Link href="/table">
+          TIC Table <ChevronRight fontSize="large" />
+        </Link>
+        <Link href="/charts">
+          Light Curves <ChevronRight fontSize="large" />
+        </Link>
+        <Link href="/dictionary">
+          Term Dictionary <ChevronRight fontSize="large" />
+        </Link>
+        {!!getCurrentUser() ? (
+          <Link href="/profile">
+            Profile <ChevronRight fontSize="large" />
+          </Link>
+        ) : (
+          <Link href="/signin">
+            Sign In <ChevronRight fontSize="large" />
+          </Link>
+        )}
       </div>
     </div>
   );

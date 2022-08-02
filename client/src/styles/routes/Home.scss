@@ -1,54 +1,45 @@
 .home {
-  > .title {
-    font-weight: $fw-bold;
-    font-size: 3em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
-    text-align: center;
+  height: 100%;
+
+  padding: 3em;
+
+  .title {
+    font-size: 6em;
+    @include styled-title();
   }
 
-  > .description {
-    font-size: 1.3em;
-    text-align: center;
-  }
-
-  .section {
-    margin: 1em 3em;
-    padding: 0 4em;
-
+  .links {
     display: flex;
-    align-items: center;
+    flex-direction: column;
 
-    border-radius: $border-radius-large;
+    margin: 1em 0;
 
-    &:nth-of-type(even) {
-      background: $pri1;
-    }
+    .link {
+      margin: 0.2em 0;
+      padding: 0.5em 2em;
 
-    .text {
-      position: relative;
-      z-index: 100;
+      font-size: 2em;
+      display: flex;
+      justify-content: center;
+      align-items: center;
 
-      width: 50%;
+      background: $primary;
+      color: $bkg;
 
-      .title {
-        font-size: 2.7em;
-        font-weight: $fw-bold;
+      border-radius: $border-radius-large;
+
+      font-weight: $fw-bold;
+
+      text-decoration: none;
+
+      &:hover {
+        background: $pri6;
       }
-
-      .description {
-        font-size: 1.3em;
-      }
-    }
-
-    img {
-      z-index: 1;
-
-      padding: 4em;
-      box-sizing: border-box;
-
-      max-width: 50%;
-      width: auto;
-      height: auto;
     }
   }
 }

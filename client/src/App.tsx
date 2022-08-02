@@ -1,7 +1,7 @@
 import { User } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Header, Footer } from './components/Header';
+import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
+import { Header, Footer } from './components/HeaderAndFooter';
 import { auth } from './handlers/firebase';
 import DictionaryPage from './routes/DictionaryPage';
 import Home from './routes/Home';
@@ -32,28 +32,38 @@ function App() {
   return (
     <UserContext.Provider value={user}>
       <Router>
-        <Header />
-        <div className="content-wrapper">
-          <div>
-            <Routes>
-              <Route index element={<Home />} />
-              <Route path="table" element={<TicTablePage />}>
-                <Route path=":group" element={<TicTablePage />} />
-              </Route>
-              <Route path="charts" element={<TicChartsPage />}>
-                <Route path=":ticIds" element={<TicChartsPage />} />
-              </Route>
-              <Route path="dictionary" element={<DictionaryPage />} />
-              <Route path="tic/:ticId" element={<TicPage />} />
-              <Route path="signin" element={<SignInPage />} />
-              <Route path="profile" element={<ProfilePage />} />
-              <Route path="*" element={<PageNotFound />} />
-            </Routes>
-          </div>
-          <Footer />
-        </div>
+        <Routes>
+          <Route index element={<Home />} />
+          <Route path="/" element={<Page />}>
+            <Route path="table" element={<TicTablePage />}>
+              <Route path=":group" element={<TicTablePage />} />
+            </Route>
+            <Route path="charts" element={<TicChartsPage />}>
+              <Route path=":ticIds" element={<TicChartsPage />} />
+            </Route>
+            <Route path="dictionary" element={<DictionaryPage />} />
+            <Route path="tic/:ticId" element={<TicPage />} />
+            <Route path="signin" element={<SignInPage />} />
+            <Route path="profile" element={<ProfilePage />} />
+            <Route path="*" element={<PageNotFound />} />
+          </Route>
+        </Routes>
       </Router>
     </UserContext.Provider>
+  );
+}
+
+function Page() {
+  return (
+    <>
+      <Header />
+      <div className="content-wrapper">
+        <div>
+          <Outlet />
+        </div>
+      </div>
+      <Footer />
+    </>
   );
 }
 

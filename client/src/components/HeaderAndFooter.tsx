@@ -38,7 +38,7 @@ function HeaderAndFooterContent() {
       <div className="links">
         <Link to="/table">TIC Table</Link>
         <div className="sep">/</div>
-        <Link to="/charts">TIC Charts</Link>
+        <Link to="/charts">Light Curves</Link>
         <div className="sep">/</div>
         <Link to="/dictionary">Dictionary</Link>
       </div>
