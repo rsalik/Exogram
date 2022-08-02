@@ -2,7 +2,7 @@ import { ChartDataGenerator } from '../ChartDataGenerator';
 
 export class BackgroundFluxChartDataGenerator extends ChartDataGenerator {
   constructor(tics: any[]) {
-    super(tics, 'Background Flux vs. Time', 'Time', 'Background Flux');
+    super(tics, 'Background Flux (Normalized) vs. Time', 'Time', 'Background Flux (Normalized)');
   }
 
   generateDataset(data: any, ticId: string, index: number, cleaned?: boolean) {
@@ -10,11 +10,11 @@ export class BackgroundFluxChartDataGenerator extends ChartDataGenerator {
 
     return [
       {
-        label: `TIC ${ticId}`,
+        label: `TIC ${ticId} (normalized)`,
         data: data.time.map((v: any, i: number) => {
           return {
             x: v,
-            y: data.sap_bkg[i] || null,
+            y: data.sap_bkg_nrm[i] || null,
           };
         }),
         showLine: true,
