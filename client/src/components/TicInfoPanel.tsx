@@ -89,7 +89,7 @@ export default function TicInfoPanel(props: { ticData: any }) {
               {ticFiles.map((f: any) => (
                 <tr>
                   <td>
-                    <Link href={f.webContentLink} newTab>
+                    <Link href={f.webContentLink} external newTab>
                       {f.name}
                     </Link>
                   </td>

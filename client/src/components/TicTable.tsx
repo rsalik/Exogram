@@ -7,7 +7,7 @@ import { exofopLink, searchTicList, sortTicList, TicBasicProperties, TicListSort
 import { getAllTicDispositions, useTicGroups } from '../handlers/databaseHandler';
 import ErrorPanel from './ErrorPanel';
 
-export default function TicTable(props: { ticList: any[]; title?: string }) {
+export default function TicTable(props: { ticList: any[], title?: string }) {
   const ticList = props.ticList;
   const ticGroups = useTicGroups();
 
@@ -34,10 +34,9 @@ export default function TicTable(props: { ticList: any[]; title?: string }) {
   }, [activeGroup]);
 
   function getFilteredTicList() {
-    return sortTicList(
-      searchTicList(publishedOnly ? ticList.filter((t: any) => !!t.paperDisposition) : ticList, search, dispositions),
-      sortBy
-    ).filter((t: any) => activeGroup === 'all' || t.group === parseInt(activeGroup));
+    return sortTicList(searchTicList(publishedOnly ? ticList.filter((t: any) => !!t.paperDisposition) : ticList, search, dispositions), sortBy).filter(
+      (t: any) => activeGroup === 'all' || t.group === parseInt(activeGroup)
+    );
   }
 
   return (
@@ -144,9 +143,9 @@ function TicTableCompactRow(props: { ticData: any }) {
         <Link href={`/tic/${props.ticData.ticId}`}>{props.ticData.ticId}</Link>
       </td>
       <td>
-        <a className="link" href={exofopLink(props.ticData.ticId)} target="_blank" rel="noreferrer">
+        <Link href={exofopLink(props.ticData.ticId)} external newTab>
           Exofop
-        </a>
+        </Link>
       </td>
       <td>{props.ticData.sectors.replaceAll(',', ', ')}</td>
       <td className="mono">{fixedString(props.ticData.epoch, 3)}</td>
@@ -171,7 +170,7 @@ function TicTableRow(props: { ticData: any; sortBy: string }) {
         <ReactLink className="tic-id" to={`/tic/${props.ticData.ticId}`}>
           TIC {props.ticData.ticId}
         </ReactLink>
-        <Link newTab href={exofopLink(props.ticData.ticId)}>
+        <Link external newTab href={exofopLink(props.ticData.ticId)}>
           Exofop
         </Link>
       </div>
