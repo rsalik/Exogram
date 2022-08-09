@@ -8,10 +8,6 @@ export const TicListSortByOptions = [
     value: 'ticId',
   },
   {
-    name: 'Epoch [BJD]',
-    value: 'epoch',
-  },
-  {
     name: 'Period [Days]',
     value: 'period',
   },
@@ -49,11 +45,6 @@ export const TicBasicProperties = [
     shortName: 'Sectors',
   },
   {
-    name: 'Epoch [BJD]',
-    id: 'epoch',
-    shortName: 'Epoch',
-  },
-  {
     name: 'Period [Days]',
     id: 'period',
     shortName: 'Period',
@@ -62,11 +53,6 @@ export const TicBasicProperties = [
     name: 'Duration [Hours]',
     id: 'duration',
     shortName: 'Duration',
-  },
-  {
-    name: 'Depth [ppm]',
-    id: 'depth',
-    shortName: 'Depth',
   },
   {
     name: 'Depth [%]',

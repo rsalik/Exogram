@@ -79,7 +79,7 @@ function getTicFilesFromFolder(ticId: string, drive: drive_v3.Drive, folderId = 
   return new Promise((resolve, reject) => {
     drive.files.list(
       {
-        q: `'${folderId}' in parents and name contains '${ticId}' and mimeType == 'application/pdf'`,
+        q: `'${folderId}' in parents and name contains '${ticId}' and mimeType = 'application/pdf'`,
         pageSize: 1000,
         fields: 'nextPageToken, files(id, webContentLink, name, mimeType)',
       },

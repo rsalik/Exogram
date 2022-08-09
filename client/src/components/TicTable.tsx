@@ -148,10 +148,8 @@ function TicTableCompactRow(props: { ticData: any }) {
         </Link>
       </td>
       <td>{props.ticData.sectors.replaceAll(',', ', ')}</td>
-      <td className="mono">{fixedString(props.ticData.epoch, 3)}</td>
       <td className="mono">{fixedString(props.ticData.period, 6)}</td>
       <td className="mono">{fixedString(props.ticData.duration, 2)}</td>
-      <td className="mono">{props.ticData.depth}</td>
       <td className="mono">{fixedString(props.ticData.depthPercent, 3)}</td>
       <td className="mono">{fixedString(props.ticData.rPlanet, 2)}</td>
       <td className="mono">{fixedString(props.ticData.rStar, 2)}</td>
