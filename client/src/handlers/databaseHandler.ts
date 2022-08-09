@@ -69,7 +69,6 @@ export function useTicDispositions(ticId: string) {
   const [dispositions, setDispositions] = useState<any>();
 
   useEffect(() => {
-    console.log('oh no');
     get(ref(db, `dispositions/${ticId}`)).then(
       (snapshot: any) => {
         setDispositions(convertDispositionsObjectToList(snapshot.val()));
