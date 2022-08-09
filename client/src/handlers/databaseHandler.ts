@@ -166,7 +166,6 @@ export async function amIAdmin() {
   if (!auth.currentUser) return false;
 
   const token = await auth.currentUser.getIdTokenResult();
-  console.log(token);
   return !!token.claims.admin;
 }
 
@@ -268,13 +267,9 @@ async function updateDispositionCount(ticId: string, dispositions?: any[]) {
   const count = dispositions.length;
   const curValue = (await get(ref(db, `tics/${ticId}/dispositionCount`))).val();
 
-  console.log(curValue, count);
-
   if (curValue !== count) {
     await set(ref(db, `tics/${ticId}/dispositionCount`), count);
     await set(ref(db, `ticsLastModified`), Date.now());
-
-    console.log('eee');
   }
 }
 
