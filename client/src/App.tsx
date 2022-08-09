@@ -34,8 +34,8 @@ function App() {
     <UserContext.Provider value={user}>
       <Router>
         <Routes>
-          <Route index element={<Home />} />
           <Route path="/" element={<Page />}>
+            <Route index element={<Home />} />
             <Route path="table" element={<TicTablePage />}>
               <Route path=":group" element={<TicTablePage />} />
             </Route>

@@ -1,47 +1,33 @@
-import { ChevronRight } from '@mui/icons-material';
-import { useContext, useEffect, useState } from 'react';
-import { UserContext } from '../App';
-import Link from '../components/Link';
-import { amIAdmin } from '../handlers/databaseHandler';
+import TableImage from '../imgs/table.png';
+import DispositionImage from '../imgs/dispositions.png';
+import ChartsImage from '../imgs/charts.png';
 
 export default function Home() {
-  const user = useContext(UserContext);
-
-  const [isAdmin, setIsAdmin] = useState(false);
-
-  useEffect(() => {
-    amIAdmin().then(setIsAdmin);
-  }, []);
-
   return (
     <div className="home">
-      <div className="title">
-        Exo<span>gram</span>
+      <div className="title">Welcome to Exogram!</div>
+      <div className="section">
+        <img src={TableImage} alt="TIC Table" />
+        <div className="text">
+          <div className="title">TIC Table</div>
+          <div className="description">View, sort, and search through Planet Patrol's vast catalog of TESS targets.</div>
+        </div>
       </div>
-      <div className="links">
-        <Link href="/table">
-          TIC Table <ChevronRight fontSize="large" />
-        </Link>
-        <Link href="/charts">
-          Light Curves <ChevronRight fontSize="large" />
-        </Link>
-        <Link href="/dictionary">
-          Term Dictionary <ChevronRight fontSize="large" />
-        </Link>
-        {!!user ? (
-          <Link href="/profile">
-            Profile <ChevronRight fontSize="large" />
-          </Link>
-        ) : (
-          <Link href="/signin">
-            Sign In <ChevronRight fontSize="large" />
-          </Link>
-        )}
-        {isAdmin && (
-          <Link href="/admin">
-            Admin <ChevronRight fontSize="large" />
-          </Link>
-        )}
+      <div className="section">
+        <div className="text">
+          <div className="title">View and Create Dispositions</div>
+          <div className="description">
+            Compare others' dispositions, and write your own. Use prewritten comments to ensure your dispositions are machine readable.
+          </div>
+        </div>
+        <img src={DispositionImage} alt="View and Create Dispositions" />
+      </div>
+      <div className="section">
+        <img src={ChartsImage} alt="Light Curves" />
+        <div className="text">
+          <div className="title">View Light Curves</div>
+          <div className="description">Automatically generate interactive light curves that can feature multiple targets at once. These charts can be easily zoomed, panned, and (soon) shared!</div>
+        </div>
       </div>
     </div>
   );
