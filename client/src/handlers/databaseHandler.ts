@@ -69,6 +69,7 @@ export function useTicDispositions(ticId: string) {
   const [dispositions, setDispositions] = useState<any>();
 
   useEffect(() => {
+    console.log('oh no');
     get(ref(db, `dispositions/${ticId}`)).then(
       (snapshot: any) => {
         setDispositions(convertDispositionsObjectToList(snapshot.val()));
@@ -112,21 +113,16 @@ export async function getAllTicDispositions(ticList: any[]) {
   return dispositions;
 }
 
-export function useUsernames(uids: string[]) {
-  const [usernames, setUsernames] = useState<{ [key: string]: string }>({});
+export function useUsername(uid: string) {
+  const [username, setUsername] = useState<string>('');
 
   useEffect(() => {
-    for (const uid of uids) {
-      get(ref(db, `users/${uid}/name`)).then((snapshot: any) => {
-        setUsernames((users: any) => ({
-          ...users,
-          [uid]: snapshot.val(),
-        }));
-      });
-    }
-  }, [uids]);
+    get(ref(db, `users/${uid}/name`)).then((snapshot: any) => {
+      setUsername(snapshot.val());
+    });
+  }, [uid]);
 
-  return usernames;
+  return username;
 }
 
 export async function amISuperuser() {
