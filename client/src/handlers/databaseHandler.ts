@@ -1,4 +1,4 @@
-import { ref, onValue, get, set, remove } from 'firebase/database';
+import { ref, get, set, remove } from 'firebase/database';
 import { useEffect, useState } from 'react';
 import { auth, db } from './firebase';
 
@@ -30,13 +30,9 @@ export function useUsers() {
   const [users, setUsers] = useState<any[]>([]);
 
   useEffect(() => {
-    const unsubscribe = onValue(ref(db, 'users'), (snapshot: any) => {
+    get(ref(db, 'users')).then((snapshot: any) => {
       setUsers(convertUsersObjToList(snapshot.val()));
     });
-
-    return () => {
-      unsubscribe();
-    };
   }, []);
 
   return users;
@@ -47,13 +43,9 @@ export function useTicGroups() {
   const [groups, setGroups] = useState<any[]>([]);
 
   useEffect(() => {
-    const unsubscribe = onValue(ref(db, 'ticGroups'), (snapshot: any) => {
+    get(ref(db, 'ticGroups')).then((snapshot: any) => {
       setGroups(convertTicGroupsObjToList(snapshot.val()));
     });
-
-    return () => {
-      unsubscribe();
-    };
   }, []);
 
   return groups;
@@ -64,13 +56,9 @@ export function useTicData(ticId: string) {
   const [tic, setTic] = useState<any>();
 
   useEffect(() => {
-    const unsubscribe = onValue(ref(db, `tics/${ticId}`), (snapshot: any) => {
+    get(ref(db, `tics/${ticId}`)).then((snapshot: any) => {
       setTic({ ...snapshot.val(), ticId });
     });
-
-    return () => {
-      unsubscribe();
-    };
   }, [ticId]);
 
   return tic;
@@ -81,8 +69,7 @@ export function useTicDispositions(ticId: string) {
   const [dispositions, setDispositions] = useState<any>();
 
   useEffect(() => {
-    const unsubscribe = onValue(
-      ref(db, `dispositions/${ticId}`),
+    get(ref(db, `dispositions/${ticId}`)).then(
       (snapshot: any) => {
         setDispositions(convertDispositionsObjectToList(snapshot.val()));
       },
@@ -90,10 +77,6 @@ export function useTicDispositions(ticId: string) {
         setDispositions({ error: true });
       }
     );
-
-    return () => {
-      unsubscribe();
-    };
   }, [ticId]);
 
   useEffect(() => {
@@ -133,24 +116,14 @@ export function useUsernames(uids: string[]) {
   const [usernames, setUsernames] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
-    let unsubscribes = [] as Function[];
-
     for (const uid of uids) {
-      unsubscribes.push(
-        onValue(ref(db, `users/${uid}/name`), (snapshot: any) => {
-          setUsernames((users: any) => ({
-            ...users,
-            [uid]: snapshot.val(),
-          }));
-        })
-      );
-    }
-
-    return () => {
-      unsubscribes.forEach((f) => {
-        f();
+      get(ref(db, `users/${uid}/name`)).then((snapshot: any) => {
+        setUsernames((users: any) => ({
+          ...users,
+          [uid]: snapshot.val(),
+        }));
       });
-    };
+    }
   }, [uids]);
 
   return usernames;
