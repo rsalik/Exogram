@@ -7,13 +7,13 @@ import { exofopLink, searchTicList, sortTicList, TicBasicProperties, TicListSort
 import { getAllTicDispositions, useTicGroups } from '../handlers/databaseHandler';
 import ErrorPanel from './ErrorPanel';
 
-export default function TicTable(props: { ticList: any[], title?: string }) {
+export default function TicTable(props: { ticList: any[]; title?: string }) {
   const ticList = props.ticList;
   const ticGroups = useTicGroups();
 
   const { group } = useParams();
 
-  const [dispositions, setDispositions] = useState<any>({});
+  const [dispositions, setDispositions] = useState<any>(undefined);
 
   const [compact, setCompact] = useState(true);
   const [activeGroup, setActiveGroup] = useState(group || 'all');
@@ -22,8 +22,8 @@ export default function TicTable(props: { ticList: any[], title?: string }) {
   const [publishedOnly, setPublishedOnly] = useState(false);
 
   useEffect(() => {
-    getAllTicDispositions(ticList).then(setDispositions);
-  }, [ticList]);
+    if (search.length && !dispositions) getAllTicDispositions(ticList).then(setDispositions);
+  }, [ticList, search, dispositions]);
 
   useEffect(() => {
     if (activeGroup !== 'all' && isNaN(parseInt(activeGroup))) {
@@ -34,9 +34,10 @@ export default function TicTable(props: { ticList: any[], title?: string }) {
   }, [activeGroup]);
 
   function getFilteredTicList() {
-    return sortTicList(searchTicList(publishedOnly ? ticList.filter((t: any) => !!t.paperDisposition) : ticList, search, dispositions), sortBy).filter(
-      (t: any) => activeGroup === 'all' || t.group === parseInt(activeGroup)
-    );
+    return sortTicList(
+      searchTicList(publishedOnly ? ticList.filter((t: any) => !!t.paperDisposition) : ticList, search, dispositions),
+      sortBy
+    ).filter((t: any) => activeGroup === 'all' || t.group === parseInt(activeGroup));
   }
 
   return (

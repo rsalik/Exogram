@@ -148,7 +148,7 @@ export function searchTicList(ticList: any[], search: string, dispositions: any)
       .map((s) => {
         if (tic.ticId.startsWith(s)) return true;
 
-        if (!dispositions[tic.ticId]) return false;
+        if (!dispositions || !dispositions[tic.ticId]) return false;
 
         if (
           Object.keys(dispositions[tic.ticId]).some((d) => {
