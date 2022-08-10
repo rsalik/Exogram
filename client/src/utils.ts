@@ -128,10 +128,14 @@ export function sortTicList(ticList: any[], sortBy: string) {
     if (!a[sortBy]) return 1;
     if (!b[sortBy]) return -1;
 
-    if (a[sortBy] < b[sortBy]) {
+    const af = parseFloat(a[sortBy]);
+    const bf = parseFloat(b[sortBy]);
+
+
+    if (af < bf) {
       return -1;
     }
-    if (a[sortBy] > b[sortBy]) {
+    if (af > bf) {
       return 1;
     }
     return 0;
