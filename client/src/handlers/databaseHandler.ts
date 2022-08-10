@@ -1,4 +1,4 @@
-import { ref, get, set, remove } from 'firebase/database';
+import { ref, get, set, remove, onValue } from 'firebase/database';
 import { useEffect, useState } from 'react';
 import { auth, db } from './firebase';
 
@@ -30,9 +30,13 @@ export function useUsers() {
   const [users, setUsers] = useState<any[]>([]);
 
   useEffect(() => {
-    get(ref(db, 'users')).then((snapshot: any) => {
+    const unsubscribe = onValue(ref(db, 'users'), (snapshot: any) => {
       setUsers(convertUsersObjToList(snapshot.val()));
     });
+
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   return users;
@@ -43,9 +47,13 @@ export function useTicGroups() {
   const [groups, setGroups] = useState<any[]>([]);
 
   useEffect(() => {
-    get(ref(db, 'ticGroups')).then((snapshot: any) => {
+    const unsubscribe = onValue(ref(db, 'ticGroups'), (snapshot: any) => {
       setGroups(convertTicGroupsObjToList(snapshot.val()));
     });
+
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   return groups;
@@ -69,7 +77,8 @@ export function useTicDispositions(ticId: string) {
   const [dispositions, setDispositions] = useState<any>();
 
   useEffect(() => {
-    get(ref(db, `dispositions/${ticId}`)).then(
+    const unsubscribe = onValue(
+      ref(db, `dispositions/${ticId}`),
       (snapshot: any) => {
         setDispositions(convertDispositionsObjectToList(snapshot.val()));
       },
@@ -77,6 +86,10 @@ export function useTicDispositions(ticId: string) {
         setDispositions({ error: true });
       }
     );
+
+    return () => {
+      unsubscribe();
+    };
   }, [ticId]);
 
   useEffect(() => {
