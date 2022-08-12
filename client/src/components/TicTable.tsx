@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Link from './Link';
-import { Link as ReactLink, useParams } from 'react-router-dom';
+import { Link as ReactLink, useNavigate, useParams } from 'react-router-dom';
 import TicDisposition from './TicDisposition';
 import { TableRows, ViewAgenda, Search } from '@mui/icons-material';
 import { exofopLink, searchTicList, sortTicList, TicBasicProperties, TicListSortByOptions } from '../utils';
@@ -115,7 +115,6 @@ export default function TicTable(props: { ticList: any[]; title?: string }) {
 
 function TicTableCompact(props: { ticData: any; sortBy: string }) {
   const headerNames = [...TicBasicProperties];
-  headerNames.splice(1, 0, { id: 'exofop', name: 'Exofop', shortName: 'Exofop' });
 
   return (
     <table className="table-compact" cellSpacing={0}>
@@ -138,27 +137,28 @@ function TicTableCompact(props: { ticData: any; sortBy: string }) {
 }
 
 function TicTableCompactRow(props: { ticData: any }) {
+  const navigate = useNavigate();
+  const handleOnClick = useCallback(() => navigate(`/tic/${props.ticData.ticId}`, {replace: true}), [navigate, props]);
+
+
   return (
-    <tr>
-      <td className="tic-id mono">
-        <Link href={`/tic/${props.ticData.ticId}`}>{props.ticData.ticId}</Link>
-      </td>
-      <td>
-        <Link href={exofopLink(props.ticData.ticId)} external newTab>
-          Exofop
-        </Link>
-      </td>
-      <td>{props.ticData.sectors.replaceAll(',', ', ')}</td>
-      <td className="mono">{fixedString(props.ticData.period, 6)}</td>
-      <td className="mono">{fixedString(props.ticData.duration, 2)}</td>
-      <td className="mono">{fixedString(props.ticData.depthPercent, 3)}</td>
-      <td className="mono">{fixedString(props.ticData.rPlanet, 2)}</td>
-      <td className="mono">{fixedString(props.ticData.rStar, 2)}</td>
-      <td className="mono">{props.ticData.tmag}</td>
-      <td className="mono">{fixedString(props.ticData.deltaTmag, 2)}</td>
-      <td>{props.ticData.paperDisposition?.disposition}</td>
-      <td>{props.ticData.dispositionCount}</td>
-    </tr>
+      <tr onClick={handleOnClick} className="tic">
+        <td className="tic-id mono">
+          <Link href={exofopLink(props.ticData.ticId)} external newTab>
+            {props.ticData.ticId}
+          </Link>
+        </td>
+        <td>{props.ticData.sectors.replaceAll(',', ', ')}</td>
+        <td className="mono">{fixedString(props.ticData.period, 6)}</td>
+        <td className="mono">{fixedString(props.ticData.duration, 2)}</td>
+        <td className="mono">{fixedString(props.ticData.depthPercent, 3)}</td>
+        <td className="mono">{fixedString(props.ticData.rPlanet, 2)}</td>
+        <td className="mono">{fixedString(props.ticData.rStar, 2)}</td>
+        <td className="mono">{props.ticData.tmag}</td>
+        <td className="mono">{fixedString(props.ticData.deltaTmag, 2)}</td>
+        <td>{props.ticData.paperDisposition?.disposition}</td>
+        <td>{props.ticData.dispositionCount}</td>
+      </tr>
   );
 }
 
@@ -194,7 +194,7 @@ function TicTableRow(props: { ticData: any; sortBy: string }) {
 
 function FloatingSearchBar(props: { value: string; onChange: (v: string) => void }) {
   return (
-    <div className="floating-search">
+    <div className={`floating-search${props.value.length === 0 ? ' empty' : ''}`}>
       <div className="label">{<Search />} Search</div>
       <input type="text" placeholder="1003831, pVshape" value={props.value} onChange={(e) => props.onChange(e.target.value)} />
     </div>

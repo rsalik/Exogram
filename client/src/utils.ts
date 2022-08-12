@@ -40,19 +40,19 @@ export const TicBasicProperties = [
     shortName: 'TIC ID',
   },
   {
-    name: 'Sectors',
+    name: 'Sector(s)',
     id: 'sectors',
-    shortName: 'Sectors',
+    shortName: 'Sector(s)',
   },
   {
     name: 'Period [Days]',
     id: 'period',
-    shortName: 'Period',
+    shortName: 'Period [Days]',
   },
   {
     name: 'Duration [Hours]',
     id: 'duration',
-    shortName: 'Duration',
+    shortName: 'Duration [Hrs]',
   },
   {
     name: 'Depth [%]',
@@ -62,12 +62,12 @@ export const TicBasicProperties = [
   {
     name: 'Planet Radius [R<sub>J</sub>]',
     id: 'rPlanet',
-    shortName: 'R<sub>P</sub>',
+    shortName: 'R<sub>P</sub> [R<sub>J</sub>]',
   },
   {
     name: 'Star Radius [R<sub>☉</sub>]',
     id: 'rStar',
-    shortName: 'R<sub>S</sub>',
+    shortName: 'R<sub>S</sub> [R<sub>☉</sub>]',
   },
   {
     name: 'TESSmag',

@@ -13,11 +13,12 @@ export default function Link(props: {
       className={`${props.borderless ? 'borderless-' : ''}link`}
       rel={'noreferrer'}
       target={props.newTab ? '_blank' : '_self'}
+      onClick={(e) => e.stopPropagation()}
     >
       {props.children}
     </a>
   ) : (
-    <ReactLink to={props.href} className={`${props.borderless ? 'borderless-' : ''}link`}>
+    <ReactLink to={props.href} className={`${props.borderless ? 'borderless-' : ''}link`} onClick={(e) => e.stopPropagation()}>
       {props.children}
     </ReactLink>
   );

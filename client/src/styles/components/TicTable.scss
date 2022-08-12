@@ -188,6 +188,14 @@
         background: $pri3;
       }
 
+      &.tic {
+        cursor: pointer;
+      }
+
+      &:hover td {
+        background: $pri5;
+      }
+
       th {
         padding: 0.5em 1em;
         background: $secondary;
@@ -196,7 +204,6 @@
 
         position: sticky;
         top: 0;
-
 
         &.sort {
           background: $tertiary;
@@ -247,8 +254,9 @@
 }
 
 .floating-search {
-  @include blurred-bkg($pri2);
-  border-radius: $border-radius;
+  @include blurred-bkg($pri4);
+  border-top-left-radius: $border-radius-large;
+  border-bottom-left-radius: $border-radius-large;
 
   font-size: 1.3em;
 
@@ -257,7 +265,15 @@
   padding: 1em;
 
   bottom: 0.5em;
-  right: 0.5em;
+
+  right: -16.8em;
+
+  transition: right $transition;
+
+  &:hover,
+  &:not(.empty) {
+    right: 0em;
+  }
 
   position: fixed;
 
@@ -273,7 +289,7 @@
   }
 
   .label svg {
-    margin-right: 0.2em;
+    margin-right: 0.6em;
   }
 
   input {
