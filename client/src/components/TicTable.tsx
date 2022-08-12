@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import Link from './Link';
 import { Link as ReactLink, useNavigate, useParams } from 'react-router-dom';
 import TicDisposition from './TicDisposition';
-import { TableRows, TableView, Search } from '@mui/icons-material';
+import { TableViewRounded, Search, TableRowsRounded } from '@mui/icons-material';
 import { exofopLink, searchTicList, sortTicList, TicBasicProperties, TicListSortByOptions } from '../utils';
 import { getAllTicDispositions, useTicGroups } from '../handlers/databaseHandler';
 import ErrorPanel from './ErrorPanel';
@@ -48,10 +48,10 @@ export default function TicTable(props: { ticList: any[]; title?: string }) {
           {props.title || 'TIC Table'}
           <div className="style-toggle">
             <div className={`icon ${compact ? 'active' : ''}`} onClick={() => setCompact(true)}>
-              <TableRows fontSize="large" />
+              <TableRowsRounded fontSize="large" />
             </div>
             <div className={`icon ${compact ? '' : 'active'}`} onClick={() => setCompact(false)}>
-              <TableView fontSize="large" />
+              <TableViewRounded fontSize="large" />
             </div>
           </div>
         </div>
@@ -138,27 +138,26 @@ function TicTableCompact(props: { ticData: any; sortBy: string }) {
 
 function TicTableCompactRow(props: { ticData: any }) {
   const navigate = useNavigate();
-  const handleOnClick = useCallback(() => navigate(`/tic/${props.ticData.ticId}`, {replace: true}), [navigate, props]);
-
+  const handleOnClick = useCallback(() => navigate(`/tic/${props.ticData.ticId}`, { replace: true }), [navigate, props]);
 
   return (
-      <tr onClick={handleOnClick} className="tic">
-        <td className="tic-id mono">
-          <Link href={exofopLink(props.ticData.ticId)} external newTab>
-            {props.ticData.ticId}
-          </Link>
-        </td>
-        <td>{props.ticData.sectors.replaceAll(',', ', ')}</td>
-        <td className="mono">{fixedString(props.ticData.period, 6)}</td>
-        <td className="mono">{fixedString(props.ticData.duration, 2)}</td>
-        <td className="mono">{fixedString(props.ticData.depthPercent, 3)}</td>
-        <td className="mono">{fixedString(props.ticData.rPlanet, 2)}</td>
-        <td className="mono">{fixedString(props.ticData.rStar, 2)}</td>
-        <td className="mono">{props.ticData.tmag}</td>
-        <td className="mono">{fixedString(props.ticData.deltaTmag, 2)}</td>
-        <td>{props.ticData.paperDisposition?.disposition}</td>
-        <td>{props.ticData.dispositionCount}</td>
-      </tr>
+    <tr onClick={handleOnClick} className="tic">
+      <td className="tic-id mono">
+        <Link href={exofopLink(props.ticData.ticId)} external newTab>
+          {props.ticData.ticId}
+        </Link>
+      </td>
+      <td>{props.ticData.sectors.replaceAll(',', ', ')}</td>
+      <td className="mono">{fixedString(props.ticData.period, 6)}</td>
+      <td className="mono">{fixedString(props.ticData.duration, 2)}</td>
+      <td className="mono">{fixedString(props.ticData.depthPercent, 3)}</td>
+      <td className="mono">{fixedString(props.ticData.rPlanet, 2)}</td>
+      <td className="mono">{fixedString(props.ticData.rStar, 2)}</td>
+      <td className="mono">{props.ticData.tmag}</td>
+      <td className="mono">{fixedString(props.ticData.deltaTmag, 2)}</td>
+      <td>{props.ticData.paperDisposition?.disposition}</td>
+      <td>{props.ticData.dispositionCount}</td>
+    </tr>
   );
 }
 
