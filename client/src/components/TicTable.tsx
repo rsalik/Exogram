@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import Link from './Link';
 import { Link as ReactLink, useNavigate, useParams } from 'react-router-dom';
 import TicDisposition from './TicDisposition';
-import { TableRows, ViewAgenda, Search } from '@mui/icons-material';
+import { TableRows, TableView, Search } from '@mui/icons-material';
 import { exofopLink, searchTicList, sortTicList, TicBasicProperties, TicListSortByOptions } from '../utils';
 import { getAllTicDispositions, useTicGroups } from '../handlers/databaseHandler';
 import ErrorPanel from './ErrorPanel';
@@ -51,7 +51,7 @@ export default function TicTable(props: { ticList: any[]; title?: string }) {
               <TableRows fontSize="large" />
             </div>
             <div className={`icon ${compact ? '' : 'active'}`} onClick={() => setCompact(false)}>
-              <ViewAgenda fontSize="large" />
+              <TableView fontSize="large" />
             </div>
           </div>
         </div>
