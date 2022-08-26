@@ -273,6 +273,10 @@
   &:hover,
   &:not(.empty) {
     right: 0em;
+
+    .label span {
+      opacity: 1;
+    }
   }
 
   position: fixed;
@@ -290,6 +294,12 @@
 
   .label svg {
     margin-right: 0.6em;
+  }
+
+  .label span {
+    opacity: 0;
+
+    transition: opacity $transition;
   }
 
   input {
