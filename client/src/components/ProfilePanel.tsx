@@ -2,6 +2,8 @@ import { User } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import { amIAdmin, amISuperuser, getTicDispositions, useTicGroups, useTicList } from '../handlers/databaseHandler';
 import { auth } from '../handlers/firebase';
+import InfoPanel from './InfoPanel';
+import MyDispositionsTable from './MyDispositionsTable';
 import TicTable from './TicTable';
 
 export default function ProfilePanel(props: { user: User }) {
@@ -13,6 +15,8 @@ export default function ProfilePanel(props: { user: User }) {
 
   const [isSuperuser, setIsSuperuser] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+
+  const [activeTable, setActiveTable] = useState('');
 
   useEffect(() => {
     amISuperuser().then(setIsSuperuser);
@@ -69,12 +73,20 @@ export default function ProfilePanel(props: { user: User }) {
           </div>
         </div>
         <div className="name">
-          {props.user.displayName} {isSuperuser && <div className="superuser-badge">SuperUser</div>} {isAdmin && <div className="superuser-badge">Admin</div>}
+          {props.user.displayName} {isSuperuser && <div className="superuser-badge">SuperUser</div>}{' '}
+          {isAdmin && <div className="superuser-badge">Admin</div>}
         </div>
         <div className="stats">
-          <div className="stat">
+          <div
+            className={`stat clickable${activeTable === 'dispositions' ? ' active' : ''}`}
+            onClick={() => setActiveTable('dispositions')}
+          >
             <div className="name">Dispositions</div>
             <div className="value">{dispositionCount}</div>
+          </div>
+          <div className={`stat clickable${activeTable === 'attention' ? ' active' : ''}`} onClick={() => setActiveTable('attention')}>
+            <div className="name">Need Attention</div>
+            <div className="value">{ticsWithoutUserDisposition.length}</div>
           </div>
           <div className="stat">
             <div className="name">Email</div>
@@ -82,7 +94,9 @@ export default function ProfilePanel(props: { user: User }) {
           </div>
         </div>
       </div>
-      <TicTable title="Needs Your Attention" ticList={ticsWithoutUserDisposition} />
+      {activeTable === 'attention' && <TicTable title="Needs Your Attention" ticList={ticsWithoutUserDisposition} />}
+      {activeTable === 'dispositions' && <MyDispositionsTable />}
+      {activeTable === '' && <InfoPanel  title="View Table" message={`Click "Dispositions" or "Need Attention" to view a table of those targets. `} />}
     </>
   );
 }

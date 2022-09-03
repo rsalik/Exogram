@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
 import Link from './Link';
-import { Link as ReactLink, useNavigate, useParams } from 'react-router-dom';
+import { Link as ReactLink, useParams } from 'react-router-dom';
 import TicDisposition from './TicDisposition';
-import { TableViewRounded, Search, TableRowsRounded } from '@mui/icons-material';
+import { TableViewRounded, TableRowsRounded } from '@mui/icons-material';
 import { exofopLink, searchTicList, sortTicList, TicBasicProperties, TicListSortByOptions } from '../utils';
 import { getAllTicDispositions, useTicGroups } from '../handlers/databaseHandler';
 import ErrorPanel from './ErrorPanel';
+import { FloatingSearchBar } from './FloatingSearchBar';
 
 export default function TicTable(props: { ticList: any[]; title?: string }) {
   const ticList = props.ticList;
@@ -27,7 +28,7 @@ export default function TicTable(props: { ticList: any[]; title?: string }) {
 
   useEffect(() => {
     if (activeGroup !== 'all' && isNaN(parseInt(activeGroup))) {
-      setActiveGroup('1000000');
+      setActiveGroup('all');
     }
 
     if (window.location.pathname.includes('table')) window.history.pushState({}, '', `/table/${activeGroup}`);
@@ -137,8 +138,7 @@ function TicTableCompact(props: { ticData: any; sortBy: string }) {
 }
 
 function TicTableCompactRow(props: { ticData: any }) {
-  const navigate = useNavigate();
-  const handleOnClick = useCallback(() => navigate(`/tic/${props.ticData.ticId}`, { replace: true }), [navigate, props]);
+  const handleOnClick = useCallback(() => window.open(`/tic/${props.ticData.ticId}`), [props]);
 
   return (
     <tr onClick={handleOnClick} className="tic">
@@ -187,15 +187,6 @@ function TicTableRow(props: { ticData: any; sortBy: string }) {
         {props.ticData.paperDisposition && <TicDisposition data={{ ...props.ticData.paperDisposition, name: 'Paper Disposition' }} />}
         <div className="num-dispositions">{props.ticData.dispositionCount} Dispositions</div>
       </div>
-    </div>
-  );
-}
-
-function FloatingSearchBar(props: { value: string; onChange: (v: string) => void }) {
-  return (
-    <div className={`floating-search${props.value.length === 0 ? ' empty' : ''}`}>
-      <div className="label">{<Search />} <span>Search</span></div>
-      <input type="text" placeholder="1003831, pVshape" value={props.value} onChange={(e) => props.onChange(e.target.value)} />
     </div>
   );
 }

@@ -51,9 +51,25 @@
 
       min-width: 8em;
 
-      margin: 0.2em .4em;
+      margin: 0.2em 0.4em;
 
       box-sizing: border-box;
+
+
+
+      &.clickable {
+        cursor: pointer;
+
+        &:hover, &.active {
+          .value {
+            background: $sec3;
+          }
+
+          .name {
+            background: $sec7;
+          }
+        }
+      }
 
       :nth-child(1) {
         border-top-left-radius: $border-radius;
@@ -69,6 +85,8 @@
       .name {
         width: 100%;
         padding: 0.2em;
+
+        transition: background-color $transition;
       }
 
       .value {
