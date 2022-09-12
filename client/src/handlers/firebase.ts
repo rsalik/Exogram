@@ -3,7 +3,7 @@ import { getAuth } from 'firebase/auth';
 import { getDatabase } from 'firebase/database';
 
 const app = initializeApp({
-  apiKey: 'AIzaSyCANdvfJid7BOHTeKS-pFrRF8hDNmhkX_A',
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: 'exogram-46cc8.firebaseapp.com',
   databaseURL: 'https://exogram-46cc8-default-rtdb.firebaseio.com',
   projectId: 'exogram-46cc8',
