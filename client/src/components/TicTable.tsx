@@ -3,7 +3,7 @@ import Link from './Link';
 import { Link as ReactLink, useParams } from 'react-router-dom';
 import TicDisposition from './TicDisposition';
 import { TableViewRounded, TableRowsRounded } from '@mui/icons-material';
-import { exofopLink, searchTicList, sortTicList, TicBasicProperties, TicListSortByOptions } from '../utils';
+import { downloadTics, exofopLink, searchTicList, sortTicList, TicBasicProperties, TicListSortByOptions } from '../utils';
 import { getAllTicDispositions, useTicGroups } from '../handlers/databaseHandler';
 import ErrorPanel from './ErrorPanel';
 import { FloatingSearchBar } from './FloatingSearchBar';
@@ -89,6 +89,21 @@ export default function TicTable(props: { ticList: any[]; title?: string }) {
               ))}
               <option value="all">All Groups</option>
             </select>
+          </div>
+          {/* eslint-disable-next-line react/jsx-no-comment-textnodes*/}
+          <div className="sep">//</div>
+          <div
+            className="borderless-link"
+            onClick={() =>
+              downloadTics(
+                getFilteredTicList(),
+                `Exogram - ${search ? 'Search Results for ' + search + ' in ' : ''}${
+                  activeGroup !== 'all' ? ticGroups.find((g) => g.id === activeGroup).name : 'All'
+                } TICs Exported ${new Date().toLocaleString()}.csv`
+              )
+            }
+          >
+            Download as CSV
           </div>
         </div>
 

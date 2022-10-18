@@ -1,3 +1,5 @@
+import { getAllTicDispositions, getAllUsernames } from './handlers/databaseHandler';
+
 export function exofopLink(ticId: string) {
   return `https://exofop.ipac.caltech.edu/tess/target.php?id=${ticId}`;
 }
@@ -131,7 +133,6 @@ export function sortTicList(ticList: any[], sortBy: string) {
     const af = parseFloat(a[sortBy]);
     const bf = parseFloat(b[sortBy]);
 
-
     if (af < bf) {
       return -1;
     }
@@ -167,4 +168,68 @@ export function searchTicList(ticList: any[], search: string, dispositions: any)
       })
       .includes(false);
   });
+}
+
+export function downloadFile(content: string, mimeType: string, filename: string) {
+  var a = document.createElement('a');
+  var blob = new Blob([content], { type: mimeType });
+  var url = URL.createObjectURL(blob);
+  a.setAttribute('href', url);
+  a.setAttribute('download', filename);
+  a.click();
+}
+
+export async function downloadTics(ticList: any[], name: string) {
+  const dispositionsArr = await getAllTicDispositions(ticList);
+
+  const userCols = [] as string[];
+  const lines = [] as string[];
+
+  ticList.forEach((tic) => {
+    const line = [] as string[];
+
+    TicBasicProperties.forEach((p) => {
+      line.push(tic[p.id]);
+    });
+
+    line.push(tic.paperDisposition?.disposition ?? '');
+    line.push(tic.paperDisposition?.comments ?? '');
+
+    const disps = dispositionsArr[tic.ticId];
+
+    if (disps) {
+      disps.forEach((disp: any) => {
+        if (!userCols.includes(disp.userId)) userCols.push(disp.userId);
+      });
+
+      userCols.forEach((user) => {
+        const disp = disps.find((d: any) => d.userId === user);
+
+        if (disp) {
+          line.push(disp.disposition);
+          line.push(disp.comments);
+        } else {
+          line.push('');
+          line.push('');
+        }
+      });
+    }
+
+    lines.push(line.map((l) => `"${l}"`).join(','));
+  });
+
+  const usernames = await getAllUsernames(userCols);
+  usernames['group'] = 'Group';
+
+  console.log(usernames);
+
+  const header = [...TicBasicProperties.map((p) => p.name.replaceAll(/<\/?sub>/gm, '')), "Paper Disposition", "Paper Comments"];
+
+  for (let uid of userCols) {
+    console.log(uid, usernames[uid]);
+    header.push(usernames[uid] + ' Disposition');
+    header.push(usernames[uid] + ' Comments');
+  }
+
+  downloadFile(header.join(',') + '\n' + lines.join('\n'), 'text/csv', name);
 }

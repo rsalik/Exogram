@@ -125,6 +125,24 @@ export async function getAllTicDispositions(ticList: any[]) {
   return dispositions;
 }
 
+export async function getAllUsernames(userIds: any[]) {
+  const usernames = {} as { [key: string]: any };
+  const promises = [];
+
+  async function getUsername(uid: string) {
+    try {
+      usernames[uid] = (await get(ref(db, `users/${uid}/name`))).val();
+    } catch {}
+  }
+
+  for (const uid of userIds) {
+    promises.push(getUsername(uid));
+  }
+
+  await Promise.all(promises);
+  return usernames;
+}
+
 export async function getTicDispositionsRaw(ticId: string) {
   try {
     return (await get(ref(db, `dispositions/${ticId}`))).val();
