@@ -1,0 +1,294 @@
+.ebs {
+	.btn {
+		font-size: 2em;
+
+		position: relative;
+
+		display: inline-flex;
+		align-items: center;
+		flex-grow: 1;
+		justify-content: center;
+
+		padding: 0.3em;
+
+		cursor: pointer;
+		transition: all 0.1s ease-in-out;
+
+		border: 3px solid $white;
+		border-radius: $border-radius;
+
+		&.yes {
+			color: $green;
+			border-color: $green;
+
+			&:hover {
+				color: $bkg;
+				background: $green;
+			}
+		}
+
+		&.no {
+			color: $error;
+			border-color: $error;
+
+			&:hover {
+				color: $bkg;
+				background: $error;
+			}
+		}
+
+		.key {
+			font-size: 0.8em;
+
+			position: absolute;
+			right: 0.4em;
+
+			width: 1.7em;
+			height: 1.7em;
+		}
+	}
+
+	.input {
+		display: flex;
+		justify-content: center;
+
+		width: 100%;
+		margin: 0.5em 0;
+
+		.spacer {
+			width: 0.5em;
+		}
+	}
+
+	.text-input-wrapper {
+		font-size: 1.2em;
+
+		position: relative;
+
+		display: flex;
+
+		width: 100%;
+
+		input {
+			flex-grow: 1;
+		}
+
+		.btn {
+			flex-grow: 0;
+
+			width: 0.8em;
+			height: 0.8em;
+			margin-left: 0.2em;
+
+			color: $green;
+			border-color: $green;
+
+			&:hover {
+				color: $bkg;
+				background: $green;
+			}
+		}
+
+		.key {
+			font-size: 1.5em;
+
+			position: absolute;
+			top: 0;
+			right: 2.5em;
+			bottom: 0.1em;
+
+			width: 1.7em;
+			height: 1.7em;
+			margin: auto;
+		}
+	}
+
+	.review {
+		font-size: 1.3em;
+
+		display: flex;
+		flex-direction: column;
+
+		width: 100%;
+		margin-right: 0.5em;
+		padding: 1em;
+
+		border: 3px solid $primary;
+		border-radius: $border-radius;
+
+		.review-item {
+			display: flex;
+		}
+
+		.title {
+			font-weight: $fw-bold;
+
+			margin-right: 0.4em;
+		}
+
+		.buttons {
+			font-size: 0.7em;
+
+			display: flex;
+
+			width: 100%;
+			margin-top: auto;
+
+			.spacer {
+				width: 0.5em;
+			}
+		}
+	}
+
+	.panel {
+		position: relative;
+
+		@include rounded-panel();
+
+		.wrapper {
+			width: max(40vw, min(50vh, 80vw));
+			margin: 0 auto;
+
+			&.w-review {
+				display: flex;
+				flex-direction: row-reverse;
+
+				width: auto;
+
+				img {
+					width: 50%;
+				}
+
+				@media screen and (max-width: 1100px) {
+					img {
+						width: 32%;
+					}
+				}
+			}
+		}
+
+		img {
+			width: 100%;
+			height: 100%;
+
+			border-radius: $border-radius;
+
+			object-fit: cover;
+		}
+
+		.key {
+			position: absolute;
+
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+
+			color: $bkg;
+			border-radius: $border-radius;
+			background: $primary;
+
+			filter: drop-shadow(0 0.15em 0 $pri4);
+		}
+
+		.steps {
+			@media screen and (min-width: 1100px) {
+				position: absolute;
+				top: 1rem;
+				right: 1rem;
+			}
+
+			@media screen and (max-width: 1100px) {
+				display: flex;
+				align-items: center;
+				flex-direction: row;
+				justify-content: center;
+			}
+
+			.step {
+				font-size: 1.5em;
+
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+
+				width: 2em;
+				height: 2em;
+				margin: 0.25em;
+
+				border: 2px solid $white;
+				border-radius: 50%;
+
+				&.active {
+					color: $secondary;
+					border-color: $secondary;
+				}
+
+				&.done {
+					color: $bkg;
+					border-color: $green;
+					background: $green;
+				}
+			}
+		}
+	}
+
+	.instructions {
+		.step-marker {
+			font-size: 1.7em;
+
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+
+			width: 2em;
+			height: 2em;
+			margin: 0.5em;
+
+			border: 3px solid $white;
+			border-radius: 50%;
+		}
+	}
+
+	.success {
+		position: fixed;
+		z-index: 1000;
+		right: 1em;
+		bottom: 1em;
+
+		display: flex;
+		align-items: center;
+		flex-direction: row;
+
+		width: 20em;
+		padding: 0.5em;
+
+		transition: opacity 0.3s linear;
+
+		opacity: 0;
+		color: $bkg;
+		border-radius: $border-radius * 2;
+		background: $green;
+
+		filter: drop-shadow(0 0.15em 0 $bkg);
+
+		&.show {
+			opacity: 1;
+		}
+
+		.icon {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			margin-right: 1em;
+			padding: 0.5em;
+
+			border: 2px solid $bkg;
+			border-radius: 50%;
+		}
+
+		.text {
+			font-size: 1.2em;
+		}
+	}
+}

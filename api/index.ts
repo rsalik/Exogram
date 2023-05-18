@@ -1,14 +1,51 @@
 import { drive_v3, google } from 'googleapis';
 
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
+
 import dotenv from 'dotenv';
+
+if (process.env.NODE_ENV !== 'production') {
+  dotenv.config();
+}
+
+import admin from 'firebase-admin';
+admin.initializeApp({
+  credential: admin.credential.cert({
+    projectId: 'exogram-46cc8',
+    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+    privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/gm, '\n'),
+  }),
+  databaseURL: 'https://exogram-46cc8-default-rtdb.firebaseio.com',
+});
+
+const db = admin.database();
 
 const app = express();
 app.use(express.json());
 
 if (process.env.NODE_ENV !== 'production') {
-  dotenv.config();
+  // CORS allow any
+  app.use((_req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', '*');
+    next();
+  });
 }
+
+async function decodeIDToken(req: Request, _res: Response, next: NextFunction) {
+  if (req.headers?.authorization?.startsWith('Bearer ')) {
+    const idToken = req.headers.authorization.split('Bearer ')[1];
+
+    try {
+      const decodedToken = await admin.auth().verifyIdToken(idToken);
+      (req as any).currentUser = decodedToken;
+    } catch {}
+  }
+
+  next();
+}
+
+app.use(decodeIDToken);
 
 app.get('/api/getTicFiles/:ticId', async (req, res) => {
   if (!req.params.ticId) {
@@ -37,11 +74,137 @@ app.get('/api/getTicFiles/:ticId', async (req, res) => {
   );
 });
 
+app.get('/api/randomEB', async (req, res) => {
+  const currentUser = (req as any).currentUser;
+
+  if (!currentUser) {
+    res.status(401).send('Unauthorized');
+    return;
+  }
+
+  const { uid } = currentUser;
+
+  const auth = new google.auth.JWT(process.env.GOOGLE_CLIENT_EMAIL, undefined, process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/gm, '\n'), [
+    'https://www.googleapis.com/auth/drive',
+  ]);
+
+  const drive = google.drive({ version: 'v3', auth });
+
+  const files = await getEBFiles(drive);
+
+  if (!files) {
+    res.status(500).send({ none: true });
+    return;
+  }
+
+  if (!files.length) {
+    res.status(200).send({ none: true });
+    return;
+  }
+
+  let randomFile;
+
+  let snapshot: any = null;
+
+  do {
+    randomFile = files[Math.floor(Math.random() * files.length)];
+
+    // Remove the file from the array
+    files.splice(files.indexOf(randomFile), 1);
+
+    if (!randomFile) {
+      res.status(200).send({ none: true });
+      return;
+    }
+
+    const ref = db.ref(`ebs/${randomFile.name?.split('.')[0]}/${uid}`);
+    snapshot = await ref.once('value');
+  } while (snapshot && snapshot.exists());
+
+  res.send(randomFile);
+});
+
+app.post('/api/ebResponse', async (req, res) => {
+  const currentUser = (req as any).currentUser;
+
+  if (!currentUser) {
+    res.status(401).send({ success: false });
+    return;
+  }
+
+  const { uid } = currentUser;
+
+  const { file, response } = req.body;
+
+  if (!file || !response) {
+    res.status(400).send({ success: false });
+    return;
+  }
+
+  const ebName = file.name?.split('.')[0];
+
+  const ref = db.ref(`ebs/${ebName}/${uid}`);
+
+  try {
+    await ref.set(response);
+
+    res.send({ success: true });
+
+    const snapshot = await db.ref(`ebs/${ebName}`).once('value');
+
+    if (snapshot.numChildren() >= 3) {
+      try {
+        const auth = new google.auth.JWT(
+          process.env.GOOGLE_CLIENT_EMAIL,
+          undefined,
+          process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/gm, '\n'),
+          ['https://www.googleapis.com/auth/drive']
+        );
+
+        const drive = google.drive({ version: 'v3', auth });
+
+        const ebFolder = await drive.files.get({ fileId: file.id, fields: 'id, name, parents' });
+
+        drive.files.update({
+          fileId: file.id,
+          addParents: '1f687fXlP3J9hRFGeAVqzoD5nP685Mw59',
+          removeParents: ebFolder.data.parents?.join(','),
+          fields: 'id, name, parents',
+        });
+      } catch (e) {
+        console.error(`An error occurred while moving the file ${file.name} (${file.id}) to the Done folder:`);
+        console.error(e);
+      }
+    }
+  } catch (e) {
+    console.log(e);
+    res.status(500).send({ success: false });
+  }
+});
+
 function getTicFiles(ticId: string, drive: drive_v3.Drive): Promise<drive_v3.Schema$File[] | null> {
   return new Promise((resolve, reject) => {
     drive.files.list(
       {
         q: `'1h_9ylFGZwaWkovcxBYTduTtgo6DPuqtN' in parents and name contains '${ticId}' and mimeType = 'application/pdf'`,
+        pageSize: 1000,
+        fields: 'files(id, webContentLink, name, mimeType)',
+      },
+      async (err: any, driveRes: any) => {
+        if (err) reject(console.error(err));
+
+        let files = driveRes.data.files;
+        resolve(files);
+      }
+    );
+  });
+}
+
+function getEBFiles(drive: drive_v3.Drive): Promise<drive_v3.Schema$File[] | null> {
+  return new Promise((resolve, reject) => {
+    drive.files.list(
+      {
+        q: `'1oQbC6C2DMRraDy8agDjomeajnisuVrc9' in parents and mimeType = 'image/jpeg'`,
         pageSize: 1000,
         fields: 'files(id, webContentLink, name, mimeType)',
       },

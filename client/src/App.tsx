@@ -13,6 +13,7 @@ import TicChartsPage from './routes/TicChartsPage';
 import { TicPage } from './routes/TicPage';
 import TicTablePage from './routes/TicTablePage';
 import './styles/style.scss';
+import EclipsingBinaries from './routes/EclipsingBinaries';
 
 export const UserContext = React.createContext<User | null>(null);
 
@@ -42,6 +43,7 @@ function App() {
             <Route path="charts" element={<TicChartsPage />}>
               <Route path=":ticIds" element={<TicChartsPage />} />
             </Route>
+            <Route path="ebs" element={<EclipsingBinaries />} />
             <Route path="dictionary" element={<DictionaryPage />} />
             <Route path="tic/:ticId" element={<TicPage />} />
             <Route path="signin" element={<SignInPage />} />

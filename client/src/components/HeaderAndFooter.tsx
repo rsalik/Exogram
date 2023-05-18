@@ -49,6 +49,8 @@ function HeaderAndFooterContent() {
         <div className="sep">/</div>
         <Link to="/charts">Light Curves</Link>
         <div className="sep">/</div>
+        <Link to="/ebs">EBs</Link>
+        <div className="sep">/</div>
         <Link to="/dictionary">Dictionary</Link>
         {isAdmin && (
           <>

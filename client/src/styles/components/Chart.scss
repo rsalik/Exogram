@@ -1,86 +1,86 @@
 .chart {
-  padding: 0 0em;
-  margin: 1em 3em;
-  position: relative;
+	font-size: 20px;
 
-  font-size: 20px;
-  height: 30em;
+	position: relative;
 
-  min-height: 20em;
+	overflow: auto;
 
-  overflow: auto;
+	height: 30em;
+	min-height: 20em;
+	margin: 1em 3em;
+	padding: 0 0;
 
-  resize: vertical;
+	resize: vertical;
 
-  canvas {
-    position: relative;
-    z-index: 1;
-  }
+	canvas {
+		position: relative;
+		z-index: 1;
+	}
 
-  .tooltip {
-    @include blurred-bkg();
+	.tooltip {
+		font-size: 0.9em;
 
-    position: absolute;
-    top: 5rem;
-    left: 5.5rem;
+		position: absolute;
+		z-index: 100;
+		top: 5rem;
+		left: 5.5rem;
 
-    padding: 1em;
-    border-radius: $border-radius;
+		padding: 1em;
 
-    font-size: 0.9em;
+		border-radius: $border-radius;
 
-    z-index: 100;
+		@include blurred-bkg();
 
-    .text {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+		.text {
+			font-weight: $fw-bold;
 
-      padding: 0.3em;
-      margin: 0.2em 0;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
 
-      border-radius: $border-radius;
+			margin: 0.2em 0;
+			padding: 0.3em;
 
-      font-weight: $fw-bold;
+			border-radius: $border-radius;
 
-      &.md {
-        background: $error !important;
-      }
+			&.md {
+				background: $error !important;
+			}
 
-      span {
-        font-weight: $fw-regular;
-        margin-left: 0.5em;
-      }
+			span {
+				font-weight: $fw-regular;
 
-      &.color {
-        color: $bkg;
-      }
-    }
-  }
+				margin-left: 0.5em;
+			}
 
-  .btn {
-    @include blurred-bkg();
+			&.color {
+				color: $bkg;
+			}
+		}
+	}
 
-    padding: 0.7em;
-    border-radius: $border-radius;
+	.btn {
+		position: absolute;
+		z-index: 100;
+		top: 4.5em;
+		right: 1.5em;
 
-    cursor: pointer;
+		padding: 0.7em;
 
-    z-index: 100;
+		cursor: pointer;
+		transition: color $transition, background-color $transition;
 
-    position: absolute;
-    right: 1.5em;
-    top: 4.5em;
+		border-radius: $border-radius;
 
-    transition: color $transition, background-color $transition;
+		@include blurred-bkg();
 
-    &:hover {
-      color: $bkg;
-      background: $primary;
-    }
+		&:hover {
+			color: $bkg;
+			background: $primary;
+		}
 
-    &.show-clean {
-      top: 7.5em;
-    }
-  }
+		&.show-clean {
+			top: 7.5em;
+		}
+	}
 }

@@ -22,70 +22,78 @@
 @import 'components/dropdown';
 @import 'components/input';
 
+// Eclipsing Binaries
+@import 'components/EclipsingBinaries';
+
 // Routes
 @import 'routes/Home';
 @import 'routes/TicChartsPage';
 
 // Import Nunito font
 @font-face {
-  font-family: 'Nunito';
-  src: url('../fonts/Nunito-VariableFont_wght.ttf') format('truetype-variations');
-  font-weight: 100 1000;
+	font-family: 'Nunito';
+	font-weight: 100 1000;
+
+	src: url('../fonts/Nunito-VariableFont_wght.ttf') format('truetype-variations');
 }
 
 @font-face {
-  font-family: 'Nunito';
-  src: url('../fonts/Nunito-Italic-VariableFont_wght.ttf') format('truetype-variations');
-  font-weight: 100 1000;
-  font-style: italic;
+	font-family: 'Nunito';
+	font-weight: 100 1000;
+	font-style: italic;
+
+	src: url('../fonts/Nunito-Italic-VariableFont_wght.ttf') format('truetype-variations');
 }
 
 // Import Jetbrains Mono font
 @font-face {
-  font-family: 'Jetbrains Mono';
-  src: url('../fonts/JetBrainsMono-VariableFont_wght.ttf') format('truetype-variations');
-  font-weight: 100 1000;
+	font-family: 'Jetbrains Mono';
+	font-weight: 100 1000;
+
+	src: url('../fonts/JetBrainsMono-VariableFont_wght.ttf') format('truetype-variations');
 }
 
 @font-face {
-  font-family: 'Jetbrains Mono';
-  src: url('../fonts/JetBrainsMono-Italic-VariableFont_wght.ttf') format('truetype-variations');
-  font-weight: 100 1000;
-  font-style: italic;
+	font-family: 'Jetbrains Mono';
+	font-weight: 100 1000;
+	font-style: italic;
+
+	src: url('../fonts/JetBrainsMono-Italic-VariableFont_wght.ttf') format('truetype-variations');
 }
 
 html,
 input {
-  font-family: $font;
+	font-family: $font;
 }
 
 .mono,
 code {
-  font-family: $mono;
-  font-size: 0.92em;
+	font-family: $mono;
+	font-size: 0.92em;
 }
 
 a {
-  text-decoration: inherit;
-  color: inherit;
+	text-decoration: inherit;
+
+	color: inherit;
 }
 
 body {
-  margin: 0;
-  background: $bkg;
-  color: $white;
+	font-size: max(16px, 1.6vmin);
 
-  font-size: max(16px, 1.6vmin);
+	position: relative;
 
-  position: relative;
+	margin: 0;
+	padding-bottom: 6rem;
 
-  padding-bottom: 6rem;
+	color: $white;
+	background: $bkg;
 }
 
 .content-wrapper {
-  display: flex;
-  flex-direction: column;
-  min-height: 90vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
 
-  justify-content: space-between;
+	min-height: 90vh;
 }
