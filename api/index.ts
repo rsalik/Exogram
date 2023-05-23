@@ -167,7 +167,7 @@ app.post('/api/ebResponse', async (req, res) => {
 
         drive.files.update({
           fileId: file.id,
-          addParents: '1f687fXlP3J9hRFGeAVqzoD5nP685Mw59',
+          addParents: '1iC_W_YwIlUzZU6CC2aFg_qYiGRAWZp4n',
           removeParents: ebFolder.data.parents?.join(','),
           fields: 'id, name, parents',
         });
@@ -204,7 +204,7 @@ function getEBFiles(drive: drive_v3.Drive): Promise<drive_v3.Schema$File[] | nul
   return new Promise((resolve, reject) => {
     drive.files.list(
       {
-        q: `'1oQbC6C2DMRraDy8agDjomeajnisuVrc9' in parents and mimeType = 'image/jpeg'`,
+        q: `'13yIRMekWCvwckG5nfvCpS7OJ_vsMa0Td' in parents and mimeType = 'image/jpeg'`,
         pageSize: 1000,
         fields: 'files(id, webContentLink, name, mimeType)',
       },
