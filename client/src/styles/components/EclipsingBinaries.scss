@@ -66,6 +66,10 @@
 		}
 	}
 
+	.input-wrapper {
+		width: 100%;
+	}
+
 	.text-input-wrapper {
 		font-size: 1.2em;
 
@@ -106,6 +110,34 @@
 			width: 1.7em;
 			height: 1.7em;
 			margin: auto;
+		}
+	}
+
+	.quick-adds {
+		font-size: 1.3em;
+
+		display: grid;
+
+		margin: 0.7em auto 0;
+
+		border-radius: $border-radius;
+		background: $sec4;
+
+		grid-auto-rows: 1fr;
+		grid-template-columns: repeat(3, 1fr);
+
+		.quick-add {
+			padding: 0.5em;
+
+			cursor: pointer;
+			transition: background-color $transition;
+
+			border-radius: $border-radius;
+			background: $sec4;
+
+			&:hover {
+				background: $sec5;
+			}
 		}
 	}
 

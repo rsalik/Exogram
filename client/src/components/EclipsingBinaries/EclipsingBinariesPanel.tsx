@@ -13,6 +13,8 @@ const questions = [
   'Review',
 ];
 
+const quickAdds = ['CPOC', 'AE', 'LowSNR', 'DLC', 'Fla', 'SSys'];
+
 export default function EclipsingBinariesPanel() {
   const [ebFile, setEBFile] = useState<any>(null);
   const [ebFileFailedLoading, setEBFileFailedLoading] = useState(false);
@@ -152,15 +154,17 @@ export default function EclipsingBinariesPanel() {
             <div className={`step ${step === 1 ? 'active' : step > 1 ? 'done' : ''}`}>2</div>
             <div className={`step ${step === 2 ? 'active' : step > 2 ? 'done' : ''}`}>3</div>
           </div>
-          {step < 3 && <div className="links">
-            <a href={exofopLink(ticId)} className="exofop eb-link" target="_blank" rel="noreferrer">
-              Exofop
-            </a>
-            <div className="spacer"></div>
-            <a href={latteLink(ticId)} className="latte eb-link" target="_blank" rel="noreferrer">
-              LATTE
-            </a>
-          </div>}
+          {step < 3 && (
+            <div className="links">
+              <a href={exofopLink(ticId)} className="exofop eb-link" target="_blank" rel="noreferrer">
+                Exofop
+              </a>
+              <div className="spacer"></div>
+              <a href={latteLink(ticId)} className="latte eb-link" target="_blank" rel="noreferrer">
+                LATTE
+              </a>
+            </div>
+          )}
         </div>
         <br />
 
@@ -204,13 +208,22 @@ export default function EclipsingBinariesPanel() {
                   </div>
                 </>
               ) : (
-                <div className="text-input-wrapper">
-                  <input autoFocus type="text" placeholder="Comments" value={comments} onChange={(e) => setComments(e.target.value)} />
-                  <div className="key">
-                    <KeyboardReturn />
+                <div className='input-wrapper'>
+                  <div className="text-input-wrapper">
+                    <input autoFocus type="text" placeholder="Comments" value={comments} onChange={(e) => setComments(e.target.value)} />
+                    <div className="key">
+                      <KeyboardReturn />
+                    </div>
+                    <div className="btn go" onClick={registerComments}>
+                      <ChevronRight fontSize="large" />
+                    </div>
                   </div>
-                  <div className="btn go" onClick={registerComments}>
-                    <ChevronRight fontSize="large" />
+                  <div className="quick-adds">
+                    {quickAdds.map((quickAdd) => (
+                      <div className="quick-add" onClick={() => setComments(comments + (comments.length > 0 ? ', ' + quickAdd : quickAdd))}>
+                        {quickAdd}
+                      </div>
+                    ))}
                   </div>
                 </div>
               )}
