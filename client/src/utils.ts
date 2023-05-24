@@ -4,6 +4,10 @@ export function exofopLink(ticId: string) {
   return `https://exofop.ipac.caltech.edu/tess/target.php?id=${ticId}`;
 }
 
+export function latteLink(ticId: string) {
+  return `http://latte-online.flatironinstitute.org/app#ID=${ticId}`
+}
+
 export const TicListSortByOptions = [
   {
     name: 'TIC ID',

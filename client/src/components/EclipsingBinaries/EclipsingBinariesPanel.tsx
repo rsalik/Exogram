@@ -4,8 +4,14 @@ import ErrorPanel from '../ErrorPanel';
 import InfoPanel from '../InfoPanel';
 import { UserContext } from '../../App';
 import { Check, ChevronRight, KeyboardReturn } from '@mui/icons-material';
+import { exofopLink, latteLink } from '../../utils';
 
-const questions = ['Is this an eclipsing binary?', 'Is the measured period correct?', 'Any other comments?', 'Review'];
+const questions = [
+  'Is this an <span>eclipsing binary</span>?',
+  'Is the <span>measured period</span> correct?',
+  'Any other comments?',
+  'Review',
+];
 
 export default function EclipsingBinariesPanel() {
   const [ebFile, setEBFile] = useState<any>(null);
@@ -19,6 +25,8 @@ export default function EclipsingBinariesPanel() {
   const [showSuccess, setShowSuccess] = useState(false);
 
   const user = useContext(UserContext);
+
+  const ticId = ebFile?.name.split('.')[0].replace('TIC', '').replace(/^0+/, '');
 
   function fetchEBFile() {
     getRandomEB().then((file) => {
@@ -137,13 +145,25 @@ export default function EclipsingBinariesPanel() {
   return (
     <>
       <div className="panel">
-        <div className="title">{questions[step]}</div>
-        <div className="steps">
-          <div className={`step ${step === 0 ? 'active' : step > 0 ? 'done' : ''}`}>1</div>
-          <div className={`step ${step === 1 ? 'active' : step > 1 ? 'done' : ''}`}>2</div>
-          <div className={`step ${step === 2 ? 'active' : step > 2 ? 'done' : ''}`}>3</div>
+        <div className="title" dangerouslySetInnerHTML={{ __html: questions[step] }}></div>
+        <div className="info">
+          <div className="steps">
+            <div className={`step ${step === 0 ? 'active' : step > 0 ? 'done' : ''}`}>1</div>
+            <div className={`step ${step === 1 ? 'active' : step > 1 ? 'done' : ''}`}>2</div>
+            <div className={`step ${step === 2 ? 'active' : step > 2 ? 'done' : ''}`}>3</div>
+          </div>
+          {step < 3 && <div className="links">
+            <a href={exofopLink(ticId)} className="exofop eb-link" target="_blank" rel="noreferrer">
+              Exofop
+            </a>
+            <div className="spacer"></div>
+            <a href={latteLink(ticId)} className="latte eb-link" target="_blank" rel="noreferrer">
+              LATTE
+            </a>
+          </div>}
         </div>
         <br />
+
         <div className={`wrapper ${step === 3 ? 'w-review' : ''}`}>
           <img src={ebFile.webContentLink} alt="Eclipsing Binary" />
 
