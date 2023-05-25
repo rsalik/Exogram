@@ -25,6 +25,7 @@ export default function EclipsingBinariesPanel() {
   const [comments, setComments] = useState('');
 
   const [showSuccess, setShowSuccess] = useState(false);
+  const [submittedTicId, setSubmittedTicId] = useState(0);
 
   const user = useContext(UserContext);
 
@@ -61,6 +62,7 @@ export default function EclipsingBinariesPanel() {
           fetchEBFile();
 
           setShowSuccess(true);
+          setSubmittedTicId(ticId);
           setTimeout(() => {
             setShowSuccess(false);
           }, 3000);
@@ -73,7 +75,7 @@ export default function EclipsingBinariesPanel() {
     }
 
     setStep(step + 1);
-  }, [step, responses, ebFile]);
+  }, [step, responses, ebFile, ticId]);
 
   const registerNo = useCallback(() => {
     if (step === 0) setResponses({ ...responses, isEB: false });
@@ -123,29 +125,54 @@ export default function EclipsingBinariesPanel() {
     };
   }, [step, registerYes, registerNo, registerComments]);
 
+  const successEle = (
+    <div className={`success ${showSuccess ? 'show' : ''}`}>
+      <div className="icon">
+        <Check fontSize="large" />
+      </div>
+      <div className="text">
+        Response Submitted for <br/>TIC <strong>{submittedTicId}</strong>
+      </div>
+    </div>
+  );
+
   if (!user) {
     return <ErrorPanel title="Not Authenticated" message="You must be logged in to view this page." />;
   }
 
   if (ebFileFailedLoading) {
-    return <ErrorPanel title="Error Loading File" message="There was an error loading the file. Please try again later." />;
+    return (
+      <>
+        {successEle}
+        <ErrorPanel title="Error Loading File" message="There was an error loading the file. Please try again later." />;
+      </>
+    );
   }
 
   if (noFilesLeft) {
     return (
-      <InfoPanel
-        title="No Files Left"
-        message="There are no potential eclipsing binaries left for you to vet. Check back later for more!"
-      />
+      <>
+        {successEle}
+        <InfoPanel
+          title="No Files Left"
+          message="There are no potential eclipsing binaries left for you to vet. Check back later for more!"
+        />
+      </>
     );
   }
 
   if (!ebFile) {
-    return <InfoPanel title={'Loading...'} />;
+    return (
+      <>
+        {successEle}
+        <InfoPanel title={'Loading...'} />;
+      </>
+    );
   }
 
   return (
     <>
+      {successEle}
       <div className="panel">
         <div className="title" dangerouslySetInnerHTML={{ __html: questions[step] }}></div>
         <div className="info">
@@ -208,7 +235,7 @@ export default function EclipsingBinariesPanel() {
                   </div>
                 </>
               ) : (
-                <div className='input-wrapper'>
+                <div className="input-wrapper">
                   <div className="text-input-wrapper">
                     <input autoFocus type="text" placeholder="Comments" value={comments} onChange={(e) => setComments(e.target.value)} />
                     <div className="key">
@@ -231,16 +258,6 @@ export default function EclipsingBinariesPanel() {
           )}
         </div>
       </div>
-      {
-        <div className={`success ${showSuccess ? 'show' : ''}`}>
-          <div className="icon">
-            <Check fontSize="large" />
-          </div>
-          <div className="text">
-            Response Submitted for <strong>{ebFile.name.split('.')[0]}</strong>
-          </div>
-        </div>
-      }
     </>
   );
 }
