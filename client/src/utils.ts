@@ -1,11 +1,11 @@
-import { getAllTicDispositions, getAllUsernames } from './handlers/databaseHandler';
+import { getAllTicDispositions, getAllUsernames, getEBResponses, getUsername } from './handlers/databaseHandler';
 
 export function exofopLink(ticId: string) {
   return `https://exofop.ipac.caltech.edu/tess/target.php?id=${ticId}`;
 }
 
 export function latteLink(ticId: string) {
-  return `http://latte-online.flatironinstitute.org/app#ID=${ticId}`
+  return `http://latte-online.flatironinstitute.org/app#ID=${ticId}`;
 }
 
 export const TicListSortByOptions = [
@@ -225,15 +225,58 @@ export async function downloadTics(ticList: any[], name: string) {
   const usernames = await getAllUsernames(userCols);
   usernames['group'] = 'Group';
 
-  console.log(usernames);
-
-  const header = [...TicBasicProperties.map((p) => p.name.replaceAll(/<\/?sub>/gm, '')), "Paper Disposition", "Paper Comments"];
+  const header = [...TicBasicProperties.map((p) => p.name.replaceAll(/<\/?sub>/gm, '')), 'Paper Disposition', 'Paper Comments'];
 
   for (let uid of userCols) {
-    console.log(uid, usernames[uid]);
     header.push(usernames[uid] + ' Disposition');
     header.push(usernames[uid] + ' Comments');
   }
 
   downloadFile(header.join(',') + '\n' + lines.join('\n'), 'text/csv', name);
+}
+
+// Admin Only
+export async function downloadEBs() {
+  try {
+    const ebs = await getEBResponses();
+
+    if (!ebs) return;
+
+    const header = ['TIC ID', '# Responses', '# is EB', '# is Period Correct'];
+    const usernames = {} as { [key: string]: string };
+
+    const getUserHeaders = (uid: string, username: string) => {
+      const uid5 = uid.slice(0, 5);
+      return [`${username} (${uid5}) is EB?`, `${username} (${uid5}) is Period Correct?`, `${username} (${uid5}) Comments`];
+    };
+
+    const lines = [] as string[];
+
+    for (let eb in ebs) {
+      const line = [eb, Object.keys(ebs[eb]).length];
+      let isEbs = 0,
+        isPeriodCorrects = 0;
+
+      for (let uid in ebs[eb]) {
+        if (!usernames[uid] || !header.includes(getUserHeaders(uid, usernames[uid])[0])) {
+          usernames[uid] = await getUsername(uid);
+          header.push(...getUserHeaders(uid, usernames[uid]));
+        }
+
+        if (ebs[eb][uid].isEB) isEbs++;
+        if (ebs[eb][uid].isPeriodCorrect) isPeriodCorrects++;
+
+        line[header.indexOf(getUserHeaders(uid, usernames[uid])[0])] = ebs[eb][uid].isEB;
+        line[header.indexOf(getUserHeaders(uid, usernames[uid])[1])] = ebs[eb][uid].isPeriodCorrect;
+        line[header.indexOf(getUserHeaders(uid, usernames[uid])[2])] = `"${ebs[eb][uid].comments}"`;
+      }
+
+      line[2] = isEbs;
+      line[3] = isPeriodCorrects;
+
+      lines.push(line.join(','));
+    }
+
+    downloadFile(header.join(',') + '\n' + lines.join('\n'), 'text/csv', `Exogram EBs ${new Date().toLocaleString()}.csv`);
+  } catch {}
 }

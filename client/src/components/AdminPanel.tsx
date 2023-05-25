@@ -5,6 +5,7 @@ import {
   useTicGroups,
   useUsers,
 } from '../handlers/databaseHandler';
+import { downloadEBs } from '../utils';
 import Link from './Link';
 
 export default function AdminPanel() {
@@ -74,6 +75,12 @@ export default function AdminPanel() {
             ))}
           </tbody>
         </table>
+      </div>
+      <div className="ebs">
+        <div className="title">Eclipsing Binaries</div>
+        <div className="link download" onClick={downloadEBs}>
+          Download All as CSV
+        </div>
       </div>
     </div>
   );

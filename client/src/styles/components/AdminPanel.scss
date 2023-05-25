@@ -1,117 +1,121 @@
 .admin-panel {
-  @include rounded-panel($sec1);
+	@include rounded-panel($sec1);
 
-  .groups {
-    @include rounded-panel($sec2);
+	.groups {
+		@include rounded-panel($sec2);
 
-    .group {
-      display: flex;
-      justify-content: center;
-      align-items: center;
+		.group {
+			font-size: 1.2em;
 
-      font-size: 1.2em;
+			display: flex;
+			align-items: center;
+			justify-content: center;
 
-      margin: 0.2em 0;
+			margin: 0.2em 0;
 
-      .name {
-        font-weight: $fw-semibold;
-      }
+			.name {
+				font-weight: $fw-semibold;
+			}
 
-      div {
-        margin: 0 0.5em;
-        min-width: 6em;
-      }
+			div {
+				min-width: 6em;
+				margin: 0 0.5em;
+			}
 
-      .write,
-      .public {
-        padding: 0.3em;
-        border-radius: $border-radius;
-        border: 3px solid;
-        cursor: pointer;
+			.write,
+			.public {
+				padding: 0.3em;
 
-        &.off {
-          background: none;
-          color: $white;
-        }
+				cursor: pointer;
+				transition: $transition background-color, $transition border-color, color $transition;
 
-        transition: $transition background-color, $transition border-color, color $transition;
-      }
+				border: 3px solid;
+				border-radius: $border-radius;
 
-      .write {
-        border-color: $secondary;
+				&.off {
+					color: $white;
+					background: none;
+				}
+			}
 
-        &.on,
-        &.off:hover {
-          background: $secondary;
-          color: $bkg;
-        }
-      }
+			.write {
+				border-color: $secondary;
 
-      .public {
-        border-color: $primary;
+				&.on,
+				&.off:hover {
+					color: $bkg;
+					background: $secondary;
+				}
+			}
 
-        &.on,
-        &.off:hover {
-          background: $primary;
-          color: $bkg;
-        }
-      }
-    }
-  }
+			.public {
+				border-color: $primary;
 
-  .users {
-    @include rounded-panel($sec2);
+				&.on,
+				&.off:hover {
+					color: $bkg;
+					background: $primary;
+				}
+			}
+		}
+	}
 
-    table {
-      border-collapse: collapse;
-      margin: 0 auto;
+	.users {
+		@include rounded-panel($sec2);
 
-      font-size: 1em;
+		table {
+			font-size: 1em;
 
-      tr {
-        th,
-        td {
-          padding: 0.5em 1em;
+			margin: 0 auto;
 
-          &:first-of-type {
-            border-top-left-radius: $border-radius;
-            border-bottom-left-radius: $border-radius;
-          }
+			border-collapse: collapse;
 
-          &:last-of-type {
-            border-top-right-radius: $border-radius;
-            border-bottom-right-radius: $border-radius;
-          }
-        }
+			tr {
+				th,
+				td {
+					padding: 0.5em 1em;
 
-        th {
-          background: $secondary;
-          color: $bkg;
-        }
+					&:first-of-type {
+						border-top-left-radius: $border-radius;
+						border-bottom-left-radius: $border-radius;
+					}
 
-        &:nth-of-type(even) {
-          background: $sec3;
-        }
-      }
+					&:last-of-type {
+						border-top-right-radius: $border-radius;
+						border-bottom-right-radius: $border-radius;
+					}
+				}
 
-      .superuser {
-        margin-left: 0.6rem;
+				th {
+					color: $bkg;
+					background: $secondary;
+				}
 
-        padding: 0.2em 0.3em;
-        border-radius: $border-radius;
+				&:nth-of-type(even) {
+					background: $sec3;
+				}
+			}
 
-        border: 3px solid $secondary;
-        
-        cursor: pointer;
+			.superuser {
+				margin-left: 0.6rem;
+				padding: 0.2em 0.3em;
 
-        transition: $transition color, $transition background-color;
+				cursor: pointer;
+				transition: $transition color, $transition background-color;
 
-        &.active,
-        &:hover {
-          background-color: $secondary;
-          color: $bkg;
-        }
-      }
-    }
-  }
+				border: 3px solid $secondary;
+				border-radius: $border-radius;
+
+				&.active,
+				&:hover {
+					color: $bkg;
+					background-color: $secondary;
+				}
+			}
+		}
+	}
+
+	.ebs {
+		@include rounded-panel($sec2);
+	}
 }

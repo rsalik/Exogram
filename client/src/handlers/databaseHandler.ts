@@ -125,6 +125,14 @@ export async function getAllTicDispositions(ticList: any[]) {
   return dispositions;
 }
 
+export async function getUsername(uid: string) {
+  try {
+    return (await get(ref(db, `users/${uid}/name`))).val();
+  } catch {
+    return null;
+  }
+}
+
 export async function getAllUsernames(userIds: any[]) {
   const usernames = {} as { [key: string]: any };
   const promises = [];
@@ -326,4 +334,13 @@ export async function setUserSuperuserStatus(uid: string, superuser: boolean) {
   try {
     await set(ref(db, `users/${uid}/superuser`), superuser);
   } catch {}
+}
+
+// Admin Only
+export async function getEBResponses() {
+  try {
+    return (await get(ref(db, `ebs`))).val();
+  } catch {
+    return null;
+  }
 }
