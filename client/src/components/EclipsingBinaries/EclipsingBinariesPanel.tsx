@@ -1,10 +1,10 @@
+import { Check, ChevronRight, KeyboardReturn } from '@mui/icons-material';
 import { useCallback, useContext, useEffect, useState } from 'react';
+import { UserContext } from '../../App';
 import { getRandomEB, submitEBResponse } from '../../handlers/functionsHandler';
+import { exofopLink, latteLink } from '../../utils';
 import ErrorPanel from '../ErrorPanel';
 import InfoPanel from '../InfoPanel';
-import { UserContext } from '../../App';
-import { Check, ChevronRight, KeyboardReturn } from '@mui/icons-material';
-import { exofopLink, latteLink } from '../../utils';
 
 const questions = [
   'Is this an <span>eclipsing binary</span>?',
@@ -206,7 +206,7 @@ export default function EclipsingBinariesPanel() {
               </div>
               <div className="review-item">
                 <div className="title">Is the measured period correct?</div>
-                <div className="response">{responses.isEB ? 'Yes' : 'No'}</div>
+                <div className="response">{responses.isPeriodCorrect ? 'Yes' : 'No'}</div>
               </div>
               <div className="review-item">
                 <div className="title">Any other comments?</div>
