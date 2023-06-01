@@ -165,7 +165,7 @@ export default function EclipsingBinariesPanel() {
     return (
       <>
         {successEle}
-        <InfoPanel title={'Loading...'} />;
+        <InfoPanel title={'Loading...'} />
       </>
     );
   }
