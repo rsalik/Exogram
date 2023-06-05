@@ -1,7 +1,41 @@
 .ebs {
 	.title {
+		display: flex;
+		align-items: center;
+		flex-direction: column;
+
 		span {
 			color: $primary;
+		}
+
+		.links {
+			font-size: 1.2rem;
+			font-weight: $fw-regular;
+
+			display: flex;
+
+			width: 22.5rem;
+
+			.spacer {
+				width: 0.3em;
+			}
+
+			.eb-link {
+				flex-grow: 1;
+
+				padding: 0.2em;
+
+				transition: all $transition;
+
+				border: 2px solid $white;
+				border-radius: $border-radius;
+
+				&:hover {
+					color: $bkg;
+					border-color: $primary;
+					background: $primary;
+				}
+			}
 		}
 	}
 
@@ -34,6 +68,26 @@
 		}
 
 		&.no {
+			color: $secondary;
+			border-color: $secondary;
+
+			&:hover {
+				color: $bkg;
+				background: $secondary;
+			}
+		}
+
+		&.submit {
+			color: $tertiary;
+			border-color: $tertiary;
+
+			&:hover {
+				color: $bkg;
+				background: $tertiary;
+			}
+		}
+
+		&.reset {
 			color: $error;
 			border-color: $error;
 
@@ -55,11 +109,13 @@
 	}
 
 	.input {
+		font-size: 1rem;
+
 		display: flex;
 		justify-content: center;
 
 		width: 100%;
-		margin: 0.5em 0;
+		margin-top: 0.5em;
 
 		.spacer {
 			width: 0.5em;
@@ -114,7 +170,7 @@
 	}
 
 	.quick-adds {
-		font-size: 1.3em;
+		font-size: 1.2em;
 
 		display: grid;
 
@@ -127,6 +183,13 @@
 		grid-template-columns: repeat(3, 1fr);
 
 		.quick-add {
+			font-size: 0.9em;
+
+			position: relative;
+
+			display: flex;
+			align-items: center;
+
 			padding: 0.5em;
 
 			cursor: pointer;
@@ -135,17 +198,34 @@
 			border-radius: $border-radius;
 			background: $sec4;
 
+			.key {
+				font-size: 0.8em;
+
+				position: absolute;
+				right: 0.4em;
+
+				width: 1.7em;
+				height: 1.7em;
+
+				&.l {
+					right: 2.5em;
+
+					width: 3em;
+				}
+			}
+
 			&:hover {
 				background: $sec5;
 			}
 		}
 	}
 
-	.review {
-		font-size: 1.3em;
+	.answer-panel {
+		font-size: 1.5em;
 
 		display: flex;
 		flex-direction: column;
+		justify-content: space-between;
 
 		width: 100%;
 		margin-right: 0.5em;
@@ -154,14 +234,39 @@
 		border: 3px solid $primary;
 		border-radius: $border-radius;
 
-		.review-item {
+		.horiz {
+			height: 2px;
+			margin: 0.25em 0;
+
+			background: $pri2;
+		}
+
+		.item {
 			display: flex;
+			justify-content: space-between;
+
+			&.hidden {
+				display: none;
+			}
+
+			&.active {
+				color: $tertiary;
+			}
+
+			.question {
+				font-weight: $fw-bold;
+
+				span {
+					color: $primary;
+				}
+			}
 		}
 
 		.title {
+			font-size: 1.5em;
 			font-weight: $fw-bold;
 
-			margin-right: 0.4em;
+			margin-bottom: 0.5rem;
 		}
 
 		.buttons {
@@ -184,23 +289,23 @@
 		@include rounded-panel();
 
 		.wrapper {
-			width: max(40vw, min(50vh, 80vw));
+			display: flex;
+			flex-direction: row-reverse;
+
+			width: auto;
 			margin: 0 auto;
 
-			&.w-review {
-				display: flex;
-				flex-direction: row-reverse;
+			img {
+				box-sizing: border-box;
+				width: 45%;
+				padding: 2em 0;
 
-				width: auto;
+				background: white;
+			}
 
+			@media screen and (max-width: 1100px) {
 				img {
-					width: 50%;
-				}
-
-				@media screen and (max-width: 1100px) {
-					img {
-						width: 32%;
-					}
+					width: 32%;
 				}
 			}
 		}
@@ -241,6 +346,7 @@
 				flex-direction: column;
 				justify-content: center;
 
+				margin-top: 0.5em;
 				margin-bottom: 1em;
 			}
 
@@ -267,34 +373,6 @@
 					color: $bkg;
 					border-color: $green;
 					background: $green;
-				}
-			}
-
-			.links {
-				display: flex;
-
-				width: 100%;
-				margin-top: 0.3em;
-
-				.spacer {
-					width: 0.3em;
-				}
-
-				.eb-link {
-					flex-grow: 1;
-
-					padding: 0.2em;
-
-					transition: all $transition;
-
-					border: 2px solid $white;
-					border-radius: $border-radius;
-
-					&:hover {
-						color: $bkg;
-						border-color: $primary;
-						background: $primary;
-					}
 				}
 			}
 		}

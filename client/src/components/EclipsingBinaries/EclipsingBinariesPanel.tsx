@@ -6,14 +6,17 @@ import { exofopLink, latteLink } from '../../utils';
 import ErrorPanel from '../ErrorPanel';
 import InfoPanel from '../InfoPanel';
 
-const questions = [
-  'Is this an <span>eclipsing binary</span>?',
-  'Is the <span>measured period</span> correct?',
-  'Any other comments?',
-  'Review',
+const quickAdds = [
+  'CPOC',
+  'Additional Eclipses',
+  'Low SNR',
+  'High SNR',
+  'Wrong Ephemeris',
+  'Difficult Lightcurve',
+  'Flare',
+  'Strong Systemics',
+  'Needs More Eyes',
 ];
-
-const quickAdds = ['CPOC', 'AE', 'LowSNR', 'DLC', 'Fla', 'SSys'];
 
 export default function EclipsingBinariesPanel() {
   const [ebFile, setEBFile] = useState<any>(null);
@@ -115,6 +118,13 @@ export default function EclipsingBinariesPanel() {
           registerComments();
           e.preventDefault();
         }
+
+        try {
+          if (e.ctrlKey && quickAdds[parseInt(e.key) - 1]) {
+            setComments(comments + (comments.length > 0 ? ', ' + quickAdds[parseInt(e.key) - 1] : quickAdds[parseInt(e.key) - 1]));
+            e.preventDefault();
+          }
+        } catch {}
       }
     }
 
@@ -131,7 +141,8 @@ export default function EclipsingBinariesPanel() {
         <Check fontSize="large" />
       </div>
       <div className="text">
-        Response Submitted for <br/>TIC <strong>{submittedTicId}</strong>
+        Response Submitted for <br />
+        TIC <strong>{submittedTicId}</strong>
       </div>
     </div>
   );
@@ -174,55 +185,57 @@ export default function EclipsingBinariesPanel() {
     <>
       {successEle}
       <div className="panel">
-        <div className="title" dangerouslySetInnerHTML={{ __html: questions[step] }}></div>
+        {/* <div className="title" dangerouslySetInnerHTML={{ __html: questions[step] }}></div> */}
+        <div className="title">
+          TIC {ticId}
+          <div className="links">
+            <a href={exofopLink(ticId)} className="exofop eb-link" target="_blank" rel="noreferrer">
+              Exofop
+            </a>
+            <div className="spacer"></div>
+            <a href={latteLink(ticId)} className="latte eb-link" target="_blank" rel="noreferrer">
+              LATTE
+            </a>
+          </div>
+        </div>
+
         <div className="info">
           <div className="steps">
             <div className={`step ${step === 0 ? 'active' : step > 0 ? 'done' : ''}`}>1</div>
             <div className={`step ${step === 1 ? 'active' : step > 1 ? 'done' : ''}`}>2</div>
             <div className={`step ${step === 2 ? 'active' : step > 2 ? 'done' : ''}`}>3</div>
           </div>
-          {step < 3 && (
-            <div className="links">
-              <a href={exofopLink(ticId)} className="exofop eb-link" target="_blank" rel="noreferrer">
-                Exofop
-              </a>
-              <div className="spacer"></div>
-              <a href={latteLink(ticId)} className="latte eb-link" target="_blank" rel="noreferrer">
-                LATTE
-              </a>
-            </div>
-          )}
         </div>
         <br />
 
-        <div className={`wrapper ${step === 3 ? 'w-review' : ''}`}>
+        <div className={`wrapper`}>
           <img src={ebFile.webContentLink} alt="Eclipsing Binary" />
 
-          {step === 3 ? (
-            <div className="review">
-              <div className="review-item">
-                <div className="title">Is this an eclipsing binary?</div>
-                <div className="response">{responses.isEB ? 'Yes' : 'No'}</div>
-              </div>
-              <div className="review-item">
-                <div className="title">Is the measured period correct?</div>
-                <div className="response">{responses.isPeriodCorrect ? 'Yes' : 'No'}</div>
-              </div>
-              <div className="review-item">
-                <div className="title">Any other comments?</div>
-                <div className="response">{comments}</div>
-              </div>
-              <div className="buttons">
-                <div className="btn yes" onClick={registerYes}>
-                  Submit <div className="key">Q</div>
+          <div className="answer-panel">
+            <div className="main">
+              <div className="title">Responses</div>
+              <div className="questions">
+                <div className={`item ${step === 0 ? 'active' : step > 0 ? 'done' : 'hidden'}`}>
+                  <div className="question">
+                    Is this an <span>eclipsing binary</span>?
+                  </div>
+                  {step > 0 && <div className="answer">{responses.isEB ? 'Yes' : 'No'}</div>}
                 </div>
-                <div className="spacer"></div>
-                <div className="btn no" onClick={registerNo}>
-                  Start Over <div className="key">E</div>
+                {step > 0 && <div className="horiz"></div>}
+                <div className={`item ${step === 1 ? 'active' : step > 1 ? 'done' : 'hidden'}`}>
+                  <div className="question">
+                    Is the <span>measured period</span> correct?
+                  </div>
+                  {step > 1 && <div className="answer">{responses.isPeriodCorrect ? 'Yes' : 'No'}</div>}
+                </div>
+                {step > 1 && <div className="horiz"></div>}
+                <div className={`item ${step === 2 ? 'active' : step > 2 ? 'done' : 'hidden'}`}>
+                  <div className="question">Additional Comments?</div>
+                  {step > 2 && <div className="answer">{responses.comments}</div>}
                 </div>
               </div>
             </div>
-          ) : (
+
             <div className="input">
               {step < 2 ? (
                 <>
@@ -234,7 +247,7 @@ export default function EclipsingBinariesPanel() {
                     No <div className="key">E</div>
                   </div>
                 </>
-              ) : (
+              ) : step === 2 ? (
                 <div className="input-wrapper">
                   <div className="text-input-wrapper">
                     <input autoFocus type="text" placeholder="Comments" value={comments} onChange={(e) => setComments(e.target.value)} />
@@ -246,16 +259,27 @@ export default function EclipsingBinariesPanel() {
                     </div>
                   </div>
                   <div className="quick-adds">
-                    {quickAdds.map((quickAdd) => (
+                    {quickAdds.map((quickAdd, i) => (
                       <div className="quick-add" onClick={() => setComments(comments + (comments.length > 0 ? ', ' + quickAdd : quickAdd))}>
-                        {quickAdd}
+                        {quickAdd} <div className="key l">CTRL</div>
+                        <div className="key">{i + 1}</div>
                       </div>
                     ))}
                   </div>
                 </div>
+              ) : (
+                <>
+                  <div className="btn submit" onClick={registerYes}>
+                    Submit <div className="key">Q</div>
+                  </div>
+                  <div className="spacer"></div>
+                  <div className="btn reset" onClick={registerNo}>
+                    Reset <div className="key">E</div>
+                  </div>
+                </>
               )}
             </div>
-          )}
+          </div>
         </div>
       </div>
     </>
