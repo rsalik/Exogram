@@ -1,6 +1,7 @@
 import { ChevronRight, KeyboardReturn } from '@mui/icons-material';
 import { useEffect, useState } from 'react';
 import { getEB } from '../../handlers/functionsHandler';
+import Link from '../Link';
 
 export default function EBLookupPanel(props: { id?: string }) {
   const [id, setId] = useState(props.id || '');
@@ -9,6 +10,8 @@ export default function EBLookupPanel(props: { id?: string }) {
   const [noFileFound, setNoFileFound] = useState(false);
   const [internalError, setInternalError] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const ticId = file?.name.split('.')[0].replace('TIC', '').replace(/^0+/, '');
 
   useEffect(() => {
     setNoFileFound(false);
@@ -68,12 +71,17 @@ export default function EBLookupPanel(props: { id?: string }) {
               <div className="questions">
                 <div className="item">
                   <div className="question">TIC ID</div>
-                  <div className="answer">{file.name.split('.')[0].replace('TIC', '').replace(/^0+/, '')}</div>
+                  <div className="answer">{ticId}</div>
                 </div>
                 <div className="horiz"></div>
                 <div className="item">
                   <div className="question">File name</div>
                   <div className="answer">{file.name}</div>
+                </div>
+                <div className="horiz"></div>
+                <div className="item">
+                  <div className="question">Link</div>
+                  <div className="answer"><Link borderless external href={`https://exogram.vercel.app/ebs/lookup/${ticId}`}>https://exogram.vercel.app/ebs/lookup/{ticId}</Link></div>
                 </div>
               </div>
             </div>
