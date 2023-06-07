@@ -43,7 +43,8 @@ function App() {
             <Route path="charts" element={<TicChartsPage />}>
               <Route path=":ticIds" element={<TicChartsPage />} />
             </Route>
-            <Route path="ebs" element={<EclipsingBinaries />} />
+            <Route path="ebs/lookup/:ticId" element={<EclipsingBinaries />} />
+            <Route path="ebs/*" element={<EclipsingBinaries />} />
             <Route path="dictionary" element={<DictionaryPage />} />
             <Route path="tic/:ticId" element={<TicPage />} />
             <Route path="signin" element={<SignInPage />} />

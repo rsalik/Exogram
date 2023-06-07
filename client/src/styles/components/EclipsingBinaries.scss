@@ -1,4 +1,80 @@
 .ebs {
+	&.home {
+		@include rounded-panel();
+
+		.buttons {
+			display: flex;
+			justify-content: center;
+
+			margin-top: 0.5em;
+
+			.lbtn {
+				display: flex;
+				align-items: center;
+				flex-direction: column;
+
+				box-sizing: border-box;
+				width: min(45vw, 28em);
+				margin: 0 0.5em;
+				padding: 2em;
+
+				transition: all $transition;
+
+				border: 3px solid $white;
+				border-radius: $border-radius;
+
+				&.verify {
+					border-color: $green;
+
+					.icon {
+						color: $green;
+					}
+
+					&:hover {
+						color: $bkg;
+						background: $green;
+
+						.icon {
+							color: $bkg;
+						}
+					}
+				}
+
+				&.lookup {
+					border-color: $secondary;
+
+					.icon {
+						color: $secondary;
+					}
+
+					&:hover {
+						color: $bkg;
+						background: $secondary;
+
+						.icon {
+							color: $bkg;
+						}
+					}
+				}
+
+				.name {
+					font-size: 4em;
+					font-weight: $fw-bold;
+				}
+
+				.desc {
+					font-size: 1.3em;
+				}
+
+				.icon {
+					font-size: 10em;
+
+					height: 1.2em;
+				}
+			}
+		}
+	}
+
 	.title {
 		display: flex;
 		align-items: center;
@@ -97,19 +173,35 @@
 			}
 		}
 
-		.key {
+		.keys {
 			font-size: 0.8em;
 
 			position: absolute;
-			right: 0.4em;
+			right: 0.3em;
 
-			width: 1.7em;
-			height: 1.7em;
+			display: flex;
+			align-items: center;
+
+			.key-sep {
+				font-size: 1.2em;
+
+				margin: 0 0.2em;
+
+				color: $primary;
+			}
+
+			.key {
+				position: static;
+
+				width: 1.7em;
+				height: 1.7em;
+				margin: 0 0.1em;
+			}
 		}
 	}
 
 	.input {
-		font-size: 1rem;
+		font-size: 0.7em;
 
 		display: flex;
 		justify-content: center;
@@ -170,7 +262,7 @@
 	}
 
 	.quick-adds {
-		font-size: 1.2em;
+		font-size: 1.1em;
 
 		display: grid;
 
@@ -201,16 +293,15 @@
 			.key {
 				font-size: 0.8em;
 
-				position: absolute;
-				right: 0.4em;
+				position: relative;
 
 				width: 1.7em;
 				height: 1.7em;
+				margin-left: 0.2em;
 
 				&.l {
-					right: 2.5em;
-
 					width: 3em;
+					margin-left: 1em;
 				}
 			}
 
@@ -284,6 +375,8 @@
 	}
 
 	.panel {
+		font-size: 1vw;
+
 		position: relative;
 
 		@include rounded-panel();
@@ -294,27 +387,17 @@
 
 			width: auto;
 			margin: 0 auto;
-
-			img {
-				box-sizing: border-box;
-				width: 45%;
-				padding: 2em 0;
-
-				background: white;
-			}
-
-			@media screen and (max-width: 1100px) {
-				img {
-					width: 32%;
-				}
-			}
 		}
 
 		img {
+			box-sizing: border-box;
 			width: 100%;
+			width: 45%;
 			height: 100%;
+			padding: 2em 0;
 
 			border-radius: $border-radius;
+			background: white;
 
 			object-fit: cover;
 		}
@@ -374,6 +457,35 @@
 					border-color: $green;
 					background: $green;
 				}
+			}
+		}
+
+		&.lookup {
+			.placeholder {
+				font-size: 2em;
+
+				display: flex;
+				align-items: center;
+				justify-content: center;
+
+				width: 100%;
+
+				border-radius: $border-radius;
+
+				&.error {
+					color: $bkg;
+					background: $error;
+				}
+
+				&.loading {
+					background: $pri2;
+				}
+			}
+
+			.text-input-wrapper {
+				font-size: 0.8em;
+
+				margin-top: 1em;
 			}
 		}
 	}

@@ -124,6 +124,34 @@ app.get('/api/randomEB', async (req, res) => {
   res.send(randomFile);
 });
 
+app.get('/api/getEB/:ticId', async (req, res) => {
+  if (!req.params.ticId) {
+    res.status(400).send('Missing ticId');
+    return;
+  }
+
+  const ticId = req.params.ticId;
+
+  const auth = new google.auth.JWT(process.env.GOOGLE_CLIENT_EMAIL, undefined, process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/gm, '\n'), [
+    'https://www.googleapis.com/auth/drive',
+  ]);
+
+  const drive = google.drive({ version: 'v3', auth });
+
+  try {
+    const file = await getEBFile(drive, ticId);
+
+    if (!file) {
+      res.status(200).send({ none: true });
+      return;
+    }
+
+    res.send(file);
+  } catch {
+    res.status(500).send({ error: true});
+  }
+});
+
 app.post('/api/ebResponse', async (req, res) => {
   const currentUser = (req as any).currentUser;
 
@@ -213,6 +241,27 @@ function getEBFiles(drive: drive_v3.Drive): Promise<drive_v3.Schema$File[] | nul
 
         let files = driveRes.data.files;
         resolve(files);
+      }
+    );
+  });
+}
+
+function getEBFile(drive: drive_v3.Drive, ticId: string): Promise<drive_v3.Schema$File[] | null> {
+  // ticId must have leading zeros so that it is 16 characters long
+  ticId = ticId.padStart(16, '0');
+
+  return new Promise((resolve, reject) => {
+    drive.files.list(
+      {
+        q: `'13yIRMekWCvwckG5nfvCpS7OJ_vsMa0Td' in parents and mimeType = 'image/jpeg' and name = 'TIC${ticId}.jpg'`,
+        pageSize: 1000,
+        fields: 'files(id, webContentLink, name, mimeType)',
+      },
+      async (err: any, driveRes: any) => {
+        if (err) reject(console.error(err));
+
+        let files = driveRes.data.files;
+        resolve(files[0]);
       }
     );
   });

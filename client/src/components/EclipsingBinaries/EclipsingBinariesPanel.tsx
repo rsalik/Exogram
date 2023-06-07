@@ -1,4 +1,4 @@
-import { Check, ChevronRight, KeyboardReturn } from '@mui/icons-material';
+import { Backspace, BackspaceOutlined, Check, ChevronRight, KeyboardReturn } from '@mui/icons-material';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { UserContext } from '../../App';
 import { getRandomEB, submitEBResponse } from '../../handlers/functionsHandler';
@@ -102,12 +102,12 @@ export default function EclipsingBinariesPanel() {
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
       if (step < 2 || step === 3) {
-        if (e.key === 'q' || e.key === 'Q') {
+        if (e.key === 'Enter') {
           registerYes();
           e.preventDefault();
         }
 
-        if (e.key === 'e' || e.key === 'E') {
+        if (e.key === 'Backspace' || e.key === 'Delete') {
           registerNo();
           e.preventDefault();
         }
@@ -133,7 +133,7 @@ export default function EclipsingBinariesPanel() {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [step, registerYes, registerNo, registerComments]);
+  }, [step, comments, registerYes, registerNo, registerComments]);
 
   const successEle = (
     <div className={`success ${showSuccess ? 'show' : ''}`}>
@@ -240,11 +240,21 @@ export default function EclipsingBinariesPanel() {
               {step < 2 ? (
                 <>
                   <div className="btn yes" onClick={registerYes}>
-                    Yes <div className="key">Q</div>
+                    Yes
+                    <div className="keys">
+                      <div className="key">
+                        <KeyboardReturn />
+                      </div>
+                    </div>
                   </div>
                   <div className="spacer"></div>
                   <div className="btn no" onClick={registerNo}>
-                    No <div className="key">E</div>
+                    No
+                    <div className="keys">
+                      <div className="key">
+                        <BackspaceOutlined />
+                      </div>
+                    </div>
                   </div>
                 </>
               ) : step === 2 ? (
@@ -252,15 +262,19 @@ export default function EclipsingBinariesPanel() {
                   <div className="text-input-wrapper">
                     <input autoFocus type="text" placeholder="Comments" value={comments} onChange={(e) => setComments(e.target.value)} />
                     <div className="key">
-                      <KeyboardReturn />
+                      <KeyboardReturn fontSize="inherit" />
                     </div>
                     <div className="btn go" onClick={registerComments}>
-                      <ChevronRight fontSize="large" />
+                      <ChevronRight fontSize="inherit" />
                     </div>
                   </div>
                   <div className="quick-adds">
                     {quickAdds.map((quickAdd, i) => (
-                      <div className="quick-add" onClick={() => setComments(comments + (comments.length > 0 ? ', ' + quickAdd : quickAdd))}>
+                      <div
+                        className="quick-add"
+                        key={i}
+                        onClick={() => setComments(comments + (comments.length > 0 ? ', ' + quickAdd : quickAdd))}
+                      >
                         {quickAdd} <div className="key l">CTRL</div>
                         <div className="key">{i + 1}</div>
                       </div>
@@ -270,11 +284,21 @@ export default function EclipsingBinariesPanel() {
               ) : (
                 <>
                   <div className="btn submit" onClick={registerYes}>
-                    Submit <div className="key">Q</div>
+                    Submit
+                    <div className="keys">
+                      <div className="key">
+                        <KeyboardReturn />
+                      </div>
+                    </div>
                   </div>
                   <div className="spacer"></div>
                   <div className="btn reset" onClick={registerNo}>
-                    Reset <div className="key">E</div>
+                    Reset
+                    <div className="keys">
+                      <div className="key">
+                        <BackspaceOutlined />
+                      </div>
+                    </div>
                   </div>
                 </>
               )}

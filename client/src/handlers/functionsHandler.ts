@@ -31,6 +31,22 @@ export async function getRandomEB() {
   }
 }
 
+export async function getEB(ticId: string) {
+  const url = process.env.NODE_ENV === 'production' ? '/api/getEB/' + ticId : 'http://localhost:3001/api/getEB/' + ticId;
+
+  try {
+    const response = await fetch(url);
+
+    if (response.status !== 200) {
+      return null;
+    }
+
+    return await response.json();
+  } catch {
+    return null;
+  }
+}
+
 export async function submitEBResponse(file: string, ebResponse: any) {
   const url = process.env.NODE_ENV === 'production' ? '/api/ebResponse/' : 'http://localhost:3001/api/ebResponse/';
 
