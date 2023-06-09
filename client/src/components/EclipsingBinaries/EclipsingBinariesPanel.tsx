@@ -8,7 +8,7 @@ import InfoPanel from '../InfoPanel';
 
 const quickAdds = [
   'CPOC',
-  'Additional Eclipses',
+  'Period Off by Integer',
   'Low SNR',
   'High SNR',
   'Wrong Ephemeris',
