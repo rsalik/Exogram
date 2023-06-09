@@ -8,10 +8,10 @@ import InfoPanel from '../InfoPanel';
 
 const quickAdds = [
   'CPOC',
-  'Period Off by Integer',
+  'Additional Eclipses',
   'Low SNR',
   'High SNR',
-  'Wrong Ephemeris',
+  'Period Off by Integer',
   'Difficult Lightcurve',
   'Flare',
   'Strong Systemics',
