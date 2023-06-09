@@ -316,9 +316,9 @@
 
 		display: flex;
 		flex-direction: column;
+		flex-grow: 1;
 		justify-content: space-between;
 
-		width: 100%;
 		margin-right: 0.5em;
 		padding: 1em;
 
@@ -391,8 +391,7 @@
 
 		img {
 			box-sizing: border-box;
-			width: 100%;
-			width: 45%;
+			width: 45vw;
 			height: 100%;
 			padding: 2em 0;
 
