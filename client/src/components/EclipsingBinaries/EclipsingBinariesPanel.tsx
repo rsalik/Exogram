@@ -1,7 +1,7 @@
-import { Backspace, BackspaceOutlined, Check, ChevronRight, KeyboardReturn } from '@mui/icons-material';
+import { BackspaceOutlined, Check, ChevronRight, KeyboardReturn } from '@mui/icons-material';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { UserContext } from '../../App';
-import { getRandomEB, submitEBResponse } from '../../handlers/functionsHandler';
+import { getEB, getRandomEB, submitEBResponse } from '../../handlers/functionsHandler';
 import { exofopLink, latteLink } from '../../utils';
 import ErrorPanel from '../ErrorPanel';
 import InfoPanel from '../InfoPanel';
@@ -18,7 +18,7 @@ const quickAdds = [
   'Needs More Eyes',
 ];
 
-export default function EclipsingBinariesPanel() {
+export default function EclipsingBinariesPanel(props: { id?: string }) {
   const [ebFile, setEBFile] = useState<any>(null);
   const [ebFileFailedLoading, setEBFileFailedLoading] = useState(false);
   const [noFilesLeft, setNoFilesLeft] = useState(false);
@@ -32,24 +32,37 @@ export default function EclipsingBinariesPanel() {
 
   const user = useContext(UserContext);
 
-  const ticId = ebFile?.name.split('.')[0].replace('TIC', '').replace(/^0+/, '');
+  const ticId = props.id || ebFile?.name.split('.')[0].replace('TIC', '').replace(/^0+/, '');
 
-  function fetchEBFile() {
-    getRandomEB().then((file) => {
+  const fetchEBFile = useCallback(() => {
+    const callback = (file: any) => {
       if (file) {
         if (file.none) setNoFilesLeft(true);
         else setEBFile(file);
       } else {
         setEBFileFailedLoading(true);
       }
-    });
-  }
+    };
+
+    if (props.id) {
+      getEB(props.id).then(callback);
+    } else {
+      getRandomEB().then((file: any) => {
+        if (file) {
+          if (file.none) setNoFilesLeft(true);
+          else setEBFile(file);
+        } else {
+          setEBFileFailedLoading(true);
+        }
+      });
+    }
+  }, [props.id]);
 
   useEffect(() => {
     if (user) {
       fetchEBFile();
     }
-  }, [user]);
+  }, [user, fetchEBFile]);
 
   const registerYes = useCallback(() => {
     if (step === 0) setResponses({ ...responses, isEB: true });
@@ -78,7 +91,7 @@ export default function EclipsingBinariesPanel() {
     }
 
     setStep(step + 1);
-  }, [step, responses, ebFile, ticId]);
+  }, [step, responses, ebFile, ticId, fetchEBFile]);
 
   const registerNo = useCallback(() => {
     if (step === 0) setResponses({ ...responses, isEB: false });
@@ -161,6 +174,18 @@ export default function EclipsingBinariesPanel() {
   }
 
   if (noFilesLeft) {
+    if (props.id) {
+      return (
+        <>
+          {successEle}
+          <ErrorPanel
+            title="Invalid TIC ID"
+            message={`No file for TIC ${props.id} was found.`}
+          />
+        </>
+      );
+    }
+
     return (
       <>
         {successEle}

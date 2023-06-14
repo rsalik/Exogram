@@ -6,10 +6,10 @@ import { useParams } from 'react-router';
 export default function EclipsingBinaries() {
   const { ticId } = useParams();
 
-  if (window.location.pathname === '/ebs/verify') {
+  if (window.location.pathname.includes('/ebs/verify')) {
     return (
       <div className="ebs">
-        <EclipsingBinariesPanel />
+        <EclipsingBinariesPanel id={ticId} />
       </div>
     );
   }

@@ -31,7 +31,6 @@ export default function EBLookupPanel(props: { id?: string }) {
             return;
           }
 
-          console.log(res);
           setFile(res);
         } else {
           setInternalError(true);
@@ -81,7 +80,20 @@ export default function EBLookupPanel(props: { id?: string }) {
                 <div className="horiz"></div>
                 <div className="item">
                   <div className="question">Link</div>
-                  <div className="answer"><Link borderless external href={`https://exogram.vercel.app/ebs/lookup/${ticId}`}>https://exogram.vercel.app/ebs/lookup/{ticId}</Link></div>
+                  <div className="answer">
+                    <Link borderless external href={`https://exogram.vercel.app/ebs/lookup/${ticId}`}>
+                      https://exogram.vercel.app/ebs/lookup/{ticId}
+                    </Link>
+                  </div>
+                </div>
+                <div className="horiz"></div>
+                <div className="item">
+                  <div className="question">Verify</div>
+                  <div className="answer">
+                    <Link borderless external href={`https://exogram.vercel.app/ebs/verify/${ticId}`}>
+                      Click Here to Verify
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
