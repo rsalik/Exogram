@@ -13,7 +13,7 @@ const quickAdds = [
   'High SNR',
   'Period Off by Integer',
   'Difficult Lightcurve',
-  'Overfitting Models',
+  'Secondary Phase Incorrect',
   'Strong Systemics',
   'Needs More Eyes',
 ];
