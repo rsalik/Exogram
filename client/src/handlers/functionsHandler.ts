@@ -47,7 +47,7 @@ export async function getEB(ticId: string) {
   }
 }
 
-export async function submitEBResponse(file: string, ebResponse: any) {
+export async function submitEBResponse(ticId: string, ebResponse: any) {
   const url = process.env.NODE_ENV === 'production' ? '/api/ebResponse/' : 'http://localhost:3001/api/ebResponse/';
 
   try {
@@ -58,7 +58,7 @@ export async function submitEBResponse(file: string, ebResponse: any) {
       },
       method: 'POST',
       body: JSON.stringify({
-        file,
+        ticId,
         response: ebResponse,
       }),
     });

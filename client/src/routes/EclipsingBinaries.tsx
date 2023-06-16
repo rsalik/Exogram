@@ -1,27 +1,57 @@
-import { CheckCircle, Search } from '@mui/icons-material';
+import { Check, CheckCircle, Search } from '@mui/icons-material';
 import EclipsingBinariesPanel from '../components/EclipsingBinaries/EclipsingBinariesPanel';
 import EBLookupPanel from '../components/EclipsingBinaries/EBLookupPanel';
 import { useParams } from 'react-router';
+import { useState } from 'react';
 
 export default function EclipsingBinaries() {
   const { ticId } = useParams();
 
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [submittedTicId, setSubmittedTICId] = useState('');
+
+  const successEle = (
+    <div className={`success ${showSuccess ? 'show' : ''}`}>
+      <div className="icon">
+        <Check fontSize="large" />
+      </div>
+      <div className="text">
+        Response Submitted for <br />
+        TIC <strong>{submittedTicId}</strong>
+      </div>
+    </div>
+  );
+
+  function submitSuccess(id: string) {
+    setShowSuccess(true);
+    setSubmittedTICId(id);
+
+    setTimeout(() => {
+      setShowSuccess(false);
+    }, 4000);
+  }
+
   if (window.location.pathname.includes('/ebs/verify')) {
     return (
       <div className="ebs">
-        <EclipsingBinariesPanel id={ticId} />
+        {successEle}
+        <EclipsingBinariesPanel submitSuccess={submitSuccess} id={ticId} />
       </div>
     );
   }
 
-  if (window.location.pathname.includes('/ebs/lookup')) { 
-    return <div className="ebs">
-      <EBLookupPanel id={ticId} />
-    </div>
+  if (window.location.pathname.includes('/ebs/lookup')) {
+    return (
+      <div className="ebs">
+        {successEle}
+        <EBLookupPanel id={ticId} />
+      </div>
+    );
   }
 
   return (
     <div className="ebs home">
+      {successEle}
       <div className="title">Eclipsing Binaries</div>
       <div className="buttons">
         <a className="lbtn verify" href="/ebs/verify">

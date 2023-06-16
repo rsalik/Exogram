@@ -148,7 +148,7 @@ app.get('/api/getEB/:ticId', async (req, res) => {
 
     res.send(file);
   } catch {
-    res.status(500).send({ error: true});
+    res.status(500).send({ error: true });
   }
 });
 
@@ -162,23 +162,21 @@ app.post('/api/ebResponse', async (req, res) => {
 
   const { uid } = currentUser;
 
-  const { file, response } = req.body;
+  const { ticId, response } = req.body;
 
-  if (!file || !response) {
+  if (!ticId || !response) {
     res.status(400).send({ success: false });
     return;
   }
 
-  const ebName = file.name?.split('.')[0];
-
-  const ref = db.ref(`ebs/${ebName}/${uid}`);
+  const ref = db.ref(`ebs/${ticId}/${uid}`);
 
   try {
     await ref.set(response);
 
     res.send({ success: true });
 
-    const snapshot = await db.ref(`ebs/${ebName}`).once('value');
+    const snapshot = await db.ref(`ebs/${ticId}`).once('value');
 
     if (snapshot.numChildren() >= 5) {
       try {
@@ -191,16 +189,21 @@ app.post('/api/ebResponse', async (req, res) => {
 
         const drive = google.drive({ version: 'v3', auth });
 
-        const ebFolder = await drive.files.get({ fileId: file.id, fields: 'id, name, parents' });
+        const file = await getEBFile(drive, ticId, true);
+
+        if (!file || !file.id) {
+          console.error(`Could not find the file for the TIC ${ticId} after all the responses were submitted.`);
+          return;
+        }
 
         drive.files.update({
           fileId: file.id,
           addParents: '1iC_W_YwIlUzZU6CC2aFg_qYiGRAWZp4n',
-          removeParents: ebFolder.data.parents?.join(','),
+          removeParents: file.parents?.join(','),
           fields: 'id, name, parents',
         });
       } catch (e) {
-        console.error(`An error occurred while moving the file ${file.name} (${file.id}) to the Done folder:`);
+        console.error(`An error occurred while marking ${ticId} to the Done folder:`);
         console.error(e);
       }
     }
@@ -246,7 +249,7 @@ function getEBFiles(drive: drive_v3.Drive): Promise<drive_v3.Schema$File[] | nul
   });
 }
 
-function getEBFile(drive: drive_v3.Drive, ticId: string): Promise<drive_v3.Schema$File[] | null> {
+function getEBFile(drive: drive_v3.Drive, ticId: string, parents?: boolean): Promise<drive_v3.Schema$File | null> {
   // ticId must have leading zeros so that it is 16 characters long
   ticId = ticId.padStart(16, '0');
 
@@ -255,7 +258,7 @@ function getEBFile(drive: drive_v3.Drive, ticId: string): Promise<drive_v3.Schem
       {
         q: `'13yIRMekWCvwckG5nfvCpS7OJ_vsMa0Td' in parents and mimeType = 'image/jpeg' and name = 'TIC${ticId}.jpg'`,
         pageSize: 1000,
-        fields: 'files(id, webContentLink, name, mimeType)',
+        fields: `files(id, webContentLink, name, mimeType${parents ? ', parents' : ''})`,
       },
       async (err: any, driveRes: any) => {
         if (err) reject(console.error(err));

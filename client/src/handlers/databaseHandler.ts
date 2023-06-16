@@ -344,3 +344,68 @@ export async function getEBResponses() {
     return null;
   }
 }
+
+export async function getMyEBResponse(ticId: string) {
+  const user = auth.currentUser;
+  if (!user) return;
+
+  try {
+    return (await get(ref(db, `ebs/${ticId}/${user.uid}`))).val();
+  } catch {
+    return null;
+  }
+}
+
+export async function setIsEBSaved(ticId: string, saved: boolean) {
+  const user = auth.currentUser;
+  if (!user) return;
+
+  const userId = user.uid;
+
+  try {
+    const r = ref(db, `saved_ebs/${userId}/${ticId}`);
+    const snapshot = await get(r);
+
+    if (saved) {
+      if (!snapshot.exists()) {
+        await set(r, true);
+      }
+    } else {
+      if (snapshot.exists()) {
+        await remove(r);
+      }
+    }
+
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export async function getIsEBSaved(ticId: string) {
+  const user = auth.currentUser;
+  if (!user) return;
+
+  const userId = user.uid;
+
+  try {
+    const r = ref(db, `saved_ebs/${userId}/${ticId}`);
+    const snapshot = await get(r);
+    return snapshot.exists();
+  } catch {
+    return false;
+  }
+}
+
+export async function getSavedEBs() {
+  const user = auth.currentUser;
+  if (!user) return;
+
+  const userId = user.uid;
+
+  try {
+    return (await get(ref(db, `saved_ebs/${userId}`))).val();
+  } catch {
+    return null;
+  }
+}
