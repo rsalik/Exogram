@@ -178,7 +178,7 @@ app.post('/api/ebResponse', async (req, res) => {
 
     const snapshot = await db.ref(`ebs/${ticId}`).once('value');
 
-    if (snapshot.numChildren() >= 5) {
+    if (snapshot.numChildren() >= 3) {
       try {
         const auth = new google.auth.JWT(
           process.env.GOOGLE_CLIENT_EMAIL,

@@ -1,4 +1,4 @@
-import { BackspaceOutlined, Bookmark, BookmarkBorderOutlined, Check, ChevronRight, KeyboardReturn } from '@mui/icons-material';
+import { BackspaceOutlined, Bookmark, BookmarkBorderOutlined, ChevronRight, KeyboardReturn } from '@mui/icons-material';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { UserContext } from '../../App';
 import { getEB, getRandomEB, submitEBResponse } from '../../handlers/functionsHandler';
@@ -104,7 +104,7 @@ export default function EclipsingBinariesPanel(props: { submitSuccess: Function;
     }
 
     setStep(step + 1);
-  }, [step, responses, ticId, fetchEBFile, props]);
+  }, [step, responses, ticId, fetchEBFile, props, navigate]);
 
   const registerNo = useCallback(() => {
     if (step === 0) setResponses({ ...responses, isEB: false });
@@ -206,6 +206,10 @@ export default function EclipsingBinariesPanel(props: { submitSuccess: Function;
         <div className="links">
           <a href={exofopLink(ticId)} className="exofop eb-link" target="_blank" rel="noreferrer">
             Exofop
+          </a>
+          <div className="spacer"></div>
+          <a href={`/charts/${ticId}`} className="exogram eb-link" target="_blank" rel="noreferrer">
+            Lightcurve
           </a>
           <div className="spacer"></div>
           <a href={latteLink(ticId)} className="latte eb-link" target="_blank" rel="noreferrer">

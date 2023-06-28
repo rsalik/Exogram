@@ -1,9 +1,18 @@
 import { Backspace, ChevronRight } from '@mui/icons-material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { TicChartsPanel } from '../components/TicChartsPanel';
+import { useParams } from 'react-router';
 
 export default function TicChartsPage() {
-  const [ticIds, setTicIds] = useState([] as string[]);
+  const urlTics = useParams().ticIds;
+
+  const [ticIds, setTicIds] = useState(
+    urlTics
+      ? urlTics.split('&').filter((t) => {
+          return t.match(/^\d+$/);
+        })
+      : []
+  );
   const [ticTrackInput, setTicTrackInput] = useState('');
 
   function addInputtedTic() {
@@ -15,6 +24,10 @@ export default function TicChartsPage() {
 
     setTicIds([...ticIds, ticTrackInput]);
   }
+
+  useEffect(() => {
+    if (ticIds) window.history.pushState({}, '', '/charts/' + ticIds.join('&'));
+  }, [ticIds]);
 
   return (
     <div className="charts-page">
