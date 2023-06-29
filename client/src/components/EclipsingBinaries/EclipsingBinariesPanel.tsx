@@ -216,7 +216,7 @@ export default function EclipsingBinariesPanel(props: { submitSuccess: Function;
             Lightcurve
           </a>
           <div className="spacer"></div>
-          <a href={`https://fast-lightcurve-inspector.osc-fr1.scalingo.io`} className="exogram eb-link" target="_blank" rel="noreferrer">
+          <a href={`https://fast-lightcurve-inspector.osc-fr1.scalingo.io/${ticId}`} className="exogram eb-link" target="_blank" rel="noreferrer">
             FLI
           </a>
           <div className="spacer"></div>
