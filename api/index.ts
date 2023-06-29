@@ -121,7 +121,9 @@ app.get('/api/randomEB', async (req, res) => {
     snapshot = await ref.once('value');
   } while (snapshot && snapshot.exists());
 
-  res.send(randomFile);
+  const doneFiles = (await getDoneEBFiles(drive)) || [];
+
+  res.send({ file: randomFile, progress: doneFiles.length / (files.length + doneFiles.length) });
 });
 
 app.get('/api/getEB/:ticId', async (req, res) => {
@@ -249,6 +251,24 @@ function getEBFiles(drive: drive_v3.Drive): Promise<drive_v3.Schema$File[] | nul
   });
 }
 
+function getDoneEBFiles(drive: drive_v3.Drive): Promise<drive_v3.Schema$File[] | null> {
+  return new Promise((resolve, reject) => {
+    drive.files.list(
+      {
+        q: `'1iC_W_YwIlUzZU6CC2aFg_qYiGRAWZp4n' in parents and mimeType = 'image/jpeg'`,
+        pageSize: 1000,
+        fields: 'files(id, webContentLink, name, mimeType)',
+      },
+      async (err: any, driveRes: any) => {
+        if (err) reject(console.error(err));
+
+        let files = driveRes.data.files;
+        resolve(files);
+      }
+    );
+  });
+}
+
 function getEBFile(drive: drive_v3.Drive, ticId: string, parents?: boolean): Promise<drive_v3.Schema$File | null> {
   // ticId must have leading zeros so that it is 16 characters long
   ticId = ticId.padStart(16, '0');
@@ -256,7 +276,7 @@ function getEBFile(drive: drive_v3.Drive, ticId: string, parents?: boolean): Pro
   return new Promise((resolve, reject) => {
     drive.files.list(
       {
-        q: `'13yIRMekWCvwckG5nfvCpS7OJ_vsMa0Td' in parents and mimeType = 'image/jpeg' and name = 'TIC${ticId}.jpg'`,
+        q: `('13yIRMekWCvwckG5nfvCpS7OJ_vsMa0Td' in parents or '1iC_W_YwIlUzZU6CC2aFg_qYiGRAWZp4n' in parents) and mimeType = 'image/jpeg' and name = 'TIC${ticId}.jpg'`,
         pageSize: 1000,
         fields: `files(id, webContentLink, name, mimeType${parents ? ', parents' : ''})`,
       },

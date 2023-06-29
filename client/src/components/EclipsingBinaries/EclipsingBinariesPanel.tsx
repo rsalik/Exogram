@@ -26,6 +26,8 @@ export default function EclipsingBinariesPanel(props: { submitSuccess: Function;
   const [noFilesLeft, setNoFilesLeft] = useState(false);
   const [step, setStep] = useState(0);
 
+  const [progress, setProgress] = useState(0);
+
   const [saved, setSaved] = useState(false);
 
   const [responses, setResponses] = useState({ isEB: false, isPeriodCorrect: false, comments: '' });
@@ -59,13 +61,15 @@ export default function EclipsingBinariesPanel(props: { submitSuccess: Function;
     if (props.id) {
       getEB(props.id).then(callback);
     } else {
-      getRandomEB().then((file: any) => {
+      getRandomEB().then(({ file, progress }: any) => {
         if (file) {
           if (file.none) setNoFilesLeft(true);
           else setEBFile(file);
         } else {
           setEBFileFailedLoading(true);
         }
+
+        setProgress(progress);
       });
     }
   }, [props.id]);
@@ -212,6 +216,10 @@ export default function EclipsingBinariesPanel(props: { submitSuccess: Function;
             Lightcurve
           </a>
           <div className="spacer"></div>
+          <a href={`https://fast-lightcurve-inspector.osc-fr1.scalingo.io`} className="exogram eb-link" target="_blank" rel="noreferrer">
+            FLI
+          </a>
+          <div className="spacer"></div>
           <a href={latteLink(ticId)} className="latte eb-link" target="_blank" rel="noreferrer">
             LATTE
           </a>
@@ -323,6 +331,10 @@ export default function EclipsingBinariesPanel(props: { submitSuccess: Function;
             )}
           </div>
         </div>
+      </div>
+      <div className="progress">
+        <strong>Total EB Progress: &nbsp;</strong>{(progress * 100).toFixed(0)}%
+        <progress value={progress} max="1"></progress>
       </div>
     </div>
   );
