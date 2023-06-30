@@ -90,40 +90,35 @@ app.get('/api/randomEB', async (req, res) => {
 
   const drive = google.drive({ version: 'v3', auth });
 
-  const files = await getEBFiles(drive);
+  const tics = await getEBFileNames(drive);
 
-  if (!files) {
-    res.status(500).send({ none: true });
-    return;
-  }
-
-  if (!files.length) {
+  if (!tics || !tics.length) {
     res.status(200).send({ none: true });
     return;
   }
 
-  let randomFile;
+  let randomTic;
 
   let snapshot: any = null;
 
   do {
-    randomFile = files[Math.floor(Math.random() * files.length)];
-
-    // Remove the file from the array
-    files.splice(files.indexOf(randomFile), 1);
-
-    if (!randomFile) {
+    if (!tics.length) {
       res.status(200).send({ none: true });
       return;
     }
 
-    const ref = db.ref(`ebs/${randomFile.name?.split('.')[0]}/${uid}`);
+    randomTic = tics[Math.floor(Math.random() * tics.length)];
+
+    // Remove the file from the array
+    tics.splice(tics.indexOf(randomTic), 1);
+
+    const ref = db.ref(`ebs/${randomTic}/${uid}`);
     snapshot = await ref.once('value');
   } while (snapshot && snapshot.exists());
 
-  const doneFiles = (await getDoneEBFiles(drive)) || [];
+  const doneFiles = (await getDoneEBFileNames(drive)) || [];
 
-  res.send({ file: randomFile, progress: doneFiles.length / (files.length + doneFiles.length) });
+  res.send({ file: await getEBFile(drive, randomTic), progress: doneFiles.length / (tics.length + doneFiles.length) });
 });
 
 app.get('/api/getEB/:ticId', async (req, res) => {
@@ -204,6 +199,18 @@ app.post('/api/ebResponse', async (req, res) => {
           removeParents: file.parents?.join(','),
           fields: 'id, name, parents',
         });
+
+        const activeRef = db.ref(`ebs_active`);
+        const doneRef = db.ref(`ebs_done`);
+
+        const activeSnapshot = await activeRef.once('value');
+        const doneSnapshot = await doneRef.once('value');
+
+        const active = activeSnapshot.val().split(',') || [];
+        const done = doneSnapshot.val().split(',') || [];
+
+        activeRef.set(active.filter((a: string) => a !== ticId).join(','));
+        doneRef.set([...done, ticId].join(','));
       } catch (e) {
         console.error(`An error occurred while marking ${ticId} to the Done folder:`);
         console.error(e);
@@ -233,39 +240,115 @@ function getTicFiles(ticId: string, drive: drive_v3.Drive): Promise<drive_v3.Sch
   });
 }
 
+async function getEBFileNames(drive: drive_v3.Drive): Promise<string[] | null> {
+  return getCachedEBFileNamesOrCreateCache(drive, getEBFiles, 'ebs_active');
+}
+
+async function getDoneEBFileNames(drive: drive_v3.Drive): Promise<string[] | null> {
+  return getCachedEBFileNamesOrCreateCache(drive, getDoneEBFiles, 'ebs_done');
+}
+
+async function getCachedEBFileNamesOrCreateCache(
+  drive: drive_v3.Drive,
+  getFunction: (drive: drive_v3.Drive) => Promise<drive_v3.Schema$File[] | null>,
+  refName: string
+) {
+  const ref = db.ref(refName);
+
+  const snapshot = await ref.once('value');
+  if (!snapshot.exists()) {
+    return await updateEBFileCache(drive, getFunction, refName);
+  }
+
+  const timestamp_ref = db.ref(refName + '_timestamp');
+  const timestamp = await timestamp_ref.once('value');
+
+  if (!timestamp.exists() || Date.now() - timestamp.val() > 12 * 60 * 60 * 1000 /* 12 hours */) {
+    return await updateEBFileCache(drive, getFunction, refName);
+  }
+
+  const val = snapshot.val();
+  if (val === "") return [];
+  return val.split(',');
+}
+
+async function updateEBFileCache(
+  drive: drive_v3.Drive,
+  getFunction: (drive: drive_v3.Drive) => Promise<drive_v3.Schema$File[] | null>,
+  refName: string
+) {
+  const names = (await getFunction(drive))?.map((file) => parseInt(file.name?.split('.')[0].replace('TIC', '') || '-1').toString());
+
+  const ref = db.ref(refName);
+  ref.set(names?.join(','));
+
+  const timestamp_ref = db.ref(refName + '_timestamp');
+  timestamp_ref.set(Date.now());
+
+  return names;
+}
+
 function getEBFiles(drive: drive_v3.Drive): Promise<drive_v3.Schema$File[] | null> {
   return new Promise((resolve, reject) => {
-    drive.files.list(
-      {
-        q: `'13yIRMekWCvwckG5nfvCpS7OJ_vsMa0Td' in parents and mimeType = 'image/jpeg'`,
-        pageSize: 1000,
-        fields: 'files(id, webContentLink, name, mimeType)',
-      },
-      async (err: any, driveRes: any) => {
-        if (err) reject(console.error(err));
+    let nextPageToken: string | undefined = undefined;
+    let files: drive_v3.Schema$File[] = [];
 
-        let files = driveRes.data.files;
-        resolve(files);
-      }
-    );
+    async function getFiles() {
+      drive.files.list(
+        {
+          q: `'13yIRMekWCvwckG5nfvCpS7OJ_vsMa0Td' in parents and mimeType = 'image/jpeg'`,
+          pageSize: 1000,
+          fields: 'nextPageToken, files(id, webContentLink, name, mimeType)',
+          pageToken: nextPageToken,
+        },
+        async (err: any, driveRes: any) => {
+          if (err) reject(console.error(err));
+
+          nextPageToken = driveRes.data.nextPageToken;
+          files = [...files, ...driveRes.data.files];
+
+          if (nextPageToken) {
+            getFiles();
+          } else {
+            resolve(files);
+          }
+        }
+      );
+    }
+
+    getFiles();
   });
 }
 
 function getDoneEBFiles(drive: drive_v3.Drive): Promise<drive_v3.Schema$File[] | null> {
   return new Promise((resolve, reject) => {
-    drive.files.list(
-      {
-        q: `'1iC_W_YwIlUzZU6CC2aFg_qYiGRAWZp4n' in parents and mimeType = 'image/jpeg'`,
-        pageSize: 1000,
-        fields: 'files(id, webContentLink, name, mimeType)',
-      },
-      async (err: any, driveRes: any) => {
-        if (err) reject(console.error(err));
+    let nextPageToken: string | undefined = undefined;
+    let files: drive_v3.Schema$File[] = [];
 
-        let files = driveRes.data.files;
-        resolve(files);
-      }
-    );
+    async function getFiles() {
+      drive.files.list(
+        {
+          q: `'1iC_W_YwIlUzZU6CC2aFg_qYiGRAWZp4n' in parents and mimeType = 'image/jpeg'`,
+          pageSize: 1000,
+          fields: 'nextPageToken, files(id, webContentLink, name, mimeType)',
+          pageToken: nextPageToken,
+        },
+        async (err: any, driveRes: any) => {
+          if (err) reject(console.error(err));
+
+          nextPageToken = driveRes.data.nextPageToken;
+          files = [...files, ...driveRes.data.files];
+
+          if (nextPageToken) {
+            getFiles();
+          } else {
+            resolve(files);
+          }
+        }
+      );
+    }
+
+    getFiles();
   });
 }
 

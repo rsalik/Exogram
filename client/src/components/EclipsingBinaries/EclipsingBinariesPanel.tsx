@@ -61,13 +61,10 @@ export default function EclipsingBinariesPanel(props: { submitSuccess: Function;
     if (props.id) {
       getEB(props.id).then(callback);
     } else {
-      getRandomEB().then(({ file, progress }: any) => {
-        if (file) {
-          if (file.none) setNoFilesLeft(true);
-          else setEBFile(file);
-        } else {
-          setEBFileFailedLoading(true);
-        }
+      getRandomEB().then(({ none, file, progress }: any) => {
+        if (none) setNoFilesLeft(true);
+        else if (file) setEBFile(file);
+        else setEBFileFailedLoading(true);
 
         setProgress(progress);
       });
@@ -187,7 +184,7 @@ export default function EclipsingBinariesPanel(props: { submitSuccess: Function;
   }
 
   if (!ebFile) {
-    return <InfoPanel title={'Loading...'} />;
+    return <InfoPanel title={'Loading...'} message={'This may take some time if the cache has expired.'} />;
   }
 
   return (
@@ -216,7 +213,12 @@ export default function EclipsingBinariesPanel(props: { submitSuccess: Function;
             Lightcurve
           </a>
           <div className="spacer"></div>
-          <a href={`https://fast-lightcurve-inspector.osc-fr1.scalingo.io/${ticId}`} className="exogram eb-link" target="_blank" rel="noreferrer">
+          <a
+            href={`https://fast-lightcurve-inspector.osc-fr1.scalingo.io/${ticId}`}
+            className="exogram eb-link"
+            target="_blank"
+            rel="noreferrer"
+          >
             FLI
           </a>
           <div className="spacer"></div>
@@ -333,8 +335,8 @@ export default function EclipsingBinariesPanel(props: { submitSuccess: Function;
         </div>
       </div>
       <div className="progress">
-        <strong>Total EB Progress: &nbsp;</strong>{(progress * 100).toFixed(0)}%
-        <progress value={progress} max="1"></progress>
+        <strong>Total EB Progress: &nbsp;</strong>
+        {(progress * 100).toFixed(0)}%<progress value={progress} max="1"></progress>
       </div>
     </div>
   );
