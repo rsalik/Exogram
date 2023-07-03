@@ -257,36 +257,38 @@ async function getCachedEBFileNamesOrCreateCache(
 
   const snapshot = await ref.once('value');
   if (!snapshot.exists()) {
-    return await updateEBFileCache(drive, getFunction, refName);
+    return null;
+    //return await updateEBFileCache(drive, getFunction, refName);
   }
 
-  const timestamp_ref = db.ref(refName + '_timestamp');
-  const timestamp = await timestamp_ref.once('value');
+  // Vercel Function will run for max 10s, and this function would take ~1min to run
+  // const timestamp_ref = db.ref(refName + '_timestamp');
+  // const timestamp = await timestamp_ref.once('value');
 
-  if (!timestamp.exists() || Date.now() - timestamp.val() > 12 * 60 * 60 * 1000 /* 12 hours */) {
-    return await updateEBFileCache(drive, getFunction, refName);
-  }
+  // if (!timestamp.exists() || Date.now() - timestamp.val() > 12 * 60 * 60 * 1000 /* 12 hours */) {
+  //   return await updateEBFileCache(drive, getFunction, refName);
+  // }
 
   const val = snapshot.val();
   if (val === "") return [];
   return val.split(',');
 }
 
-async function updateEBFileCache(
-  drive: drive_v3.Drive,
-  getFunction: (drive: drive_v3.Drive) => Promise<drive_v3.Schema$File[] | null>,
-  refName: string
-) {
-  const names = (await getFunction(drive))?.map((file) => parseInt(file.name?.split('.')[0].replace('TIC', '') || '-1').toString());
+// async function updateEBFileCache(
+//   drive: drive_v3.Drive,
+//   getFunction: (drive: drive_v3.Drive) => Promise<drive_v3.Schema$File[] | null>,
+//   refName: string
+// ) {
+//   const names = (await getFunction(drive))?.map((file) => parseInt(file.name?.split('.')[0].replace('TIC', '') || '-1').toString());
 
-  const ref = db.ref(refName);
-  ref.set(names?.join(','));
+//   const ref = db.ref(refName);
+//   ref.set(names?.join(','));
 
-  const timestamp_ref = db.ref(refName + '_timestamp');
-  timestamp_ref.set(Date.now());
+//   const timestamp_ref = db.ref(refName + '_timestamp');
+//   timestamp_ref.set(Date.now());
 
-  return names;
-}
+//   return names;
+// }
 
 function getEBFiles(drive: drive_v3.Drive): Promise<drive_v3.Schema$File[] | null> {
   return new Promise((resolve, reject) => {
