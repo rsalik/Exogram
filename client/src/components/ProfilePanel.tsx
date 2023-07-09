@@ -5,7 +5,6 @@ import { auth } from '../handlers/firebase';
 import InfoPanel from './InfoPanel';
 import MyDispositionsTable from './MyDispositionsTable';
 import TicTable from './TicTable';
-import SavedEBsTable from './SavedEBsTable';
 
 export default function ProfilePanel(props: { user: User }) {
   const tics = useTicList();
@@ -13,8 +12,6 @@ export default function ProfilePanel(props: { user: User }) {
 
   const [ticsWithoutUserDisposition, setTicsWithoutUserDisposition] = useState<any[]>([]);
   const [dispositionCount, setDispositionCount] = useState(0);
-
-  const [savedEBs, setSavedEBs] = useState<any[]>([]);
 
   const [isSuperuser, setIsSuperuser] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -24,12 +21,6 @@ export default function ProfilePanel(props: { user: User }) {
   useEffect(() => {
     amISuperuser().then(setIsSuperuser);
     amIAdmin().then(setIsAdmin);
-  }, []);
-
-  useEffect(() => {
-    getSavedEBs().then((val) => {
-      setSavedEBs(Object.keys(val));
-    });
   }, []);
 
   useEffect(() => {
@@ -96,10 +87,6 @@ export default function ProfilePanel(props: { user: User }) {
             <div className="name">Need Attention</div>
             <div className="value">{ticsWithoutUserDisposition.length}</div>
           </div>
-          <div className={`stat clickable${activeTable === 'ebs' ? ' active' : ''}`} onClick={() => setActiveTable('ebs')}>
-            <div className="name">Saved EBs</div>
-            <div className="value">{savedEBs.length}</div>
-          </div>
           <div className="stat">
             <div className="name">Email</div>
             <div className="value">{props.user.email}</div>
@@ -108,11 +95,10 @@ export default function ProfilePanel(props: { user: User }) {
       </div>
       {activeTable === 'attention' && <TicTable title="Needs Your Attention" ticList={ticsWithoutUserDisposition} />}
       {activeTable === 'dispositions' && <MyDispositionsTable />}
-      {activeTable === 'ebs' && <SavedEBsTable ticIds={savedEBs} />}
       {activeTable === '' && (
         <InfoPanel
           title="View Table"
-          message={`Click "Dispositions", "Need Attention", or "Saved EBs" to view a table of those targets.`}
+          message={`Click "Dispositions" or "Need Attention" to view a table of those targets.`}
         />
       )}
     </>

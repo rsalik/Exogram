@@ -23,6 +23,7 @@ const quickAdds = [
 export default function EclipsingBinariesPanel(props: { submitSuccess: Function; id?: string }) {
   const [ebFile, setEBFile] = useState<any>(null);
   const [ebFileFailedLoading, setEBFileFailedLoading] = useState(false);
+  const [unauthorized, setUnauthorized] = useState(false);
   const [noFilesLeft, setNoFilesLeft] = useState(false);
   const [step, setStep] = useState(0);
 
@@ -61,7 +62,8 @@ export default function EclipsingBinariesPanel(props: { submitSuccess: Function;
     if (props.id) {
       getEB(props.id).then(callback);
     } else {
-      getRandomEB().then(({ none, file, progress }: any) => {
+      getRandomEB().then(({ none, file, progress, unauthorized }: any) => {
+        if (unauthorized) setUnauthorized(true);
         if (none) setNoFilesLeft(true);
         else if (file) setEBFile(file);
         else setEBFileFailedLoading(true);
@@ -164,6 +166,10 @@ export default function EclipsingBinariesPanel(props: { submitSuccess: Function;
 
   if (!user) {
     return <ErrorPanel title="Not Authenticated" message="You must be logged in to view this page." />;
+  }
+
+  if (unauthorized) {
+    return <ErrorPanel title="No Access" message="You must be a SuperUser to view this page." />;
   }
 
   if (ebFileFailedLoading) {

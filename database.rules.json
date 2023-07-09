@@ -52,6 +52,22 @@
       ".read": true,
       ".write": "auth.uid !== null",
       ".validate": "newData.isNumber()"
+    },
+    "ebs":
+    {
+      ".read": "auth.token.admin === true",
+      "$tic_id": {
+        "$user_id": {
+          ".read": "auth.uid === $user_id",
+          ".write": "auth.uid === $user_id"
+        }
+      }
+    },
+    "saved_ebs": {
+      ".read": true,
+      "$user_id": {
+        ".write": "auth.uid === $user_id"
+      }
     }
   }
 }

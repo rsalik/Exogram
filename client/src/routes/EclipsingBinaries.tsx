@@ -1,8 +1,9 @@
-import { Check, CheckCircle, Search } from '@mui/icons-material';
+import { Bookmark, Check, CheckCircle, Search } from '@mui/icons-material';
 import EclipsingBinariesPanel from '../components/EclipsingBinaries/EclipsingBinariesPanel';
 import EBLookupPanel from '../components/EclipsingBinaries/EBLookupPanel';
 import { useParams } from 'react-router';
 import { useState } from 'react';
+import SavedEBs from '../components/EclipsingBinaries/SavedEBs';
 
 export default function EclipsingBinaries() {
   const { ticId } = useParams();
@@ -49,6 +50,15 @@ export default function EclipsingBinaries() {
     );
   }
 
+  if (window.location.pathname.includes('/ebs/saved')) {
+    return (
+      <div className="ebs">
+        {successEle}
+        <SavedEBs />
+      </div>
+    );
+  }
+
   return (
     <div className="ebs home">
       {successEle}
@@ -69,6 +79,10 @@ export default function EclipsingBinaries() {
           <div className="desc">Search for a specific target.</div>
         </a>
       </div>
+      <a className="saved" href="/ebs/saved">
+        <Bookmark font-size="inherit" />
+        &nbsp;<span>View Saved Targets</span>
+      </a>
     </div>
   );
 }

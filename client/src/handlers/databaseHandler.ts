@@ -133,6 +133,14 @@ export async function getUsername(uid: string) {
   }
 }
 
+export async function getUserPhoto(uid: string) {
+  try {
+    return (await get(ref(db, `users/${uid}/pfp`))).val();
+  } catch {
+    return null;
+  }
+}
+
 export async function getAllUsernames(userIds: any[]) {
   const usernames = {} as { [key: string]: any };
   const promises = [];
@@ -315,6 +323,7 @@ export async function writeUserData() {
   try {
     await set(ref(db, `users/${userId}/email`), user.email);
     await set(ref(db, `users/${userId}/name`), user.displayName);
+    await set(ref(db, `users/${userId}/pfp`), user.photoURL);
   } catch {}
 }
 
@@ -398,13 +407,10 @@ export async function getIsEBSaved(ticId: string) {
 }
 
 export async function getSavedEBs() {
-  const user = auth.currentUser;
-  if (!user) return;
-
-  const userId = user.uid;
-
   try {
-    return (await get(ref(db, `saved_ebs/${userId}`))).val();
+    const res = (await get(ref(db, `saved_ebs`))).val();
+
+    return Object.fromEntries(Object.entries(res).map(([key, value]: [any, any]) => [key, Object.keys(value)]));
   } catch {
     return null;
   }

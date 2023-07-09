@@ -623,4 +623,137 @@
 			}
 		}
 	}
+
+	.saved {
+		font-size: 1.5em;
+
+		display: inline-flex;
+		align-items: center;
+
+		margin: 0.5em;
+		padding: 0.5em 1em;
+
+		cursor: pointer;
+		transition: all $transition;
+
+		color: $primary;
+		border: 3px solid $primary;
+		border-radius: $border-radius;
+
+		&:hover {
+			color: $bkg;
+			background: $primary;
+		}
+
+		svg {
+			font-size: 1.5em;
+		}
+	}
+
+	.saved-panel {
+		@include rounded-panel();
+
+		.btn {
+			font-size: 1.5em;
+
+			flex-grow: 1;
+
+			margin: 0 0.1em;
+			padding: 0.2em 0.4em;
+
+			transition: all $transition;
+
+			border: 2px solid $white;
+			border-radius: $border-radius;
+
+			&:hover,
+			&.active {
+				color: $bkg;
+				border-color: $primary;
+				background: $primary;
+			}
+		}
+	}
+
+	.photos {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		width: 100%;
+	}
+
+	.user-photo {
+		width: 2em;
+		height: 2em;
+		margin: 0 0.1em;
+
+		border-radius: 50%;
+	}
+
+	th {
+		z-index: 10;
+	}
+
+	.photo {
+		position: relative;
+
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		.hover {
+			position: absolute;
+			z-index: 100;
+			bottom: 2.3em;
+			// center horizontally
+			left: 50%;
+
+			max-width: 20em;
+			margin: 0 auto;
+			padding: 0.5em 0.75em;
+
+			transform: translateX(-50%);
+			white-space: nowrap;
+
+			border-radius: $border-radius;
+
+			@include blurred-bkg($sec2);
+
+			// tooltip pointer
+			&::before {
+				position: absolute;
+				bottom: -0.5em;
+				// center horizontally
+				left: 50%;
+
+				width: 0;
+				height: 0;
+
+				content: '';
+				transform: translateX(-50%);
+
+				border-width: 0.5em 0.5em 0 0.5em;
+				border-style: solid;
+				border-color: rgba($sec2, 0.8) transparent transparent transparent;
+
+				backdrop-filter: blur(10px) saturate(125%);
+			}
+		}
+	}
+
+	div.user-photo {
+		font-weight: $fw-bold;
+
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		color: $bkg;
+		background: $secondary;
+
+		span {
+			margin-bottom: -0.1em;
+		}
+	}
 }

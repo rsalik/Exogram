@@ -21,6 +21,10 @@ export async function getRandomEB() {
       },
     });
 
+    if (response.status === 401) {
+      return { unauthorized: true };
+    }
+
     if (response.status !== 200) {
       return null;
     }

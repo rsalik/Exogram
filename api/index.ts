@@ -38,7 +38,13 @@ async function decodeIDToken(req: Request, _res: Response, next: NextFunction) {
 
     try {
       const decodedToken = await admin.auth().verifyIdToken(idToken);
-      (req as any).currentUser = decodedToken;
+
+      let superuser = false;
+
+      let s = await db.ref(`users/${decodedToken.uid}/superuser`).get();
+      superuser = s.exists() && s.val();
+
+      (req as any).currentUser = { ...decodedToken, superuser };
     } catch {}
   }
 
@@ -77,7 +83,7 @@ app.get('/api/getTicFiles/:ticId', async (req, res) => {
 app.get('/api/randomEB', async (req, res) => {
   const currentUser = (req as any).currentUser;
 
-  if (!currentUser) {
+  if (!currentUser || !currentUser.superuser) {
     res.status(401).send('Unauthorized');
     return;
   }
@@ -270,7 +276,7 @@ async function getCachedEBFileNamesOrCreateCache(
   // }
 
   const val = snapshot.val();
-  if (val === "") return [];
+  if (val === '') return [];
   return val.split(',');
 }
 
