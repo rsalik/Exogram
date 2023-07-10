@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getMyEBResponse, getUserPhoto, getUsername } from '../handlers/databaseHandler';
+import InfoPanel from './InfoPanel';
 
 export default function SavedEBsTable(props: { ebs: { ticId: string; uids: string[] }[]; showUsers: boolean }) {
   const [ebs, setEbs] = useState<any[]>([]);
@@ -10,6 +11,8 @@ export default function SavedEBsTable(props: { ebs: { ticId: string; uids: strin
       let arr = [] as any[];
       let promises = [];
       let uniqueUids = new Set<string>();
+
+      if (!props.ebs) return;
 
       for (let obj of props.ebs) {
         for (let uid of obj.uids) {
@@ -63,6 +66,8 @@ export default function SavedEBsTable(props: { ebs: { ticId: string; uids: strin
 
     getEBs();
   }, [props]);
+
+  if (!props.ebs) return <InfoPanel title="This Table Is Empty" />;
 
   return (
     <div className="tic-table">
