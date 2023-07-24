@@ -415,3 +415,11 @@ export async function getSavedEBs() {
     return null;
   }
 }
+
+export async function getEBDispCounts() {
+  try {
+    return (await get(ref(db, `eb_disp_count`))).val();
+  } catch {
+    return null;
+  }
+}

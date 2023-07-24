@@ -28,6 +28,7 @@ export default function EclipsingBinariesPanel(props: { submitSuccess: Function;
   const [step, setStep] = useState(0);
 
   const [progress, setProgress] = useState(0);
+  const [userProgress, setUserProgress] = useState(0);
 
   const [saved, setSaved] = useState(false);
 
@@ -62,13 +63,14 @@ export default function EclipsingBinariesPanel(props: { submitSuccess: Function;
     if (props.id) {
       getEB(props.id).then(callback);
     } else {
-      getRandomEB().then(({ none, file, progress, unauthorized }: any) => {
+      getRandomEB().then(({ none, file, progress, userProgress, unauthorized }: any) => {
         if (unauthorized) setUnauthorized(true);
         if (none) setNoFilesLeft(true);
         else if (file) setEBFile(file);
         else setEBFileFailedLoading(true);
 
         setProgress(progress);
+        setUserProgress(userProgress);
       });
     }
   }, [props.id]);
@@ -340,9 +342,13 @@ export default function EclipsingBinariesPanel(props: { submitSuccess: Function;
           </div>
         </div>
       </div>
+      <div className="user progress">
+        <strong>My Progress: &nbsp;</strong>
+        {(userProgress * 100).toFixed(2)}%<progress value={userProgress} max="1"></progress>
+      </div>
       <div className="progress">
         <strong>Total EB Progress: &nbsp;</strong>
-        {(progress * 100).toFixed(0)}%<progress value={progress} max="1"></progress>
+        {(progress * 100).toFixed(2)}%<progress value={progress} max="1"></progress>
       </div>
     </div>
   );

@@ -135,7 +135,9 @@ function UserPhoto(props: { photo: string | null; name: string }) {
       {props.photo ? (
         <img className="user-photo" referrerPolicy="no-referrer" src={props.photo} alt={props.name} />
       ) : (
-        <div className="user-photo"><span>{props.name[0]}</span></div>
+        <div className="user-photo">
+          <span>{props.name[0]}</span>
+        </div>
       )}
     </div>
   );

@@ -4,6 +4,7 @@ import EBLookupPanel from '../components/EclipsingBinaries/EBLookupPanel';
 import { useParams } from 'react-router';
 import { useState } from 'react';
 import SavedEBs from '../components/EclipsingBinaries/SavedEBs';
+import EBLeaderboard from '../components/EclipsingBinaries/EBLeaderboard';
 
 export default function EclipsingBinaries() {
   const { ticId } = useParams();
@@ -83,6 +84,7 @@ export default function EclipsingBinaries() {
         <Bookmark font-size="inherit" />
         &nbsp;<span>View Saved Targets</span>
       </a>
+      <EBLeaderboard />
     </div>
   );
 }

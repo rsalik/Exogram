@@ -605,6 +605,18 @@
 		border-radius: $border-radius;
 		background: $pri2;
 
+
+		&.user {
+			bottom: 3.2em;
+
+			progress {
+				&[value]::-webkit-progress-value {
+					border-radius: $border-radius;
+					background-color: $secondary;
+				}
+			}
+		}
+
 		progress {
 			height: 1.2em;
 			margin-left: 0.7em;
@@ -755,5 +767,9 @@
 		span {
 			margin-bottom: -0.1em;
 		}
+	}
+
+	.ebs-table-panel {
+		@include rounded-panel($sec2);
 	}
 }
