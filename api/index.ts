@@ -123,8 +123,9 @@ app.get('/api/randomEB', async (req, res) => {
   } while (snapshot && snapshot.exists());
 
   const doneFiles = (await getDoneEBFileNames(drive)) || [];
+  const userDispCount = (await db.ref(`eb_disp_count/${uid}`).get()).val() || 0;
 
-  res.send({ file: await getEBFile(drive, randomTic), progress: doneFiles.length / (tics.length + doneFiles.length) });
+  res.send({ file: await getEBFile(drive, randomTic), progress: doneFiles.length / (tics.length + doneFiles.length), userProgress: userDispCount / (tics.length + doneFiles.length) });
 });
 
 app.get('/api/getEB/:ticId', async (req, res) => {
@@ -178,6 +179,10 @@ app.post('/api/ebResponse', async (req, res) => {
     await ref.set(response);
 
     res.send({ success: true });
+    const count = await db.ref(`eb_disp_count/${uid}`).get();
+
+    if (count.exists()) db.ref(`eb_disp_count/${uid}`).set(count.val() + 1);
+    else db.ref(`eb_disp_count/${uid}`).set(1);
 
     const snapshot = await db.ref(`ebs/${ticId}`).once('value');
 
