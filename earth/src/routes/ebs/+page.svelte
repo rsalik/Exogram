@@ -20,6 +20,10 @@
   });
 </script>
 
+<svelte:head>
+  <title>Exogram - Eclipsing Binaries</title>
+</svelte:head>
+
 <div class="left">
   <div class="title">Eclipsing Binaries</div>
   <div class="links">
@@ -54,73 +58,73 @@
 
 <style lang="scss">
   .left {
-  	float: left;
+    float: left;
 
-  	width: 49%;
+    width: 49%;
   }
 
   .right {
-  	float: right;
+    float: right;
 
-  	width: 49%;
+    width: 49%;
   }
 
   .links {
-  	a {
-  		font-size: 2.5em;
+    a {
+      font-size: 2.5em;
 
-  		display: flex;
-  		align-items: center;
+      display: flex;
+      align-items: center;
 
-  		box-sizing: border-box;
-  		width: 100%;
-  		margin: 0.5rem 0;
-  		padding: 1.5rem 0.5em;
+      box-sizing: border-box;
+      width: 100%;
+      margin: 0.5rem 0;
+      padding: 1.5rem 0.5em;
 
-  		transition: $transition;
+      transition: $transition;
 
-  		border: solid 5px;
-  		border-radius: $border-radius;
+      border: solid 5px;
+      border-radius: $border-radius;
 
-  		&:hover {
-  			color: $bkg !important;
-  		}
+      &:hover {
+        color: $bkg !important;
+      }
 
-  		&.validate {
-  			color: $primary;
-  			border-color: $primary;
+      &.validate {
+        color: $primary;
+        border-color: $primary;
 
-  			&:hover {
-  				background: $primary;
-  			}
-  		}
-  		&.search {
-  			color: $secondary;
-  			border-color: $secondary;
+        &:hover {
+          background: $primary;
+        }
+      }
+      &.search {
+        color: $secondary;
+        border-color: $secondary;
 
-  			&:hover {
-  				background: $secondary;
-  			}
-  		}
+        &:hover {
+          background: $secondary;
+        }
+      }
 
-  		&.starred {
-  			color: $tertiary;
-  			border-color: $tertiary;
+      &.starred {
+        color: $tertiary;
+        border-color: $tertiary;
 
-  			&:hover {
-  				background: $tertiary;
-  			}
-  		}
+        &:hover {
+          background: $tertiary;
+        }
+      }
 
-  		.icon {
-  			font-size: 1.5em;
+      .icon {
+        font-size: 1.5em;
 
-  			display: flex;
-  			align-items: center;
-  			justify-content: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
-  			margin-right: 0.5em;
-  		}
-  	}
+        margin-right: 0.5em;
+      }
+    }
   }
 </style>

@@ -18,6 +18,10 @@
     $navigating && $navigating.to?.url.pathname.startsWith("/ebs/lookup");
 </script>
 
+<svelte:head>
+  <title>Exogram - Starred EBs</title>
+</svelte:head>
+
 {#if loading}
   <Loading />
 {:else}

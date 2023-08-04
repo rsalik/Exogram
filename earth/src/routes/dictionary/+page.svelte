@@ -5,6 +5,10 @@
   export let data;
 </script>
 
+<svelte:head>
+  <title>Exogram - Dictionary</title>
+</svelte:head>
+
 <div class="title">Dictionary</div>
 <div class="terms">
   {#each Object.keys(data.dictionary) as term}
@@ -30,40 +34,40 @@
 
 <style lang="scss">
   .terms {
-  	display: grid;
+    display: grid;
 
-  	grid-template-columns: auto auto auto;
-  	gap: 1em;
+    grid-template-columns: auto auto auto;
+    gap: 1em;
   }
 
   .term {
-  	font-size: 1.2em;
+    font-size: 1.2em;
 
-  	display: flex;
-  	align-items: center;
-  	flex-direction: column;
-  	justify-content: center;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
 
-  	box-sizing: border-box;
-  	height: 12rem;
-  	padding: 2rem;
+    box-sizing: border-box;
+    height: 12rem;
+    padding: 2rem;
 
-  	transition: $transition;
+    transition: $transition;
 
-  	border-radius: $border-radius;
-  	background: d($primary, 7);
+    border-radius: $border-radius;
+    background: d($primary, 7);
 
-  	&:hover {
-  		background: d($primary, 5);
-  	}
+    &:hover {
+      background: d($primary, 5);
+    }
 
-  	.name {
-  		font-size: 1.8em;
-  		font-weight: $fw-bold;
-  	}
+    .name {
+      font-size: 1.8em;
+      font-weight: $fw-bold;
+    }
 
-  	.definition {
-  		text-align: center;
-  	}
+    .definition {
+      text-align: center;
+    }
   }
 </style>

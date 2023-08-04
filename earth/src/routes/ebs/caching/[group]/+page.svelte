@@ -23,6 +23,10 @@
   }
 </script>
 
+<svelte:head>
+  <title>Exogram - Caching EB Group</title>
+</svelte:head>
+
 <div class="panel semi">
   Loading EB...
   <div class="sub">Please allow a minute for the cache to update</div>

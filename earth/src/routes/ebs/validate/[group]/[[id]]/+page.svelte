@@ -180,6 +180,10 @@
 
 <svelte:window on:keydown={handleKeydown} />
 
+<svelte:head>
+  <title>Exogram - {data.group.name} EB Validation</title>
+</svelte:head>
+
 {#if data.userComplete}
   <div class="panel semi green">
     Out of EBs!

@@ -2,6 +2,10 @@
   export let data;
 </script>
 
+<svelte:head>
+  <title>Exogram - EB Validation Home</title>
+</svelte:head>
+
 <div class="title">EB Validation</div>
 <div class="sub">Select a group to begin validating</div>
 

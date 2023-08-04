@@ -10,6 +10,10 @@
   });
 </script>
 
+<svelte:head>
+  <title>Exogram - Sign In</title>
+</svelte:head>
+
 <div class="panel">
   <div class="title">Sign In</div>
   <SignIn />
