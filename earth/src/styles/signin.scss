@@ -1,0 +1,48 @@
+@import "_values";
+
+.firebaseui-container {
+  margin-top: 1em;
+  padding: 1em 0;
+
+  border-radius: $border-radius !important;
+  background: d($primary, 5) !important;
+  box-shadow: none;
+
+  * {
+    color: $color !important;
+  }
+
+  .mdl-button {
+    color: $color;
+    background: d($primary, 4);
+
+    &:hover {
+      background: d($primary, 3);
+    }
+
+    &.firebaseui-idp-google .firebaseui-idp-text {
+      color: black !important;
+    }
+
+    &.mdl-button--colored {
+      color: $bkg !important;
+      background: $primary !important;
+    }
+  }
+
+  .firebaseui-id-secondary-link {
+    color: $color !important;
+  }
+
+  input {
+    border-color: d($primary, 3) !important;
+  }
+
+  label {
+    color: $primary !important;
+
+    &::after {
+      background-color: $primary !important;
+    }
+  }
+}

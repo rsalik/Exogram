@@ -1,0 +1,92 @@
+{
+	"rules": {
+		"tics": {
+			".read": true,
+			"$tic_id": {
+				".write": false,
+				"dispositionCount": {
+					".write": "auth.uid !== null",
+					".validate": "newData.isNumber()"
+				}
+			}
+		},
+		"dispositions": {
+			"$tic_id": {
+				".read": "root.child('ticGroups/' + root.child('tics/' + $tic_id + '/group').val() + '/public').val() === true || root.child('users/' + auth.uid + '/superuser').val() === true"
+			}
+		},
+		"users": {
+			".read": "auth.token.admin === true",
+			".write": "auth.token.admin === true",
+			"$user_id": {
+				"email": {
+					".read": "auth.token.admin === true",
+					".write": "auth.uid === $user_id"
+				},
+				"name": {
+					".read": true,
+					".write": "auth.uid === $user_id"
+				},
+				"pfp": {
+					".read": true,
+					".write": "auth.uid === $user_id"
+				},
+				"superuser": {
+					".read": true,
+					".write": "auth.token.admin === true"
+				}
+			}
+		},
+		"dictionary": {
+			".read": true,
+			".write": false
+		},
+		"ticGroups": {
+			".read": true,
+			".write": "auth.token.admin === true"
+		},
+		"ticIds": {
+			".read": true
+		},
+		"ticsLastModified": {
+			".read": true,
+			".write": "auth.uid !== null",
+			".validate": "newData.isNumber()"
+		},
+		"ebs": {
+			".read": "auth.token.admin === true",
+			"$tic_id": {
+				"$user_id": {
+					".read": "auth.uid === $user_id",
+					".write": "auth.uid === $user_id"
+				}
+			}
+		},
+		"savedEBs": {
+			".read": true,
+			"$group": {
+				"$user_id": {
+					".write": "auth.uid === $user_id"
+				}
+			}
+		},
+		"ebDispCount": {
+			".read": true,
+			".write": false
+		},
+		"ebGroups": {
+			".read": true,
+			".write": false
+		},
+		"notifications": {
+			"$user_id": {
+				".read": "auth.uid === $user_id",
+				".write": false,
+				"read": {
+					".write": true,
+					".validate": "newData.isNumber()"
+				}
+			}
+		}
+	}
+}

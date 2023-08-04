@@ -1,0 +1,48 @@
+@use "sass:list";
+
+$bkg: #131c24;
+
+$primary: #61dafb;
+$secondary: #fc9f61;
+$tertiary: #fff2d0;
+$quaternary: #fb61bd;
+$green: #74ff45;
+
+$color: #ebf8f8;
+$red: #f64961;
+
+$font: "Nunito", sans-serif;
+$mono: "Jetbrains Mono", monospace;
+
+$fw-light: 200;
+$fw-reg: 400;
+$fw-semi: 600;
+$fw-bold: 775;
+$fw-black: 850;
+
+$border-radius: 1rem;
+$border-radius-small: calc($border-radius / 3);
+
+$box-shadow: 0 0.1em 1rem rgba(0, 0.2, 0, 0.5);
+
+$transition: all 0.2s ease-in-out;
+
+$header-height: 6.6rem;
+
+@function l($c, $a: 1) {
+  $l: (90%, 80%, 70%, 60%, 50%, 30%);
+
+  @return mix($c, $color, list.nth($l, $a));
+}
+
+@function d($c, $a: 1) {
+  $d: (80%, 70%, 40%, 30%, 20%, 15%, 10%, 5%);
+
+  @return mix($c, $bkg, list.nth($d, $a));
+}
+
+@function a($c, $a: 1) {
+  $v: (10%, 15%, 20%, 30%, 50%, 70%);
+
+  @return rgba($c, list.nth($v, $a));
+}

@@ -1,0 +1,13 @@
+{
+  "name": "exogram",
+  "version": "2.0",
+  "author": "Ryan Salik",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "earth",
+    "moon",
+    "sun"
+  ],
+  "packageManager": "yarn@3.6.1"
+}

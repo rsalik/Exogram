@@ -1,0 +1,63 @@
+@import "values";
+
+@mixin btn($c: $primary) {
+  background: $c;
+
+  &:hover {
+    background: l($c, 3);
+  }
+
+  &:active {
+    background: d($c);
+  }
+}
+
+@mixin blur($c: $primary, $use-border: true) {
+  @supports not (backdrop-filter: none) {
+    background: rgba($c, 0.95);
+  }
+
+  @supports (backdrop-filter: none) or (-webkit-backdrop-filter: none) {
+    background: rgba($c, 0.75);
+
+    backdrop-filter: blur(20px) saturate(125%) brightness(0.9);
+    -webkit-backdrop-filter: blur(20px) saturate(125%) brightness(0.9);
+
+    @if $use-border {
+      box-sizing: border-box;
+
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+  }
+}
+
+%floating-button {
+  font-size: 2.5rem;
+
+  position: fixed;
+  z-index: 1001;
+  right: 0.5em;
+  bottom: 0.5em;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+  width: 2em;
+  height: 2em;
+
+  cursor: pointer;
+  transition: $transition;
+
+  color: $bkg;
+  border: none;
+  border-radius: 50%;
+  box-shadow: $box-shadow;
+
+  @include btn($primary);
+
+  &:active {
+    box-shadow: 0 0.1em 0.3rem rgba(0, 0.2, 0, 0.5);
+  }
+}
