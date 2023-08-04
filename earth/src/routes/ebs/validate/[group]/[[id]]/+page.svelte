@@ -206,6 +206,7 @@
     </div>
     <div class="links">
       <LinkLine
+        newTab
         links={{
           ExoFOP: exofopLinkOf(id),
           FLI: fliLinkOf(id),

@@ -76,6 +76,7 @@
     </div>
 
     <LinkLine
+      newTab
       links={{
         ExoFOP: exofopLinkOf(tic.id),
         FLI: fliLinkOf(tic.id),
