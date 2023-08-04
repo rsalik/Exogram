@@ -45,13 +45,9 @@ export const updateTicDispositionCount = async (id: string) => {
     (await getter<any[]>(["dispositions", id])) || {}
   ).length;
 
-
-  console.log(curVal, count);
-
   if (curVal !== count) {
     await setter(["tics", id, "dispositionCount"], count);
 
-    console.log("ee")
     await setter("ticsLastModified", Date.now());
   }
 };

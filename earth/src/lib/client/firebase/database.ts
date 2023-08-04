@@ -60,7 +60,7 @@ export async function getUserData<
           if (browser) {
             const ss = sessionStorage.getItem(`${field}:${uid}`);
             if (ss) {
-              data["name" as K] = ss;
+              data[field as K] = ss;
               continue;
             }
           }
