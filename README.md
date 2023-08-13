@@ -10,8 +10,7 @@ Currently, the only package is `earth`, which functions as both the client and t
 
 Package | Description | Language
 --- | --- | ---
-earth | Client & API | Svelte and TypeScript
-moon | Currently unused | N/A
+earth | Client & API | Svelte (TypeScript)
 
 ### Installation
 

@@ -10,6 +10,8 @@
   import Bell from "svelte-material-icons/Bell.svelte";
 
   export let notifications: UserNotificationData | null | undefined;
+
+  console.log($user);
 </script>
 
 <div class="header">
@@ -21,6 +23,10 @@
     <Link box href="/ebs">EBs</Link>
     <div class="sep" />
     <Link box href="/dictionary">Dictionary</Link>
+    {#if $user && $user.admin}
+      <div class="sep" />
+      <Link box href="/admin">Admin</Link>
+    {/if}
   </div>
   <div class="space" style:flex-grow="1" />
   {#if $user}

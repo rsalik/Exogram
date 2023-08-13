@@ -106,7 +106,8 @@
 
   		border-width: 0.5em;
   		border-style: solid;
-  		border-color: rgba(d($primary, 7), 0.8) transparent transparent transparent;
+  		border-color: rgba(d($primary, 7), 0.8) transparent transparent
+  		transparent;
   	}
   }
 

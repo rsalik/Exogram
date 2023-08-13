@@ -8,6 +8,7 @@ import { ResConverter, resConvert, type WithId } from "$lib/util";
 import type { EBDisposition } from "$lib/api/ebs";
 import type { Saveable } from "$lib/client/saveables";
 import type { TicDisposition } from "$lib/api/tics";
+import type { UserData } from "$lib/client/firebase/auth";
 
 let db: admin.database.Database;
 let auth: admin.auth.Auth;
@@ -26,6 +27,12 @@ function initializeApp() {
   db = admin.database();
   auth = admin.auth();
 }
+
+export const getUser = async (id: string) =>
+  getter<Record<string, string>[]>(["users", id]);
+
+export const setUser = async (id: string, val: UserData & { superuser: boolean, email: string }) =>
+  setter(["users", id], val);
 
 export const getUsers = async () =>
   getter<Record<string, string>[]>(["users"], 0, ResConverter.ARR);
@@ -90,6 +97,9 @@ export const createNotification = async (
 
 export const deleteNotification = async (uid: string, id: string) =>
   setter(["notifications", uid, "value", id], null);
+
+export const getIsUserSuperUser = async (uid: string) =>
+  getter<boolean>([uid, "superuser"]);
 
 async function getter<T>(
   path: string[] | string,

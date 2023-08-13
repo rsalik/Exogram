@@ -7,7 +7,9 @@ import { readable } from "svelte/store";
 export const user = createUserStore();
 
 function createUserStore() {
-  const { subscribe } = readable<User | null>(undefined, (set) => {
+  const { subscribe } = readable<
+    (User & { admin?: boolean; superuser?: boolean }) | null
+  >(undefined, (set) => {
     if (building || !browser) {
       set(null);
       return;
@@ -21,12 +23,20 @@ function createUserStore() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ user: await val?.getIdToken() }),
+        body: JSON.stringify({ token: await val?.getIdToken() }),
       });
 
       if (res.status === 200) {
         if ((await res.text()) === "OK" && browser) invalidateAll();
       } else throw new Error("Failed to Authenticate with Server.");
+
+      if (!val) return;
+
+      const privilages = await fetch("/api/get/privileges").then((res) =>
+        res.json()
+      );
+
+      set({ ...val, ...privilages } as any);
     });
   });
 

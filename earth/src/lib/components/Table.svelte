@@ -35,12 +35,22 @@
     undefined;
 
   let sortColumn: keyof T = Object.keys(columns)[0];
+
+  while (sorters[sortColumn] === null) {
+    sortColumn =
+      Object.keys(columns)[Object.keys(columns).indexOf(sortColumn) + 1];
+  }
+
   let sortReverse = false;
 
   const monoColumns = Object.keys(columns).filter((c) => {
-    return data.find(isValue) && !data.find(
-      (d) =>
-        nestedGet(d, c) && !/^[\d().]+$/.test(nestedGet(d, c).toString().trim())
+    return (
+      data.find(isValue) &&
+      !data.find(
+        (d) =>
+          nestedGet(d, c) &&
+          !/^[\d().]+$/.test(nestedGet(d, c).toString().trim())
+      )
     );
   });
 
@@ -49,7 +59,7 @@
       let a = nestedGet(dataA, sortColumn);
       let b = nestedGet(dataB, sortColumn);
 
-      let s = sorters[sortColumn]
+      let s = sorters[sortColumn];
       if (s) {
         return s(a, b);
       }
@@ -126,14 +136,12 @@
       >
         {#each Object.keys(columns) as c}
           {@const v = nestedGet(d, c)}
+          {@const filtered = filters && filters[c] ? filters[c]?.(v) : v}
           <td class:mono={monoColumns.includes(c)}>
-            {#if isValue(v)}
-              {@const filtered = filters && filters[c] ? filters[c]?.(v) : v}
-              {#if $$slots.default}
-                <slot val={filtered} col={c} />
-              {:else}
-                {@html filtered}
-              {/if}
+            {#if $$slots.default}
+              <slot val={filtered} col={c} row={d} />
+            {:else if isValue(v)}
+              {@html filtered}
             {/if}
           </td>
         {/each}
