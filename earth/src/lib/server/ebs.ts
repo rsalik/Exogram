@@ -86,27 +86,29 @@ export async function validateCache(
     return false;
   }
 
-  if (
-    !(await redis.exists(redisKey(group))) ||
-    !(await redis.exists(redisKey(group, true))) ||
-    !(await redis.exists(redisKey(group) + "_lastUpdated")) ||
-    Date.now() -
-      parseInt((await redis.get(redisKey(group) + "_lastUpdated")) || "0") >
-      1000 * 60 * 60 * 24 * 3.5
-  ) {
-    updateEBCache(group, groups);
-    return false;
-  }
+  // if (
+  //   !(await redis.exists(redisKey(group))) ||
+  //   !(await redis.exists(redisKey(group, true))) ||
+  //   !(await redis.exists(redisKey(group) + "_lastUpdated")) ||
+  //   Date.now() -
+  //     parseInt((await redis.get(redisKey(group) + "_lastUpdated")) || "0") >
+  //     1000 * 60 * 60 * 24 * 3.5
+  // ) {
+  //   updateEBCache(group, groups);
+  //   return false;
+  // }
 
   return true;
 }
 
 export async function invalidateCache(group: string) {
-  console.log(`EB > Invalidating Cache for group '${group}'.`);
+  return group;
 
-  redis.del(redisKey(group));
-  redis.del(redisKey(group, true));
-  redis.del(redisKey(group) + "_lastUpdated");
+  // console.log(`EB > Invalidating Cache for group '${group}'.`);
+
+  // redis.del(redisKey(group));
+  // redis.del(redisKey(group, true));
+  // redis.del(redisKey(group) + "_lastUpdated");
 }
 
 export async function getRandomEB(
