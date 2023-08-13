@@ -1,7 +1,11 @@
 <script lang="ts">
   import UsersTable from "$lib/components/table/UsersTable.svelte";
 
-  export let data;
+  import { adminUseUsers } from "$lib/client/firebase/database";
+
+  const users = adminUseUsers();
 </script>
 
-<UsersTable data={data.users} />
+{#if $users}
+  <UsersTable data={$users} />
+{/if}
