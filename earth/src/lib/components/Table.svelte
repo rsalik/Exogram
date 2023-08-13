@@ -22,6 +22,9 @@
     [P in keyof T]?: ((a: any, b: any) => number) | null;
   } & Record<string, ((a: any, b: any) => number) | null> = {};
 
+  export let longColumns: (keyof T)[] = [];
+  export let monoColumns: (keyof T)[] = [];
+
   export let highlighter:
     | ((
         row: { [P in keyof T]: any } & { [key: string]: any }
@@ -43,14 +46,15 @@
 
   let sortReverse = false;
 
-  const monoColumns = Object.keys(columns).filter((c) => {
+  const _monoColumns = Object.keys(columns).filter((c) => {
     return (
-      data.find(isValue) &&
-      !data.find(
-        (d) =>
-          nestedGet(d, c) &&
-          !/^[\d().]+$/.test(nestedGet(d, c).toString().trim())
-      )
+      monoColumns.includes(c as keyof T) ||
+      (data.find(isValue) &&
+        !data.find(
+          (d) =>
+            nestedGet(d, c) &&
+            !/^[\d().]+$/.test(nestedGet(d, c).toString().trim())
+        ))
     );
   });
 
@@ -136,8 +140,11 @@
       >
         {#each Object.keys(columns) as c}
           {@const v = nestedGet(d, c)}
-          {@const filtered = filters && filters[c] ? filters[c]?.(v) : v}
-          <td class:mono={monoColumns.includes(c)}>
+          {@const filtered = filters && filters[c] && v ? filters[c]?.(v) : v}
+          <td
+            class:mono={_monoColumns.includes(c)}
+            class:long={longColumns.includes(c)}
+          >
             {#if $$slots.default}
               <slot val={filtered} col={c} row={d} />
             {:else if isValue(v)}
@@ -198,6 +205,10 @@
 
   		text-align: center;
   		word-wrap: break-word;
+
+  		&.long {
+  			max-width: 13em;
+  		}
   	}
 
   	thead tr {

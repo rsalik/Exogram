@@ -1,5 +1,5 @@
 export const UsersTableColumns = {
-  pfp: "Picture",
+  pfp: "PFP",
   name: "Name",
   email: "Email",
   id: "UID",

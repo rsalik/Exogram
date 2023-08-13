@@ -41,8 +41,15 @@ export const useUserNotifications = () =>
     true,
     ResConverter.NOTIFICATIONS
   );
+
 export const updateUserNotificationsRead = () =>
   setter(["notifications", "read"], Date.now(), 1);
+
+export const adminSetIsUserSuperUser = (uid: string, val: boolean) =>
+  setter(["users", uid, "superuser"], val);
+
+export const adminUseUsers = () =>
+  createStore<Record<string, string>[]>(["users"], 0, ResConverter.ARR);
 
 export async function getUserData<
   const T extends string[],

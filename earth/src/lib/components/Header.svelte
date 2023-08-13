@@ -10,8 +10,6 @@
   import Bell from "svelte-material-icons/Bell.svelte";
 
   export let notifications: UserNotificationData | null | undefined;
-
-  console.log($user);
 </script>
 
 <div class="header">
