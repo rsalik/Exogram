@@ -79,8 +79,6 @@ export async function getFiles(
     nameString = `name contains '${partialName}'`;
   }
 
-  console.log("Querying Drive:", folderString, mimeTypeString, nameString, nextPageToken)
-
   const response = await drive.files.list({
     q: [folderString, mimeTypeString, nameString].filter(Boolean).join(" and "),
     pageSize: 1000,

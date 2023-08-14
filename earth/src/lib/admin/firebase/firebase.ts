@@ -31,8 +31,10 @@ function initializeApp() {
 export const getUser = async (id: string) =>
   getter<Record<string, string>[]>(["users", id]);
 
-export const setUser = async (id: string, val: UserData & { superuser: boolean, email: string }) =>
-  setter(["users", id], val);
+export const setUser = async (
+  id: string,
+  val: UserData & { superuser: boolean; email: string }
+) => setter(["users", id], val);
 
 export const getUsers = async () =>
   getter<Record<string, string>[]>(["users"], 0, ResConverter.ARR);
@@ -64,6 +66,12 @@ export const getEBDispositions = async (group: string, id: string) =>
     ["ebs", group, id],
     0,
     ResConverter.ARR
+  );
+
+export const getAllEBDispositions = async () =>
+  getter<Record<string, Record<string, Record<string, EBDisposition>>>>(
+    ["ebs"],
+    0
   );
 
 export const getEBDisposition = async (
