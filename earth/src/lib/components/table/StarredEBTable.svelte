@@ -89,11 +89,11 @@
     {:else if col === "isEB" || col === "isPeriodCorrect"}
       {#if val}
         <div class="yes">Yes</div>
-      {:else}
+      {:else if val === false}
         <div class="no">No</div>
       {/if}
     {:else}
-      <div class="val">{val}</div>
+      <div class="val">{val || ""}</div>
     {/if}
   </Table>
 </div>
