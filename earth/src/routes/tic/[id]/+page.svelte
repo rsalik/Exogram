@@ -80,6 +80,7 @@
       links={{
         ExoFOP: exofopLinkOf(tic.id),
         FLI: fliLinkOf(tic.id),
+        CSV: `/api/get/tic-csv/${tic.id}`
       }}
     />
   </div>

@@ -48,6 +48,9 @@ export const setTicDisposition = async (
   uid: string
 ) => await setter(["dispositions", id, uid], val);
 
+export const getTicDispositions = async (id: string) =>
+  await getter(["dispositions", id]);
+
 export const updateTicDispositionCount = async (id: string) => {
   const curVal = (await getter<number>(["tics", id, "dispositionCount"])) || 0;
   const count = Object.keys(
