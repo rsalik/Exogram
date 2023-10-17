@@ -110,7 +110,7 @@ export const deleteNotification = async (uid: string, id: string) =>
   setter(["notifications", uid, "value", id], null);
 
 export const getIsUserSuperUser = async (uid: string) =>
-  getter<boolean>([uid, "superuser"]);
+  getter<boolean>(['users', uid, "superuser"]);
 
 async function getter<T>(
   path: string[] | string,

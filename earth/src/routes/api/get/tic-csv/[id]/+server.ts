@@ -1,4 +1,4 @@
-import { error, text } from "@sveltejs/kit";
+import { error } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 import { getTic, getTicGroups } from "$lib/server/firebase/database";
 import {
