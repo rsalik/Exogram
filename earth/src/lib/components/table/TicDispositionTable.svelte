@@ -46,7 +46,7 @@
   >
     {#if col === "name"}
       {val}
-    {:else}
+    {:else if val}
       <DefinableString str={val} {dictionary} />
     {/if}
   </Table>
@@ -54,6 +54,6 @@
 
 <style lang="scss">
   .disp-table :global(table) {
-  	font-size: 1.4em;
+    font-size: 1.4em;
   }
 </style>

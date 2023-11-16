@@ -15,13 +15,13 @@ export function getDrive() {
 }
 
 export const getTicFiles = async (id: string) =>
-  getFiles("tic_files", id, MimeTypes.PDF);
+  getFiles("tic_files", false, MimeTypes.PDF, id);
 
 export const getEBFiles = async (group: string) =>
-  getFiles("eb_" + group, undefined, MimeTypes.IMAGE);
+  getFiles("eb_" + group, false, MimeTypes.IMAGE);
 
 export const getDuplicateEBFiles = async () =>
-  getFiles("duplicate_ebs", undefined, MimeTypes.IMAGE);
+  getFiles("duplicate_ebs", false, MimeTypes.IMAGE);
 
 export const getEBFile = async (
   group: string,
@@ -33,21 +33,24 @@ export const getEBFile = async (
   if (allowDone) folderNames.push("eb_" + group + "_done");
 
   return (
-    await getFiles(folderNames, ebIDToFileNamePartial(id), MimeTypes.IMAGE)
+    await getFiles(
+      folderNames,
+      false,
+      MimeTypes.IMAGE,
+      ebIDToFileNamePartial(id)
+    )
   )[0];
 };
 
 export const getDoneEBFiles = async (group: string) =>
-  getFiles(`eb_${group}_done`, undefined, MimeTypes.IMAGE);
+  getFiles(`eb_${group}_done`, false, MimeTypes.IMAGE, undefined);
 
 export async function getFiles(
   folders: string[] | string,
-  partialName?: string,
+  recursiveFolders?: boolean,
   mimeTypes?: MimeTypes | MimeTypes[],
-  nextPageToken?: string
+  partialName?: string
 ) {
-  const drive = getDrive();
-
   const allFolderIds = await getFolders();
 
   if (!Array.isArray(folders)) folders = [folders];
@@ -58,6 +61,22 @@ export async function getFiles(
 
     throw new Error(`Folder ID for '${folder}' not found.`);
   });
+
+  if (recursiveFolders)
+    folderIds.push(...(await recursiveGetSubfolders(folderIds)));
+
+  return await getFilesByFolderIDs(folderIds, mimeTypes, partialName);
+}
+
+async function getFilesByFolderIDs(
+  folderIds: string[] | string,
+  mimeTypes?: MimeTypes | MimeTypes[],
+  partialName?: string,
+  nextPageToken?: string
+) {
+  const drive = getDrive();
+
+  if (!Array.isArray(folderIds)) folderIds = [folderIds];
 
   const folderString =
     "(" + folderIds.map((id) => `'${id}' in parents`).join(" or ") + ")";
@@ -90,10 +109,10 @@ export async function getFiles(
   let files = response.data.files || [];
 
   if (response.data.nextPageToken) {
-    const nextPageFiles = await getFiles(
-      folders,
-      partialName,
+    const nextPageFiles = await getFilesByFolderIDs(
+      folderIds,
       mimeTypes,
+      partialName,
       response.data.nextPageToken
     );
 
@@ -101,6 +120,59 @@ export async function getFiles(
   }
 
   return files;
+}
+
+async function recursiveGetSubfolders(folderIds: string[]) {
+  const subfolders = (await getFilesByFolderIDs(folderIds, MimeTypes.FOLDER))
+    .map((f) => f.id)
+    .filter(Boolean) as string[];
+
+  // Split subfolders into chunks of 20
+  const subfolderChunks = subfolders.reduce((acc, cur, i) => {
+    if (i % 20 === 0) acc.push([]);
+    acc[acc.length - 1].push(cur);
+    return acc;
+  }, [] as string[][]);
+
+  for (const chunk of subfolderChunks) {
+    subfolders.push(...(await recursiveGetSubfolders(chunk)));
+  }
+
+  return subfolders;
+}
+
+export async function flattenFolder(folder: string) {
+  console.log("Flattening folder:", folder);
+
+  const drive = getDrive();
+
+  const folderId = (await getFolders())[folder];
+  const subfolders = await recursiveGetSubfolders([folderId]);
+
+  // Split subfolders into chunks of 20
+  const subfolderChunks = subfolders.reduce((acc, cur, i) => {
+    if (i % 20 === 0) acc.push([]);
+    acc[acc.length - 1].push(cur);
+    return acc;
+  }, [] as string[][]);
+
+  const files = (
+    await Promise.all(
+      subfolderChunks.map((chunk) => getFilesByFolderIDs(chunk))
+    )
+  )
+    .flat()
+
+  for (const file of files) {
+    if (!file.parents) continue;
+    if (!file.id) continue;
+
+    await drive.files.update({
+      fileId: file.id,
+      addParents: folderId,
+      removeParents: file.parents.join(",")
+    });
+  }
 }
 
 export enum MimeTypes {
