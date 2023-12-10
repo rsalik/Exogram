@@ -13,18 +13,24 @@
 
   export let id: string;
 
-  export let dispositions: WithId<TicDisposition>[];
+  export let dispositions: WithId<TicDisposition>[] | undefined | null;
+  export let paperDisposition: TicDisposition | undefined;
   export let usernames: Record<string, string> = {};
   export let dictionary: Record<string, string>;
 
-  $: tableData = dispositions
-    ? dispositions.map((d) => {
-        return {
-          ...d,
-          name: usernames[d.id] || d.id,
-        };
-      })
-    : [];
+  $: tableData = [
+    ...(dispositions
+      ? dispositions.map((d) => {
+          return {
+            ...d,
+            name: usernames[d.id] || d.id,
+          };
+        })
+      : []),
+    ...(paperDisposition ? [{name: "paper", ...paperDisposition}] : []),
+  ];
+
+  $: console.log(usernames)
 </script>
 
 <div class="disp-table">

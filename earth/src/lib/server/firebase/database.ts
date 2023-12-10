@@ -38,7 +38,7 @@ export async function getTics(): Promise<Record<string, Tic>> {
 
   if (
     !ticsLastModified ||
-    Number(serverLastModified) > Number(ticsLastModified)
+    Number(ticsLastModified) < Number(serverLastModified)
   ) {
     console.log("TICs > Cache is stale. Updating...");
 

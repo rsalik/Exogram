@@ -54,7 +54,7 @@ function createUserStore() {
 
 export const signOut = async () => {
   try {
-    await fetch("http://localhost:5173/api/auth", {
+    await fetch("/api/auth", {
       method: "DELETE",
     });
     await auth.signOut();

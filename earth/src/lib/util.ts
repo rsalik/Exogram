@@ -3,16 +3,23 @@ import type { Tic } from "$lib/api/tics";
 export enum ResConverter {
   NONE,
   ARR,
+  DISP_ARR,
   NOTIFICATIONS,
 }
 
 export type WithId<T> = T & { id: string };
 
 export function resConvert(o: any, converter: ResConverter) {
-  if (o === null || o === undefined) return o;
+  if ((o === null || o === undefined) && converter !== ResConverter.DISP_ARR)
+    return o;
 
   switch (converter) {
     case ResConverter.ARR:
+      return convertIDdObjectToArray(o);
+    case ResConverter.DISP_ARR:
+      console.log(o);
+      if (o === null) return null;
+      if (o === undefined || o.length === 0) return [];
       return convertIDdObjectToArray(o);
     case ResConverter.NOTIFICATIONS:
       return {

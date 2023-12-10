@@ -39,8 +39,12 @@
     return acc;
   }, {} as Record<string, string>);
 
+  let dispsLoading = true;
+
   onMount(async () => {
     files = await getTicFiles(tic.id);
+
+    dispositions.loading?.subscribe((v) => (dispsLoading = v));
   });
 </script>
 
@@ -80,7 +84,7 @@
       links={{
         ExoFOP: exofopLinkOf(tic.id),
         FLI: fliLinkOf(tic.id),
-        CSV: `/api/get/tic-csv/${tic.id}`
+        CSV: `/api/get/tic-csv/${tic.id}`,
       }}
     />
   </div>
@@ -161,23 +165,29 @@
 
     <br />
 
-    {#if $dispositions}
+    {#if $dispositions === null}
+      <div class="panel semi error">
+        No Access
+        <div class="sub">These dispositions are not public.</div>
+      </div>
+    {:else if dispsLoading}
+      <div class="panel semi secondary">Loading Dispositions</div>
+    {:else}
       <div class="panel secondary">
         <div class="title">Dispositions</div>
         <br />
         <DispositionTable
           id={tic.id}
-          dispositions={[
-            ...$dispositions,
-            { id: "paper", ...tic.paperDisposition },
-          ]}
+          dispositions={$dispositions}
+          paperDisposition={tic.paperDisposition}
           usernames={flatUsernames}
           dictionary={data.dictionary}
         />
         <br />
         {#if $user && ticGroups[Number(tic.group)].write}
-          {@const userDisp =
-            $dispositions.find((d) => d.id === $user?.uid) || undefined}
+          {@const userDisp = $dispositions
+            ? $dispositions.find((d) => d.id === $user?.uid) || undefined
+            : undefined}
           <div class="panel secondary">
             <div class="title">
               {#if userDisp}
@@ -204,13 +214,6 @@
           </div>
         {/if}
       </div>
-    {:else if $dispositions === null}
-      <div class="panel semi error">
-        No Access
-        <div class="sub">These dispositions are not public.</div>
-      </div>
-    {:else}
-      <div class="panel semi secondary">Loading Dispositions</div>
     {/if}
   {/if}
 </div>

@@ -6,7 +6,12 @@ import {
   remove,
   DataSnapshot,
 } from "firebase/database";
-import { derived, get as storeGet } from "svelte/store";
+import {
+  derived,
+  get as storeGet,
+  writable,
+  type Writable,
+} from "svelte/store";
 import { db } from "$lib/firebase";
 import { ResConverter, resConvert, type WithId } from "$lib/util";
 import { readable, type Readable } from "svelte/store";
@@ -21,7 +26,7 @@ export const useDispositions = (id: string) =>
   createStore<WithId<TicDisposition>[]>(
     ["/dispositions", id],
     false,
-    ResConverter.ARR
+    ResConverter.DISP_ARR
   );
 
 export const useIsEBSaved = (group: string, id: string) =>
@@ -193,8 +198,16 @@ function createStore<T>(
   }
 
   const pathArr = path instanceof Array ? path : [path];
+  const loading = writable(true);
 
-  function callback(snapshot: DataSnapshot, set: (val: T | null) => void) {
+  function callback(
+    snapshot: DataSnapshot,
+    set: (val: T | null | undefined) => void,
+    loading?: Writable<boolean>
+  ) {
+    if (loading) loading.set(false);
+
+    if (!snapshot.exists()) return set(undefined);
     const val = resConvert(snapshot.val(), resHandler);
 
     set((val as T) ?? null);
@@ -217,7 +230,7 @@ function createStore<T>(
 
         const unsubscribe = onValue(
           r,
-          (snapshot) => callback(snapshot, set),
+          (snapshot) => callback(snapshot, set, loading),
           () => set(null)
         );
 
@@ -236,16 +249,18 @@ function createStore<T>(
   const { subscribe } = readable<T | null | undefined>(undefined, (set) => {
     const unsubscribe = onValue(
       r,
-      (snapshot) => callback(snapshot, set),
+      (snapshot) => callback(snapshot, set, loading),
       () => set(null)
     );
 
     return () => {
       unsubscribe();
+      loading;
     };
   });
 
   return {
     subscribe,
+    loading,
   };
 }
