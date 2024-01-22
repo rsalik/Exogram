@@ -20,7 +20,8 @@
     type: "image",
     data: {
       name: "<span>EB</span> TIC " + data.id,
-      img: data.file?.webContentLink || "",
+      // TEMP FIX for Google Drive API issue
+      img: `https://drive.google.com/thumbnail?id=${data.file.id}&sz=w3000`//data.file?.webContentLink || "",
     },
   } as Saveable;
 </script>
@@ -32,7 +33,7 @@
 <div class="main">
   <div class="img" use:saveable={saveableObj}>
      <!-- TEMP FIX for Google Drive API issue -->
-     <img src={`https://drive.google.com/thumbnail?id=${data.id}&sz=w3000`} alt="EB File" />
+     <img src={`https://drive.google.com/thumbnail?id=${data.file.id}&sz=w3000`} alt="EB File" />
   </div>
   <div class="panel content">
     <div class="top">

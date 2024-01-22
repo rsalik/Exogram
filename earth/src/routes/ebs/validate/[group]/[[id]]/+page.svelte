@@ -52,7 +52,8 @@
     type: "image",
     data: {
       name: "<span>EB</span> TIC " + id,
-      img: file?.webContentLink || "",
+      // TEMP Fix for Google Drive API issue
+      img: `https://drive.google.com/thumbnail?id=${data.file.id}&sz=w3000`//file?.webContentLink || "",
     },
   } as Saveable;
 
