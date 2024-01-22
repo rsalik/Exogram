@@ -337,7 +337,8 @@
     </div>
 
     <div use:saveable={saveableObj}>
-      <img src={file.webContentLink} alt="EB File" />
+      <!-- TEMP FIX for Google Drive API issue -->
+      <img src={`https://drive.google.com/thumbnail?id=${file.id}&sz=w3000`} alt="EB File" />
     </div>
   </div>
 {/if}
