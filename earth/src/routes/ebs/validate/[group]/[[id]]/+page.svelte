@@ -323,7 +323,7 @@
                     {qa}
 
                     <div>
-                      <div class="key">{i + 1}</div>
+                      <kbd>{i + 1}</kbd>
                     </div>
                   </div>
                 </Button>
