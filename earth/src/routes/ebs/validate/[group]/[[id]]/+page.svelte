@@ -53,7 +53,7 @@
     data: {
       name: "<span>EB</span> TIC " + id,
       // TEMP Fix for Google Drive API issue
-      img: `https://drive.google.com/thumbnail?id=${data.file.id}&sz=w3000`//file?.webContentLink || "",
+      img: `https://drive.google.com/thumbnail?id=${file?.id}&sz=w3000`//file?.webContentLink || "",
     },
   } as Saveable;
 
@@ -339,7 +339,7 @@
 
     <div use:saveable={saveableObj}>
       <!-- TEMP FIX for Google Drive API issue -->
-      <img src={`https://drive.google.com/thumbnail?id=${file.id}&sz=w3000`} alt="EB File" />
+      <img src={`https://drive.google.com/thumbnail?id=${file?.id}&sz=w3000`} alt="EB File" />
     </div>
   </div>
 {/if}
